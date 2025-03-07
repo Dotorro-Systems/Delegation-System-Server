@@ -1,10 +1,10 @@
-package com.Dotorro.DelegationSystem;
+package com.Dotorro.DelegationSystemServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DelegationSystemApplicationTests {
+class DelegationSystemServerApplicationTests {
 
 	@Test
 	void contextLoads() {

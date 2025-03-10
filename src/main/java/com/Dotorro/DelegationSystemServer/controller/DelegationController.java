@@ -9,7 +9,6 @@ import java.util.List;
 @RequestMapping("/delegations")
 @CrossOrigin(origins = "*") // Allow frontend requests
 public class DelegationController {
-
     private final DelegationService delegationService;
 
     public DelegationController(DelegationService delegationService){this.delegationService = delegationService;}

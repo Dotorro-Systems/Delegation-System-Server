@@ -12,23 +12,21 @@ public class Delegation {
     private String title;
     private String origin;
     private String destination;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public Delegation() {}
 
-    public Delegation(Long id, String title, String origin, String destination, LocalDate start_date, LocalDate end_date) {
+    public Delegation(Long id, String title, String origin, String destination, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.start_date = start_date;
-        this.end_date = end_date;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() {return id;}
 
     public void setId(Long id) {
         this.id = id;
@@ -46,9 +44,7 @@ public class Delegation {
         return origin;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
+    public void setOrigin(String origin) {this.origin = origin;}
 
     public String getDestination() {
         return destination;
@@ -58,19 +54,15 @@ public class Delegation {
         this.destination = destination;
     }
 
-    public LocalDate getStart_date() {
-        return start_date;
-    }
+    public LocalDate getStart_date() {return startDate;}
 
-    public void setStart_date(LocalDate start_date) {
-        this.start_date = start_date;
-    }
+    public void setStart_date(LocalDate startDate) {this.startDate = startDate;}
 
     public LocalDate getEnd_date() {
-        return end_date;
+        return endDate;
     }
 
-    public void setEnd_date(LocalDate end_date) {
-        this.end_date = end_date;
+    public void setEnd_date(LocalDate endDate) {
+        this.endDate = endDate;
     }
 }

@@ -1,6 +1,6 @@
 package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notes")
@@ -11,11 +11,11 @@ public class Note {
     private Long delegationId;
     private Long userId;
     private String content;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     public Note() {}
 
-    public Note(Long id, Long delegationId, Long userId, String content, LocalDate createdAt) {
+    public Note(Long id, Long delegationId, Long userId, String content, LocalDateTime createdAt) {
         this.id = id;
         this.delegationId = delegationId;
         this.userId = userId;
@@ -39,6 +39,6 @@ public class Note {
 
     public void setContent(String content) {this.content = content;}
 
-    public LocalDate getCreatedAt() {return createdAt;}
+    public LocalDateTime getCreatedAt() {return createdAt;}
 
-    public void setCreatedAt(LocalDate createdAt) {this.createdAt = createdAt;}}
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}}

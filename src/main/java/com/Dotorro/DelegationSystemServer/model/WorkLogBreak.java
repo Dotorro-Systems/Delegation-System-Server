@@ -1,7 +1,7 @@
 package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "workLogBreaks")
@@ -10,13 +10,13 @@ public class WorkLogBreak {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long workLogId;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     public WorkLogBreak() {
     }
 
-    public WorkLogBreak(Long id, Long workLogId, LocalDate startTime, LocalDate endTime) {
+    public WorkLogBreak(Long id, Long workLogId, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
         this.workLogId = workLogId;
         this.startTime = startTime;
@@ -39,19 +39,19 @@ public class WorkLogBreak {
         this.workLogId = workLogId;
     }
 
-    public LocalDate getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDate startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDate getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDate endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 }

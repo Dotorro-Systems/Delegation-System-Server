@@ -1,6 +1,8 @@
 package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -13,6 +15,8 @@ public class User {
     private String email;
     private String role;
     private Long department_id;
+
+
 
     public User() {}
     public User(Long id, String first_name, String last_name, String password, String email, String role, Long department_id) {

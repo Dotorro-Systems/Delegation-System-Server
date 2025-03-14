@@ -14,14 +14,24 @@ public class WorkLog {
     private Delegation delegation;
     @ManyToOne
     @JoinColumn(name = "userId")
+    private User user;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public WorkLog(Long id, Delegation delegation, LocalDateTime startTime, LocalDateTime endTime) {
+    public WorkLog(Long id, Delegation delegation, User user, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
         this.delegation = delegation;
+        this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getId() {

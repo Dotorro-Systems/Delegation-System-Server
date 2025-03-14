@@ -16,6 +16,10 @@ public class User {
     @JoinColumn(name = "departmentId")
     private Department department;
 
+    public User() {
+
+    }
+
     public User(Long id, String firstName, String lastName, String hashedPassword, String email, String role, Department department) {
         this.id = id;
         this.firstName = firstName;

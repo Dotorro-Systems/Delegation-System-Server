@@ -2,14 +2,14 @@ package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
 @Embeddable
-public class DelegationEmployeeKey  {
+public class DelegationUserKey {
 
     @ManyToOne
     @JoinColumn(name = "delegationId")
     private Delegation delegation;
 
     @ManyToOne
-    @JoinColumn(name = "employeeId")
-    private User employee;
+    @JoinColumn(name = "userId")
+    private User user;
 
 }

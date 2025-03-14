@@ -2,7 +2,7 @@ package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "departments")
+@Table(name = "Departments")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

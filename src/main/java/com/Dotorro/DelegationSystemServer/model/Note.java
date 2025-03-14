@@ -3,42 +3,65 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notes")
+@Table(name = "Notes")
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long delegationId;
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "delegationId")
+    private Delegation delegation;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
     private String content;
     private LocalDateTime createdAt;
 
-    public Note() {}
-
-    public Note(Long id, Long delegationId, Long userId, String content, LocalDateTime createdAt) {
+    public Note(Long id, Delegation delegation, User user, String content, LocalDateTime createdAt) {
         this.id = id;
-        this.delegationId = delegationId;
-        this.userId = userId;
+        this.delegation = delegation;
+        this.user = user;
         this.content = content;
         this.createdAt = createdAt;
     }
 
-    public Long getId() {return id;}
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) {this.id = id;}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getDelegationId() {return delegationId;}
+    public Delegation getDelegation() {
+        return delegation;
+    }
 
-    public void setDelegationId(Long delegationId) {this.delegationId = delegationId;}
+    public void setDelegation(Delegation delegation) {
+        this.delegation = delegation;
+    }
 
-    public Long getUserId() {return userId;}
+    public User getUser() {
+        return user;
+    }
 
-    public void setUserId(Long userId) {this.userId = userId;}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public String getContent() {return content;}
+    public String getContent() {
+        return content;
+    }
 
-    public void setContent(String content) {this.content = content;}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-    public LocalDateTime getCreatedAt() {return createdAt;}
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}}
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+}

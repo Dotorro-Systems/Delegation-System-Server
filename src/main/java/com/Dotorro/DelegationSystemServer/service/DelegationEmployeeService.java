@@ -1,6 +1,6 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.model.DelegationEmployee;
+import com.Dotorro.DelegationSystemServer.model.DelegationUser;
 import com.Dotorro.DelegationSystemServer.repository.DelegationEmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +14,11 @@ public class DelegationEmployeeService {
         this.delegationEmployeeRepository = delegationEmployeeRepository;
     }
 
-    public List<DelegationEmployee> getAllDelegationEmployees() {
+    public List<DelegationUser> getAllDelegationEmployees() {
         return delegationEmployeeRepository.findAll();
     }
 
-    public DelegationEmployee createDelegationEmployee(DelegationEmployee delegationEmployee) {
-        return delegationEmployeeRepository.save(delegationEmployee);
+    public DelegationUser createDelegationEmployee(DelegationUser delegationUser) {
+        return delegationEmployeeRepository.save(delegationUser);
     }
 }

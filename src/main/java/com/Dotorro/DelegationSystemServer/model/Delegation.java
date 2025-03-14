@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "delegations")
+@Table(name = "Delegations")
 public class Delegation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

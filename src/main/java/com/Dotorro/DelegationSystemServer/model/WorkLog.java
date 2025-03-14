@@ -4,28 +4,22 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "workLogs")
+@Table(name = "WorkLogs")
 public class WorkLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long delegationId;
-    private Long userId;
-    private String password;
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "delegationId")
+    private Delegation delegation;
+    @ManyToOne
+    @JoinColumn(name = "userId")
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public WorkLog() {
-    }
-
-    public WorkLog(Long id, Long delegationId, Long userId, String password, String email, LocalDateTime startTime,
-                   LocalDateTime endTime) {
+    public WorkLog(Long id, Delegation delegation, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
-        this.delegationId = delegationId;
-        this.userId = userId;
-        this.password = password;
-        this.email = email;
+        this.delegation = delegation;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -38,36 +32,12 @@ public class WorkLog {
         this.id = id;
     }
 
-    public Long getDelegationId() {
-        return delegationId;
+    public Delegation getDelegation() {
+        return delegation;
     }
 
-    public void setDelegationId(Long delegationId) {
-        this.delegationId = delegationId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDelegation(Delegation delegation) {
+        this.delegation = delegation;
     }
 
     public LocalDateTime getStartTime() {

@@ -1,6 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
-import com.Dotorro.DelegationSystemServer.model.DelegationEmployee;
+import com.Dotorro.DelegationSystemServer.model.DelegationUser;
 import com.Dotorro.DelegationSystemServer.service.DelegationEmployeeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +17,12 @@ public class DelegationEmployeeController {
     }
 
     @GetMapping
-    public List<DelegationEmployee> getDelegationEmployees() {
+    public List<DelegationUser> getDelegationEmployees() {
         return delegationEmployeeService.getAllDelegationEmployees();
     }
 
     @PostMapping
-    public DelegationEmployee createDelegationEmployee(@RequestBody DelegationEmployee delegationEmployee) {
-        return delegationEmployeeService.createDelegationEmployee(delegationEmployee);
+    public DelegationUser createDelegationEmployee(@RequestBody DelegationUser delegationUser) {
+        return delegationEmployeeService.createDelegationEmployee(delegationUser);
     }
 }

@@ -1,24 +1,27 @@
 package com.Dotorro.DelegationSystemServer.model;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "workLogBreaks")
+@Table(name = "WorkLogBreaks")
 public class WorkLogBreak {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long workLogId;
+    @ManyToOne
+    @JoinColumn(name = "workLogId")
+    private WorkLog workLog;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     public WorkLogBreak() {
     }
 
-    public WorkLogBreak(Long id, Long workLogId, LocalDateTime startTime, LocalDateTime endTime) {
+    public WorkLogBreak(Long id, WorkLog workLog, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
-        this.workLogId = workLogId;
+        this.workLog = workLog;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -31,12 +34,12 @@ public class WorkLogBreak {
         this.id = id;
     }
 
-    public Long getWorkLogId() {
-        return workLogId;
+    public WorkLog getWorkLog() {
+        return workLog;
     }
 
-    public void setWorkLogId(Long workLogId) {
-        this.workLogId = workLogId;
+    public void setWorkLog(WorkLog workLog) {
+        this.workLog = workLog;
     }
 
     public LocalDateTime getStartTime() {

@@ -15,7 +15,7 @@ git checkout main
 git pull
 
 // Tworzymy nowego brancha poprzez kopię aktualnego (branche nazywamy podobnie jak nasz task, każde słowo oddzielone '-' oraz rozpoczęte dużą literą, np. Delegation-Entity)
-git branch -b <nazwa-brancha>
+git checkout -b <nazwa-brancha>
 ```
 
 ## 3. Pracę zawsze kończymy commitując najnowsze zmiany aby zawsze w repozytorium znajdował się najświeższy kod

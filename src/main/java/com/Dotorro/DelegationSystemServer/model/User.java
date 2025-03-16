@@ -2,27 +2,32 @@ package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String first_name;
-    private String last_name;
-    private String password;
+    private String firstName;
+    private String lastName;
+    private String hashedPassword;
     private String email;
     private String role;
-    private Long department_id;
+    @ManyToOne
+    @JoinColumn(name = "departmentId")
+    private Department department;
 
-    public User() {}
-    public User(Long id, String first_name, String last_name, String password, String email, String role, Long department_id) {
+    public User() {
+
+    }
+
+    public User(Long id, String firstName, String lastName, String hashedPassword, String email, String role, Department department) {
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.hashedPassword = hashedPassword;
         this.email = email;
         this.role = role;
-        this.department_id = department_id;
+        this.department = department;
     }
 
     public Long getId() {
@@ -33,28 +38,28 @@ public class User {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public String getEmail() {
@@ -73,11 +78,11 @@ public class User {
         this.role = role;
     }
 
-    public Long getDepartment_id() {
-        return department_id;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartment_id(Long department_id) {
-        this.department_id = department_id;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

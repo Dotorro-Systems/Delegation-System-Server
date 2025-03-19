@@ -1,6 +1,8 @@
 package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Departments")
 public class Department {

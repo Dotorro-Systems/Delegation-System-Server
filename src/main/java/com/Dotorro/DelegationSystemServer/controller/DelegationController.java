@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.service.DelegationService;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,6 @@ public class DelegationController {
     public List<Delegation> getDelegations(){return delegationService.getAllDelegations();}
 
     @PostMapping
-    public Delegation createDelegation(@RequestBody Delegation delegation){
-        return delegationService.createDelegation(delegation);}
+    public Delegation createDelegation(@RequestBody DelegationDTO delegationDTO){
+        return delegationService.createDelegation(delegationDTO);}
 }

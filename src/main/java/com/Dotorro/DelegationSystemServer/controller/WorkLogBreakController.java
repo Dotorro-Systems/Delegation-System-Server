@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
 import com.Dotorro.DelegationSystemServer.model.WorkLogBreak;
 import com.Dotorro.DelegationSystemServer.service.WorkLogBreakService;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class WorkLogBreakController {
     }
 
     @PostMapping
-    public WorkLogBreak createWorkLogBreak(@RequestBody WorkLogBreak workLogBreak) {
-        return workLogBreakService.createWorkLogBreak(workLogBreak);
+    public WorkLogBreak createWorkLogBreak(@RequestBody WorkLogBreakDTO workLogBreakDTO) {
+        return workLogBreakService.createWorkLogBreak(workLogBreakDTO);
     }
 }

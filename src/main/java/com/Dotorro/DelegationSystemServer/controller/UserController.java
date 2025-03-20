@@ -1,13 +1,15 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*") // Allow frontend requests
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 
@@ -15,13 +17,37 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/all")
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @GetMapping(value = "/{id}")
+    public User getUserById(@PathVariable Long id)
+    {
+        return userService.getUserById(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO)
+    {
+        User savedUser = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(savedUser);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteUserById(@PathVariable Long id)
+    {
+        userService.deleteUser(id);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+        try {
+            User savedUser = userService.createUser(userDTO);
+            return ResponseEntity.ok(savedUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

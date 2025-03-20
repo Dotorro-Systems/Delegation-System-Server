@@ -1,6 +1,8 @@
 package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Departments")
 public class Department {
@@ -10,6 +12,10 @@ public class Department {
     private String name;
 
     public Department() {}
+
+    public Department(String name) {
+        this.name = name;
+    }
 
     public Department(Long id, String name) {
         this.id = id;

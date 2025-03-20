@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
 import com.Dotorro.DelegationSystemServer.model.WorkLog;
 import com.Dotorro.DelegationSystemServer.service.WorkLogService;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class WorkLogController {
     }
 
     @PostMapping
-    public WorkLog createWorkLog(@RequestBody WorkLog workLog) {
-        return workLogService.createWorkLog(workLog);
+    public WorkLog createWorkLog(@RequestBody WorkLogDTO workLogDTO) {
+        return workLogService.createWorkLog(workLogDTO);
     }
 }

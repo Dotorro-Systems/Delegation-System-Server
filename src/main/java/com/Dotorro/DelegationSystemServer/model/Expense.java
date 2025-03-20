@@ -20,6 +20,16 @@ public class Expense {
     private Double amount;
     private LocalDateTime createAt;
 
+    public Expense() { }
+
+    public Expense(Delegation delegation, User user, String description, Double amount, LocalDateTime createAt) {
+        this.delegation = delegation;
+        this.user = user;
+        this.description = description;
+        this.amount = amount;
+        this.createAt = createAt;
+    }
+
     public Expense(Long id, Delegation delegation, User user, String description, Double amount, LocalDateTime createAt) {
         this.id = id;
         this.delegation = delegation;

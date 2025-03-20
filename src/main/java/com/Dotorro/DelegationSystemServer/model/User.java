@@ -20,6 +20,15 @@ public class User {
 
     }
 
+    public User(String firstName, String lastName, String hashedPassword, String email, String role, Department department) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.hashedPassword = hashedPassword;
+        this.email = email;
+        this.role = role;
+        this.department = department;
+    }
+
     public User(Long id, String firstName, String lastName, String hashedPassword, String email, String role, Department department) {
         this.id = id;
         this.firstName = firstName;

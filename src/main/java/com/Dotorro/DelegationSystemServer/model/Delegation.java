@@ -2,7 +2,6 @@ package com.Dotorro.DelegationSystemServer.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "Delegations")
@@ -17,7 +16,15 @@ public class Delegation {
     private LocalDateTime endDate;
 
 
-    public Delegation() {}
+    public Delegation() { }
+
+    public Delegation(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
+        this.title = title;
+        this.origin = origin;
+        this.destination = destination;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
@@ -56,11 +63,11 @@ public class Delegation {
         this.destination = destination;
     }
 
-    public LocalDateTime getStart_date() {return startDate;}
+    public LocalDateTime getStartDate() {return startDate;}
 
     public void setStart_date(LocalDateTime startDate) {this.startDate = startDate;}
 
-    public LocalDateTime getEnd_date() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 

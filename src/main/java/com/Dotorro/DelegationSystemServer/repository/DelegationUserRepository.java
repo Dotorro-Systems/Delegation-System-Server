@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DelegationEmployeeRepository extends JpaRepository<DelegationUser,Long> {
+public interface DelegationUserRepository extends JpaRepository<DelegationUser,Long> {
 }

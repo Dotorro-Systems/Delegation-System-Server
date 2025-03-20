@@ -17,7 +17,15 @@ public class Delegation {
     private LocalDateTime endDate;
 
 
-    public Delegation() {}
+    public Delegation() { }
+
+    public Delegation(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
+        this.title = title;
+        this.origin = origin;
+        this.destination = destination;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;

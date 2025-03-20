@@ -17,9 +17,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/")
     public List<User> getUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping(value = "/{id}")
+    public User getUserById(@PathVariable Long id)
+    {
+        return userService.getUserById(id);
     }
 
     @PostMapping
@@ -30,5 +36,18 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto)
+    {
+        User savedUser = userService.updateUser(id, userDto);
+        return ResponseEntity.ok(savedUser);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteUserById(@PathVariable Long id)
+    {
+        userService.deleteUser(id);
     }
 }

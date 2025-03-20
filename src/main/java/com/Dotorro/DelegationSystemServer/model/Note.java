@@ -17,6 +17,15 @@ public class Note {
     private String content;
     private LocalDateTime createdAt;
 
+    public Note() { }
+
+    public Note(Delegation delegation, User user, String content, LocalDateTime createdAt) {
+        this.delegation = delegation;
+        this.user = user;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+
     public Note(Long id, Delegation delegation, User user, String content, LocalDateTime createdAt) {
         this.id = id;
         this.delegation = delegation;

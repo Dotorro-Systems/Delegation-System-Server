@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,6 +33,32 @@ public class UserService {
 
     public User createUser(UserDTO userDto) {
         return userRepository.save(convertToEntity(userDto));
+    }
+
+    public User updateUser(Long id, UserDTO userDto)
+    {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        User updatedUser = convertToEntity(userDto);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setFirstName(updatedUser.getFirstName());
+            user.setLastName(updatedUser.getLastName());
+            user.setHashedPassword(updatedUser.getHashedPassword());
+            user.setEmail(updatedUser.getEmail());
+            user.setRole(updatedUser.getRole());
+            user.setDepartment(updatedUser.getDepartment());
+
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+    }
+
+    public void deleteUser(Long id)
+    {
+        userRepository.deleteById(id);
     }
 
     private User convertToEntity(UserDTO userDto) {

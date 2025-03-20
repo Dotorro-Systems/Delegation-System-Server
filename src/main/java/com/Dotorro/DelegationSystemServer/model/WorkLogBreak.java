@@ -16,7 +16,12 @@ public class WorkLogBreak {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public WorkLogBreak() {
+    public WorkLogBreak() { }
+
+    public WorkLogBreak(WorkLog workLog, LocalDateTime startTime, LocalDateTime endTime) {
+        this.workLog = workLog;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public WorkLogBreak(Long id, WorkLog workLog, LocalDateTime startTime, LocalDateTime endTime) {

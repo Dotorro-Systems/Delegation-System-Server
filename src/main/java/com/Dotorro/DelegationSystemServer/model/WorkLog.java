@@ -1,7 +1,10 @@
 package com.Dotorro.DelegationSystemServer.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "WorkLogs")
@@ -18,10 +21,11 @@ public class WorkLog {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public WorkLog()
-    {
+    @OneToMany(mappedBy = "workLog", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("workLog")
+    private List<WorkLogBreak> workLogBreaks = new ArrayList<>();
 
-    }
+    public WorkLog() { }
 
     public WorkLog(Delegation delegation, User user, LocalDateTime startTime, LocalDateTime endTime) {
         this.delegation = delegation;
@@ -76,5 +80,13 @@ public class WorkLog {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public List<WorkLogBreak> getWorkLogBreaks() {
+        return workLogBreaks;
+    }
+
+    public void setWorkLogBreaks(List<WorkLogBreak> workLogBreaks) {
+        this.workLogBreaks = workLogBreaks;
     }
 }

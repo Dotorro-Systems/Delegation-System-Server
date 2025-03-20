@@ -1,11 +1,14 @@
 package com.Dotorro.DelegationSystemServer.model;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Delegations")
@@ -21,16 +24,28 @@ public class Delegation {
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnoreProperties("delegation")
     private List<Note> notes = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<User> users = new ArrayList<>();
+    @JsonIgnoreProperties("delegation")
+    private List<DelegationUser> delegationUsers = new ArrayList<>();
+
+    public List<User> getUsers() {
+        return delegationUsers.stream()
+                .map(DelegationUser::getUser)
+                .collect(Collectors.toList());
+    }
 
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnoreProperties("delegation")
     private List<Expense> expenses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("delegation")
+    private List<WorkLog> workLogs = new ArrayList<>();
+
 
     public Delegation() { }
 
@@ -107,5 +122,29 @@ public class Delegation {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public List<DelegationUser> getDelegationUsers() {
+        return delegationUsers;
+    }
+
+    public void setDelegationUsers(List<DelegationUser> delegationUsers) {
+        this.delegationUsers = delegationUsers;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
+    public List<WorkLog> getWorkLogs() {
+        return workLogs;
+    }
+
+    public void setWorkLogs(List<WorkLog> workLogs) {
+        this.workLogs = workLogs;
     }
 }

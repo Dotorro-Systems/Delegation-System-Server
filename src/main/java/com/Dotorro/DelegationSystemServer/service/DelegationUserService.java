@@ -17,8 +17,8 @@ public class DelegationUserService {
     private final UserService userService;
 
     public DelegationUserService(DelegationUserRepository delegationUserRepository,
-                                           DelegationService delegationService,
-                                           UserService userService) {
+                                 DelegationService delegationService,
+                                 UserService userService) {
         this.delegationUserRepository = delegationUserRepository;
         this.delegationService = delegationService;
         this.userService = userService;
@@ -39,17 +39,18 @@ public class DelegationUserService {
 
         return new DelegationUser(
                 new DelegationUserKey(
-                        delegation,
-                        user
-                )
+                        delegationUserDTO.getDelegationId(),
+                        delegationUserDTO.getUserId()
+                ),
+                delegation,
+                user
         );
     }
 
-    private DelegationUserDTO convertToDTO(DelegationUser delegationUser)
-    {
+    private DelegationUserDTO convertToDTO(DelegationUser delegationUser) {
         return new DelegationUserDTO(
-                delegationUser.getId().getDelegation().getId(),
-                delegationUser.getId().getUser().getId()
+                delegationUser.getDelegation().getId(),
+                delegationUser.getUser().getId()
         );
     }
 }

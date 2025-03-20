@@ -12,7 +12,6 @@ public class Note {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "delegationId")
-    @JsonIgnoreProperties("notes")
     private Delegation delegation;
     @ManyToOne
     @JoinColumn(name = "userId")

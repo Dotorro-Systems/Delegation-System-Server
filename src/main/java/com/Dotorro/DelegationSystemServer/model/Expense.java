@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

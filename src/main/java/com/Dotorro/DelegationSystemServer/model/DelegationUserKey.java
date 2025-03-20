@@ -5,34 +5,32 @@ import java.io.Serializable;
 
 @Embeddable
 public class DelegationUserKey implements Serializable {
-    @ManyToOne
-    @JoinColumn(name = "delegationId")
-    private Delegation delegation;
+    @Column(name = "delegationId")
+    private Long delegationId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @Column(name = "userId")
+    private Long userId;
 
     public DelegationUserKey() { }
 
-    public DelegationUserKey(Delegation delegation, User user) {
-        this.delegation = delegation;
-        this.user = user;
+    public DelegationUserKey(Long delegationId, Long userId) {
+        this.delegationId = delegationId;
+        this.userId = userId;
     }
 
-    public Delegation getDelegation() {
-        return delegation;
+    public Long getDelegationId() {
+        return delegationId;
     }
 
-    public void setDelegation(Delegation delegation) {
-        this.delegation = delegation;
+    public void setDelegationId(Long delegationId) {
+        this.delegationId = delegationId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

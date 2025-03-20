@@ -1,8 +1,11 @@
 package com.Dotorro.DelegationSystemServer.model;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Delegations")
@@ -17,6 +20,17 @@ public class Delegation {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Note> notes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Expense> expenses = new ArrayList<>();
 
     public Delegation() { }
 
@@ -85,5 +99,13 @@ public class Delegation {
 
     public void setStatus(DelegationStatus status) {
         this.status = status;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 }

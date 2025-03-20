@@ -1,4 +1,6 @@
 package com.Dotorro.DelegationSystemServer.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,6 +12,7 @@ public class Note {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "delegationId")
+    @JsonIgnoreProperties("notes")
     private Delegation delegation;
     @ManyToOne
     @JoinColumn(name = "userId")

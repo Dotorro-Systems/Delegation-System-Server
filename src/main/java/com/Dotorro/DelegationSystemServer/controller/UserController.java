@@ -17,7 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/all")
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
@@ -26,16 +26,6 @@ public class UserController {
     public User getUserById(@PathVariable Long id)
     {
         return userService.getUserById(id);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
-        try {
-            User savedUser = userService.createUser(userDTO);
-            return ResponseEntity.ok(savedUser);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PutMapping(value = "/{id}")
@@ -49,5 +39,15 @@ public class UserController {
     public void deleteUserById(@PathVariable Long id)
     {
         userService.deleteUser(id);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+        try {
+            User savedUser = userService.createUser(userDTO);
+            return ResponseEntity.ok(savedUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

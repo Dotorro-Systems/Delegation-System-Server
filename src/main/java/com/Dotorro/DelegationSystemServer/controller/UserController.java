@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*") // Allow frontend requests
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 
@@ -29,9 +29,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDto) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
-            User savedUser = userService.createUser(userDto);
+            User savedUser = userService.createUser(userDTO);
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -39,9 +39,9 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto)
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO)
     {
-        User savedUser = userService.updateUser(id, userDto);
+        User savedUser = userService.updateUser(id, userDTO);
         return ResponseEntity.ok(savedUser);
     }
 

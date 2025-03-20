@@ -5,7 +5,6 @@ import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
@@ -16,11 +15,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final DepartmentRepository departmentRepository;
+    private final DepartmentService departmentService;
 
-    public UserService(UserRepository userRepository, DepartmentRepository departmentRepository) {
+    public UserService(UserRepository userRepository, DepartmentService departmentService) {
         this.userRepository = userRepository;
-        this.departmentRepository = departmentRepository;
+        this.departmentService = departmentService;
     }
 
     public List<User> getAllUsers() {
@@ -35,11 +34,11 @@ public class UserService {
         return userRepository.save(convertToEntity(userDto));
     }
 
-    public User updateUser(Long id, UserDTO userDto)
+    public User updateUser(Long id, UserDTO userDTO)
     {
         Optional<User> optionalUser = userRepository.findById(id);
 
-        User updatedUser = convertToEntity(userDto);
+        User updatedUser = convertToEntity(userDTO);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -61,17 +60,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    private User convertToEntity(UserDTO userDto) {
-        Department department = departmentRepository
-                .findById(userDto.getDepartmentId())
-                .orElseThrow(() -> new FindException("Department not found"));
+    private User convertToEntity(UserDTO userDTO) {
+        Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 
         return new User(
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getHashedPassword(),
-                userDto.getEmail(),
-                userDto.getRole(),
+                userDTO.getFirstName(),
+                userDTO.getLastName(),
+                userDTO.getHashedPassword(),
+                userDTO.getEmail(),
+                userDTO.getRole(),
                 department
         );
     }

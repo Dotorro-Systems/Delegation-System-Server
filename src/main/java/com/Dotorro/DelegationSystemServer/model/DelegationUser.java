@@ -8,8 +8,7 @@ public class DelegationUser {
     @EmbeddedId
     private DelegationUserKey id;
 
-    public DelegationUser() {
-    }
+    public DelegationUser() { }
 
     public DelegationUser(DelegationUserKey id) {
         this.id = id;

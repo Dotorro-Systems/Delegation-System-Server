@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.service.NoteService;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class NoteController {
     }
 
     @PostMapping
-    public Note createNote(@RequestBody Note note) {
-        return noteService.createNote(note);
+    public Note createNote(@RequestBody NoteDTO noteDTO) {
+        return noteService.createNote(noteDTO);
     }
 }

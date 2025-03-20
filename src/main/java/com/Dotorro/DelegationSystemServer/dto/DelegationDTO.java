@@ -6,15 +6,25 @@ public class DelegationDTO {
     private String title;
     private String origin;
     private String destination;
+    private String delegationStatus;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public DelegationDTO(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
+    public DelegationDTO(String title, String origin, String destination, String delegationStatus, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.origin = origin;
         this.destination = destination;
+        this.delegationStatus = delegationStatus;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public String getDelegationStatus() {
+        return delegationStatus;
+    }
+
+    public void setDelegationStatus(String delegationStatus) {
+        this.delegationStatus = delegationStatus;
     }
 
     public String getTitle() {

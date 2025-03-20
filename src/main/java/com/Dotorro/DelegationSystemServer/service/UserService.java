@@ -67,6 +67,7 @@ public class UserService {
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
                 userDTO.getHashedPassword(),
+                userDTO.getPhone(),
                 userDTO.getEmail(),
                 userDTO.getRole(),
                 department
@@ -79,6 +80,7 @@ public class UserService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getHashedPassword(),
+                user.getPhone(),
                 user.getEmail(),
                 user.getRole(),
                 user.getDepartment().getId()

@@ -27,8 +27,8 @@ public class DepartmentService {
         return departmentRepository.findById(departmentId).orElse(null);
     }
 
-    public Department createDepartment(Department department) {
-        return departmentRepository.save(department);
+    public Department createDepartment(DepartmentDTO departmentDTO) {
+        return departmentRepository.save(convertToEntity(departmentDTO));
     }
 
     private Department convertToEntity(DepartmentDTO departmentDTO) {

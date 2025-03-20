@@ -10,6 +10,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String hashedPassword;
+    private String phone;
     private String email;
     private String role;
     @ManyToOne
@@ -20,20 +21,22 @@ public class User {
 
     }
 
-    public User(String firstName, String lastName, String hashedPassword, String email, String role, Department department) {
+    public User(String firstName, String lastName, String hashedPassword, String phone, String email, String role, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.hashedPassword = hashedPassword;
+        this.phone = phone;
         this.email = email;
         this.role = role;
         this.department = department;
     }
 
-    public User(Long id, String firstName, String lastName, String hashedPassword, String email, String role, Department department) {
+    public User(Long id, String firstName, String lastName, String hashedPassword, String phone, String email, String role, Department department) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.hashedPassword = hashedPassword;
+        this.phone = phone;
         this.email = email;
         this.role = role;
         this.department = department;
@@ -69,6 +72,14 @@ public class User {
 
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {

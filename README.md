@@ -11,7 +11,7 @@
 - Planowanie podróży
 
 ## Schemat bazy danych
-![database_schema](database_schema.png)
+![database_schema](Delegation-System-Database-Model.png)
 
 ## Stos technologiczny
 ### Frontend

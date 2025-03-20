@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.DepartmentDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.service.DepartmentService;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public Department createDepartment(@RequestBody Department department) {
-        return departmentService.createDepartment(department);
+    public Department createDepartment(@RequestBody DepartmentDTO departmentDTO) {
+        return departmentService.createDepartment(departmentDTO);
     }
 }

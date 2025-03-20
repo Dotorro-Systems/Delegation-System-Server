@@ -13,28 +13,28 @@ public class Delegation {
     private String title;
     private String origin;
     private String destination;
-    private DelegationStatus delegationStatus;
+    private DelegationStatus status;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
 
     public Delegation() { }
 
-    public Delegation(String title, String origin, String destination, DelegationStatus delegationStatus, LocalDateTime startDate, LocalDateTime endDate) {
+    public Delegation(String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.delegationStatus = delegationStatus;
+        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Delegation(Long id, String title, String origin, String destination, DelegationStatus delegationStatus, LocalDateTime startDate, LocalDateTime endDate) {
+    public Delegation(Long id, String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.delegationStatus = delegationStatus;
+        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -79,11 +79,11 @@ public class Delegation {
         this.endDate = endDate;
     }
 
-    public DelegationStatus getDelegationStatus() {
-        return delegationStatus;
+    public DelegationStatus getStatus() {
+        return status;
     }
 
-    public void setDelegationStatus(DelegationStatus delegationStatus) {
-        this.delegationStatus = delegationStatus;
+    public void setStatus(DelegationStatus status) {
+        this.status = status;
     }
 }

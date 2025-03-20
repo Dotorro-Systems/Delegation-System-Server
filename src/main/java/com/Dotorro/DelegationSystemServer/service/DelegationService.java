@@ -1,10 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.User;
-import com.Dotorro.DelegationSystemServer.model.WorkLog;
 import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.springframework.stereotype.Service;
@@ -31,7 +28,7 @@ public class DelegationService {
                 delegationDTO.getTitle(),
                 delegationDTO.getOrigin(),
                 delegationDTO.getDestination(),
-                DelegationStatus.valueOf(delegationDTO.getDelegationStatus()),
+                DelegationStatus.valueOf(delegationDTO.getStatus()),
                 delegationDTO.getStartDate(),
                 delegationDTO.getEndDate()
         );
@@ -43,7 +40,7 @@ public class DelegationService {
                 delegation.getTitle(),
                 delegation.getOrigin(),
                 delegation.getDestination(),
-                delegation.getDelegationStatus().toString(),
+                delegation.getStatus().toString(),
                 delegation.getStartDate(),
                 delegation.getEndDate()
         );

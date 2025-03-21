@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
+import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
@@ -69,7 +70,7 @@ public class UserService {
                 userDTO.getHashedPassword(),
                 userDTO.getPhone(),
                 userDTO.getEmail(),
-                userDTO.getRole(),
+                UserRole.valueOf(userDTO.getRole()),
                 department
         );
     }
@@ -82,7 +83,7 @@ public class UserService {
                 user.getHashedPassword(),
                 user.getPhone(),
                 user.getEmail(),
-                user.getRole(),
+                user.getRole().toString(),
                 user.getDepartment().getId()
         );
     }

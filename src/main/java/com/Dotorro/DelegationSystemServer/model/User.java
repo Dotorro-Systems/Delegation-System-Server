@@ -1,4 +1,5 @@
 package com.Dotorro.DelegationSystemServer.model;
+import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,7 +13,7 @@ public class User {
     private String hashedPassword;
     private String phone;
     private String email;
-    private String role;
+    private UserRole role;
     @ManyToOne
     @JoinColumn(name = "departmentId")
     private Department department;
@@ -21,7 +22,7 @@ public class User {
 
     }
 
-    public User(String firstName, String lastName, String hashedPassword, String phone, String email, String role, Department department) {
+    public User(String firstName, String lastName, String hashedPassword, String phone, String email, UserRole role, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.hashedPassword = hashedPassword;
@@ -31,7 +32,7 @@ public class User {
         this.department = department;
     }
 
-    public User(Long id, String firstName, String lastName, String hashedPassword, String phone, String email, String role, Department department) {
+    public User(Long id, String firstName, String lastName, String hashedPassword, String phone, String email, UserRole role, Department department) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -90,11 +91,11 @@ public class User {
         this.email = email;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 

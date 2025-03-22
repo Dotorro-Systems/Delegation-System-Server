@@ -20,4 +20,12 @@ public class AuthenticationService {
 
         return matcher.matches();
     }
+
+    private boolean PasswordValidation(String password)
+    {
+        Pattern compiledPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[\\W_])[^ \\p{So}]{8,20}$");
+        Matcher matcher = compiledPattern.matcher(password);
+
+        return matcher.matches();
+    }
 }

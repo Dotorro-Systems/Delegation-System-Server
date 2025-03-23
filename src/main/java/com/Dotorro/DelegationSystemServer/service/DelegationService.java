@@ -1,9 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.springframework.stereotype.Service;
@@ -13,22 +11,22 @@ import java.util.Optional;
 
 @Service
 public class DelegationService {
-    private final DelegationRepository delegationsRepository;
+    private final DelegationRepository delegationRepository;
 
-    public DelegationService(DelegationRepository delegationsRepository) {
-        this.delegationsRepository = delegationsRepository;}
+    public DelegationService(DelegationRepository delegationRepository) {
+        this.delegationRepository = delegationRepository;}
 
-    public List<Delegation> getAllDelegations(){ return delegationsRepository.findAll();}
+    public List<Delegation> getAllDelegations(){ return delegationRepository.findAll();}
 
     public Delegation getDelegationById(Long delegationId) {
-        return delegationsRepository.findById(delegationId).orElse(null);
+        return delegationRepository.findById(delegationId).orElse(null);
     }
 
-    public Delegation createDelegation(DelegationDTO delegationDTO){return delegationsRepository.save(convertToEntity(delegationDTO));}
+    public Delegation createDelegation(DelegationDTO delegationDTO){return delegationRepository.save(convertToEntity(delegationDTO));}
 
     public Delegation updateDelegation(Long id, DelegationDTO delegationDTO)
     {
-        Optional<Delegation> optionalDelegation = delegationsRepository.findById(id);
+        Optional<Delegation> optionalDelegation = delegationRepository.findById(id);
 
         Delegation updatedDelegation = convertToEntity(delegationDTO);
 
@@ -41,7 +39,7 @@ public class DelegationService {
             delegation.setStartDate(optionalDelegation.get().getStartDate());
             delegation.setEndDate(optionalDelegation.get().getEndDate());
 
-            return delegationsRepository.save(delegation);
+            return delegationRepository.save(delegation);
         } else {
             throw new RuntimeException("Delegation not found with id: " + id);
         }
@@ -49,7 +47,7 @@ public class DelegationService {
 
     public void deleteDelegation(Long id)
     {
-        delegationsRepository.deleteById(id);
+        delegationRepository.deleteById(id);
     }
 
     private Delegation convertToEntity(DelegationDTO delegationDTO) {

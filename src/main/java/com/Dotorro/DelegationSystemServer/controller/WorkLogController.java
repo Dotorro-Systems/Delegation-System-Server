@@ -1,8 +1,12 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
+import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.model.WorkLog;
 import com.Dotorro.DelegationSystemServer.service.WorkLogService;
+import org.hibernate.jdbc.Work;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,12 +20,31 @@ public class WorkLogController {
         this.workLogService = workLogService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/all")
     public List<WorkLog> getWorkLogs() {
         return workLogService.getAllWorkLogs();
     }
 
-    @PostMapping
+    @GetMapping(value = "/{id}")
+    public WorkLog getWorkLogById(@PathVariable Long id)
+    {
+        return workLogService.getWorkLogById(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDTO workLogDTO)
+    {
+        WorkLog savedWorkLog = workLogService.updateWorkLog(id, workLogDTO);
+        return ResponseEntity.ok(savedWorkLog);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteWorkLogById(@PathVariable Long id)
+    {
+        workLogService.deleteWorkLog(id);
+    }
+
+    @PostMapping(value = "/create")
     public WorkLog createWorkLog(@RequestBody WorkLogDTO workLogDTO) {
         return workLogService.createWorkLog(workLogDTO);
     }

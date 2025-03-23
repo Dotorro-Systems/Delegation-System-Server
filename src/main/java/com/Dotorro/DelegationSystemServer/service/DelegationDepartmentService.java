@@ -1,11 +1,13 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDepartmentDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.DelegationDepartmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DelegationDepartmentService {
@@ -25,8 +27,32 @@ public class DelegationDepartmentService {
         return delegationDepartmentRepository.findAll();
     }
 
+    public DelegationDepartment getDelegationDepartmentById(Long delegationDepartmentId) {
+        return delegationDepartmentRepository.findById(delegationDepartmentId).orElse(null);
+    }
+
     public DelegationDepartment createDelegationDepartment(DelegationDepartmentDTO delegationDepartmentDTO) {
         return delegationDepartmentRepository.save(convertToEntity(delegationDepartmentDTO));
+    }
+
+    public DelegationDepartment updateDelegationDepartment(Long id, DelegationDepartmentDTO delegationDepartmentDTO)
+    {
+        Optional<DelegationDepartment> optionalDelegationDepartment = delegationDepartmentRepository.findById(id);
+
+        DelegationDepartment updatedDelegationDepartment = convertToEntity(delegationDepartmentDTO);
+
+        if (optionalDelegationDepartment.isPresent()) {
+            DelegationDepartment delegationDepartment = optionalDelegationDepartment.get();
+
+            return delegationDepartmentRepository.save(delegationDepartment);
+        } else {
+            throw new RuntimeException("DelegationDepartment not found with id: " + id);
+        }
+    }
+
+    public void deleteDelegationDepartment(Long id)
+    {
+        delegationDepartmentRepository.deleteById(id);
     }
 
     private DelegationDepartment convertToEntity(DelegationDepartmentDTO delegationUserDTO) {

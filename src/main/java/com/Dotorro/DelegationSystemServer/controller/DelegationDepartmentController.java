@@ -20,7 +20,7 @@ public class DelegationDepartmentController {
         this.delegationDepartmentService = delegationDepartmentService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<DelegationDepartment> getDelegationDepartments() {
         return delegationDepartmentService.getAllDelegationDepartments();
     }

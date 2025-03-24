@@ -19,7 +19,7 @@ public class ExpenseController {
         this.expenseService = userService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<Expense> getExpenses() {
         return expenseService.getAllExpenses();
     }

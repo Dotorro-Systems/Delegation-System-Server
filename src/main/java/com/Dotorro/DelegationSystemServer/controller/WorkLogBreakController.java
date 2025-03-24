@@ -19,7 +19,7 @@ public class WorkLogBreakController {
         this.workLogBreakService = workLogBreakService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<WorkLogBreak> getWorkLogBreaks() {
         return workLogBreakService.getAllWorkLogBreaks();
     }

@@ -17,7 +17,7 @@ public class DelegationController {
 
     public DelegationController(DelegationService delegationService){this.delegationService = delegationService;}
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<Delegation> getDelegations(){return delegationService.getAllDelegations();}
 
     @GetMapping(value = "/{id}")

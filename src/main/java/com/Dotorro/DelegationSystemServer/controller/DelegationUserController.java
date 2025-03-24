@@ -20,7 +20,7 @@ public class DelegationUserController {
         this.delegationUserService = delegationUserService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<DelegationUser> getDelegationUsers() {
         return delegationUserService.getAllDelegationUsers();
     }

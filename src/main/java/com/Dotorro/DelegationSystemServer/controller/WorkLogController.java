@@ -20,7 +20,7 @@ public class WorkLogController {
         this.workLogService = workLogService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<WorkLog> getWorkLogs() {
         return workLogService.getAllWorkLogs();
     }

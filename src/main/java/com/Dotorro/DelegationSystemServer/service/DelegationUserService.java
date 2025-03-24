@@ -33,6 +33,7 @@ public class DelegationUserService {
     public DelegationUser getDelegationUserByDelegationIdUserId(Long delegationId, Long userId)
     {
         DelegationUserKey id = new DelegationUserKey(delegationId,userId);
+
         return delegationUserRepository.findById(id).orElse(null);
     }
 
@@ -46,10 +47,11 @@ public class DelegationUserService {
 
         Optional<DelegationUser> optionalDelegationUser = delegationUserRepository.findById(id);
 
-        DelegationUser updatedDelegationUser = convertToEntity(delegationUserDTO);
-
         if (optionalDelegationUser.isPresent()) {
+            DelegationUser updatedDelegationUser = convertToEntity(delegationUserDTO);
+
             DelegationUser delegationUser = optionalDelegationUser.get();
+            delegationUser.setId(updatedDelegationUser.getId());
             delegationUser.setDelegation(updatedDelegationUser.getDelegation());
             delegationUser.setUser(updatedDelegationUser.getUser());
 
@@ -67,7 +69,6 @@ public class DelegationUserService {
 
     private DelegationUser convertToEntity(DelegationUserDTO delegationUserDTO) {
         Delegation delegation = delegationService.getDelegationById(delegationUserDTO.getDelegationId());
-
         User user = userService.getUserById(delegationUserDTO.getUserId());
 
         return new DelegationUser(

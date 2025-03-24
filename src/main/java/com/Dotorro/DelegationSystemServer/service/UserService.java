@@ -86,6 +86,19 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public boolean authenticateUser(Long id, String password)
+    {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            return authenticationService.matchPassword(password, user.getPassword());
+        } else {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+    }
+
     private User convertToEntity(UserDTO userDTO) {
         Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 

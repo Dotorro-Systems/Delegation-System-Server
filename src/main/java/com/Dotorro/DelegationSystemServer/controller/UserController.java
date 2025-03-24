@@ -28,6 +28,12 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping(value = "/{id}/authenticate")
+    public boolean authenticateUser(@PathVariable Long id, @RequestBody String password)
+    {
+        return userService.authenticateUser(id, password);
+    }
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO)
     {

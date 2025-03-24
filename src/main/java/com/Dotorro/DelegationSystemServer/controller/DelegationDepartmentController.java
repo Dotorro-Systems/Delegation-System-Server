@@ -25,23 +25,23 @@ public class DelegationDepartmentController {
         return delegationDepartmentService.getAllDelegationDepartments();
     }
 
-    @GetMapping(value = "/{id}")
-    public DelegationDepartment getDelegationDepartmentById(@PathVariable Long id)
+    @GetMapping(value = "/{delegationId}/{departmentId}")
+    public DelegationDepartment getDelegationDepartmentByDelegationIdDepartmentId(@PathVariable Long delegationId, @PathVariable Long departmentId)
     {
-        return delegationDepartmentService.getDelegationDepartmentById(id);
+        return delegationDepartmentService.getDelegationDepartmentByDelegationIdDepartmentId(delegationId,departmentId);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateDelegationDepartment(@PathVariable Long id, @RequestBody DelegationDepartmentDTO delegationDepartmentDTO)
+    @PutMapping(value = "/{delegationId}/{departmentId}")
+    public ResponseEntity<?> updateDelegationDepartment(@PathVariable Long delegationId, @PathVariable Long departmentId, @RequestBody DelegationDepartmentDTO delegationDepartmentDTO)
     {
-        DelegationDepartment savedDelegationDepartment = delegationDepartmentService.updateDelegationDepartment(id, delegationDepartmentDTO);
+        DelegationDepartment savedDelegationDepartment = delegationDepartmentService.updateDelegationDepartment(delegationId, departmentId, delegationDepartmentDTO);
         return ResponseEntity.ok(savedDelegationDepartment);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void deleteDelegationDepartmentById(@PathVariable Long id)
+    @DeleteMapping(value = "/{delegationId}/{departmentId}")
+    public void deleteDelegationDepartmentByDelegationIdDepartmentId(@PathVariable Long delegationId, @PathVariable Long departmentId)
     {
-        delegationDepartmentService.deleteDelegationDepartment(id);
+        delegationDepartmentService.deleteDelegationDepartment(delegationId, departmentId);
     }
 
     @PostMapping(value = "/create")

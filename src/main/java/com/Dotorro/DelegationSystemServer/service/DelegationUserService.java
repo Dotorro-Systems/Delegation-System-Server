@@ -30,16 +30,20 @@ public class DelegationUserService {
         return delegationUserRepository.findAll();
     }
 
-    public DelegationUser getDelegationUserById(Long delegationUserId) {
-        return delegationUserRepository.findById(delegationUserId).orElse(null);
+    public DelegationUser getDelegationUserByDelegationIdUserId(Long delegationId, Long userId)
+    {
+        DelegationUserKey id = new DelegationUserKey(delegationId,userId);
+        return delegationUserRepository.findById(id).orElse(null);
     }
 
     public DelegationUser createDelegationUser(DelegationUserDTO delegationUserDTO) {
         return delegationUserRepository.save(convertToEntity(delegationUserDTO));
     }
 
-    public DelegationUser updateDelegationUser(Long id, DelegationUserDTO delegationUserDTO)
+    public DelegationUser updateDelegationUser(Long delegationId, Long userId, DelegationUserDTO delegationUserDTO)
     {
+        DelegationUserKey id = new DelegationUserKey(delegationId,userId);
+
         Optional<DelegationUser> optionalDelegationUser = delegationUserRepository.findById(id);
 
         DelegationUser updatedDelegationUser = convertToEntity(delegationUserDTO);
@@ -51,12 +55,13 @@ public class DelegationUserService {
 
             return delegationUserRepository.save(delegationUser);
         } else {
-            throw new RuntimeException("DelegationUser not found with id: " + id);
+            throw new RuntimeException("DelegationUser not found with DelegationId: " + delegationId + " and UserId: " + userId);
         }
     }
 
-    public void deleteDelegationUser(Long id)
+    public void deleteDelegationUser(Long delegationId, Long userId)
     {
+        DelegationUserKey id = new DelegationUserKey(delegationId,userId);
         delegationUserRepository.deleteById(id);
     }
 

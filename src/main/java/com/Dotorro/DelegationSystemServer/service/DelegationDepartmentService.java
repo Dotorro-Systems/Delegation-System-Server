@@ -27,31 +27,46 @@ public class DelegationDepartmentService {
         return delegationDepartmentRepository.findAll();
     }
 
-    public DelegationDepartment getDelegationDepartmentById(Long delegationDepartmentId) {
-        return delegationDepartmentRepository.findById(delegationDepartmentId).orElse(null);
+    public DelegationDepartment getDelegationDepartmentByDelegationIdDepartmentId(Long delegationId, Long departmentId) {
+        Delegation delegation = delegationService.getDelegationById(delegationId);
+        Department department = departmentService.getDepartmentById(departmentId);
+
+        DelegationDepartmentKey id = new DelegationDepartmentKey(delegation,department);
+        return delegationDepartmentRepository.findById(id).orElse(null);
     }
 
     public DelegationDepartment createDelegationDepartment(DelegationDepartmentDTO delegationDepartmentDTO) {
         return delegationDepartmentRepository.save(convertToEntity(delegationDepartmentDTO));
     }
 
-    public DelegationDepartment updateDelegationDepartment(Long id, DelegationDepartmentDTO delegationDepartmentDTO)
+    public DelegationDepartment updateDelegationDepartment(Long delegationId, Long departmentId, DelegationDepartmentDTO delegationDepartmentDTO)
     {
+        Delegation delegation = delegationService.getDelegationById(delegationId);
+        Department department = departmentService.getDepartmentById(departmentId);
+
+        DelegationDepartmentKey id = new DelegationDepartmentKey(delegation,department);
+
         Optional<DelegationDepartment> optionalDelegationDepartment = delegationDepartmentRepository.findById(id);
 
         DelegationDepartment updatedDelegationDepartment = convertToEntity(delegationDepartmentDTO);
 
         if (optionalDelegationDepartment.isPresent()) {
             DelegationDepartment delegationDepartment = optionalDelegationDepartment.get();
+            delegationDepartment.setId(updatedDelegationDepartment.getId());
 
             return delegationDepartmentRepository.save(delegationDepartment);
         } else {
-            throw new RuntimeException("DelegationDepartment not found with id: " + id);
+            throw new RuntimeException("DelegationDepartment not found with delegationId: " + delegationId + " and departmentId: " + departmentId);
         }
     }
 
-    public void deleteDelegationDepartment(Long id)
+    public void deleteDelegationDepartment(Long delegationId, Long departmentId)
     {
+        Delegation delegation = delegationService.getDelegationById(delegationId);
+        Department department = departmentService.getDepartmentById(departmentId);
+
+        DelegationDepartmentKey id = new DelegationDepartmentKey(delegation,department);
+
         delegationDepartmentRepository.deleteById(id);
     }
 

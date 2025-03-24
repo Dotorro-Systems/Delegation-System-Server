@@ -3,12 +3,10 @@ package com.Dotorro.DelegationSystemServer.service;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
-import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.FindException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +15,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final DepartmentService departmentService;
+    private final AuthenticationService authenticationService;
 
-    public UserService(UserRepository userRepository, DepartmentService departmentService) {
+    public UserService(UserRepository userRepository,
+                       DepartmentService departmentService,
+                       AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.departmentService = departmentService;
+        this.authenticationService = authenticationService;
     }
 
     public List<User> getAllUsers() {
@@ -32,7 +34,14 @@ public class UserService {
     }
 
     public User createUser(UserDTO userDto) {
-        return userRepository.save(convertToEntity(userDto));
+        User user = convertToEntity(userDto);
+
+        authenticationService.validateEmail(user.getEmail());
+        authenticationService.validatePassword(user.getPassword());
+
+        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+
+        return userRepository.save(user);
     }
 
     public User updateUser(Long id, UserDTO userDTO)
@@ -45,10 +54,26 @@ public class UserService {
             User user = optionalUser.get();
             user.setFirstName(updatedUser.getFirstName());
             user.setLastName(updatedUser.getLastName());
-            user.setHashedPassword(updatedUser.getHashedPassword());
+            user.setPassword(updatedUser.getPassword());
             user.setEmail(updatedUser.getEmail());
             user.setRole(updatedUser.getRole());
             user.setDepartment(updatedUser.getDepartment());
+
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+    }
+
+    public User updatePassword(Long id, String newPassword)
+    {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            authenticationService.validatePassword(newPassword);
+
+            User user = optionalUser.get();
+            user.setPassword(authenticationService.hashPassword(newPassword));
 
             return userRepository.save(user);
         } else {
@@ -67,7 +92,7 @@ public class UserService {
         return new User(
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
-                userDTO.getHashedPassword(),
+                userDTO.getPassword(),
                 userDTO.getPhone(),
                 userDTO.getEmail(),
                 UserRole.valueOf(userDTO.getRole()),
@@ -80,7 +105,7 @@ public class UserService {
         return new UserDTO(
                 user.getFirstName(),
                 user.getLastName(),
-                user.getHashedPassword(),
+                user.getPassword(),
                 user.getPhone(),
                 user.getEmail(),
                 user.getRole().toString(),

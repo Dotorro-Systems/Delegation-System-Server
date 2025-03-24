@@ -1,18 +1,20 @@
 package com.Dotorro.DelegationSystemServer.dto;
 
+import com.Dotorro.DelegationSystemServer.utils.UserRole;
+
 public class UserDTO {
     private String firstName;
     private String lastName;
-    private String hashedPassword;
+    private String password;
     private String phone;
     private String email;
-    private String role;
+    private String role = UserRole.Employee.toString();
     private Long departmentId;
 
-    public UserDTO(String firstName, String lastName, String hashedPassword, String phone, String email, String role, Long departmentId) {
+    public UserDTO(String firstName, String lastName, String password, String phone, String email, String role, Long departmentId) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.hashedPassword = hashedPassword;
+        this.password = password;
         this.phone = phone;
         this.email = email;
         this.role = role;
@@ -35,12 +37,12 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhone() {

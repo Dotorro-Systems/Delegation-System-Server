@@ -1,31 +1,67 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class AuthenticationService {
 
-    private final UserService userService;
+    public AuthenticationService() { }
 
-    public AuthenticationService(UserService userService) {
-        this.userService = userService;
-    }
-
-    private boolean EmailValidation(String email)
+    public boolean validateEmail(String email)
     {
         Pattern compiledPattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
         Matcher matcher = compiledPattern.matcher(email);
 
-        return matcher.matches();
+        boolean result = matcher.matches();
+
+        if (!result)
+            throw new IllegalArgumentException("Email is not valid");
+
+        return true;
     }
 
-    private boolean PasswordValidation(String password)
+    public boolean validatePassword(String password)
     {
         Pattern compiledPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[\\W_])[^ \\p{So}]{8,20}$");
         Matcher matcher = compiledPattern.matcher(password);
 
-        return matcher.matches();
+        boolean result = matcher.matches();
+
+        if (!result)
+            throw new IllegalArgumentException("Password doesn't meet requirements");
+
+        return true;
+    }
+
+    public String hashPassword(String password) {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        SecretKeyFactory factory = null;
+        try {
+            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+
+            return Arrays.toString(hash);
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

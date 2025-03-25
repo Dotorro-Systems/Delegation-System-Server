@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/delegationUsers")
-@CrossOrigin(origins = "*") // Allow frontend requests
+@CrossOrigin(origins = "*")
 public class DelegationUserController {
     private final DelegationUserService delegationUserService;
 
@@ -45,7 +45,9 @@ public class DelegationUserController {
     }
 
     @PostMapping(value = "/create")
-    public DelegationUser createDelegationEmployee(@RequestBody DelegationUserDTO delegationUserDTO) {
-        return delegationUserService.createDelegationUser(delegationUserDTO);
+    public ResponseEntity<?> createDelegationEmployee(@RequestBody DelegationUserDTO delegationUserDTO) {
+        DelegationUser delegationUser = delegationUserService.createDelegationUser(delegationUserDTO);
+
+        return ResponseEntity.ok(delegationUser);
     }
 }

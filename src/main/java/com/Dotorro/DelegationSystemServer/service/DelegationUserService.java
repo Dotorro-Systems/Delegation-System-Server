@@ -1,7 +1,6 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationUserDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.DelegationUser;
 import com.Dotorro.DelegationSystemServer.model.DelegationUserKey;
@@ -72,10 +71,6 @@ public class DelegationUserService {
         User user = userService.getUserById(delegationUserDTO.getUserId());
 
         return new DelegationUser(
-                new DelegationUserKey(
-                        delegationUserDTO.getDelegationId(),
-                        delegationUserDTO.getUserId()
-                ),
                 delegation,
                 user
         );

@@ -11,13 +11,13 @@ public class DelegationDepartment {
 
     @ManyToOne
     @MapsId("delegationId")
-    @JoinColumn(name = "delegationId")
+    @JoinColumn(name = "delegation_id")
     @JsonIgnoreProperties("delegationDepartments")
     private Delegation delegation;
 
     @ManyToOne
     @MapsId("departmentId")
-    @JoinColumn(name = "departmentId")
+    @JoinColumn(name = "department_id")
     @JsonIgnoreProperties("delegationDepartments")
     private Department department;
 

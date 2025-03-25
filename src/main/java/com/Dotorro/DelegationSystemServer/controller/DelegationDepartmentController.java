@@ -45,7 +45,9 @@ public class DelegationDepartmentController {
     }
 
     @PostMapping(value = "/create")
-    public DelegationDepartment createDelegationDepartment(@RequestBody DelegationDepartmentDTO delegationDepartmentDTO) {
-        return delegationDepartmentService.createDelegationDepartment(delegationDepartmentDTO);
+    public ResponseEntity<?> createDelegationDepartment(@RequestBody DelegationDepartmentDTO delegationDepartmentDTO) {
+        DelegationDepartment delegationDepartment = delegationDepartmentService.createDelegationDepartment(delegationDepartmentDTO);
+
+        return ResponseEntity.ok(delegationDepartment);
     }
 }

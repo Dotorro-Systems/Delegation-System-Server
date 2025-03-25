@@ -11,17 +11,24 @@ public class DelegationUser {
 
     @ManyToOne
     @MapsId("delegationId")
-    @JoinColumn(name = "delegationId")
+    @JoinColumn(name = "delegation_id")
     @JsonIgnoreProperties("delegationUsers")
     private Delegation delegation;
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("delegationUsers")
     private User user;
 
     public DelegationUser() { }
+
+    public DelegationUser(Delegation delegation, User user)
+    {
+        this.id = new DelegationUserKey(delegation.getId(), user.getId());
+        this.delegation = delegation;
+        this.user = user;
+    }
 
     public DelegationUser(DelegationUserKey id, Delegation delegation, User user) {
         this.id = id;

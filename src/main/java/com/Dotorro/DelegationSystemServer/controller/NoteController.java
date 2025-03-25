@@ -1,8 +1,11 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Note;
+import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.NoteService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -14,12 +17,31 @@ public class NoteController {
 
     public  NoteController(NoteService noteService){this.noteService = noteService;}
 
-    @GetMapping
+    @GetMapping(value = "/")
     public List<Note> getNotes() {
         return noteService.getAllNotes();
     }
 
-    @PostMapping
+    @GetMapping(value = "/{id}")
+    public Note getNoteById(@PathVariable Long id)
+    {
+        return noteService.getNoteById(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateNote(@PathVariable Long id, @RequestBody NoteDTO noteDTO)
+    {
+        Note savedNote = noteService.updateNote(id, noteDTO);
+        return ResponseEntity.ok(savedNote);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteNoteById(@PathVariable Long id)
+    {
+        noteService.deleteNote(id);
+    }
+
+    @PostMapping(value = "/create")
     public Note createNote(@RequestBody NoteDTO noteDTO) {
         return noteService.createNote(noteDTO);
     }

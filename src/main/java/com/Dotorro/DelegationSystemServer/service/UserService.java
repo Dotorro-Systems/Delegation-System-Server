@@ -3,12 +3,10 @@ package com.Dotorro.DelegationSystemServer.service;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
-import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.FindException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +43,7 @@ public class UserService {
             User user = optionalUser.get();
             user.setFirstName(updatedUser.getFirstName());
             user.setLastName(updatedUser.getLastName());
-            user.setHashedPassword(updatedUser.getHashedPassword());
+            user.setPassword(updatedUser.getPassword());
             user.setEmail(updatedUser.getEmail());
             user.setRole(updatedUser.getRole());
             user.setDepartment(updatedUser.getDepartment());
@@ -80,7 +78,7 @@ public class UserService {
         return new UserDTO(
                 user.getFirstName(),
                 user.getLastName(),
-                user.getHashedPassword(),
+                user.getPassword(),
                 user.getPhone(),
                 user.getEmail(),
                 user.getRole().toString(),

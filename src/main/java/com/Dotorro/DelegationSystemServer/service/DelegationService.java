@@ -7,21 +7,48 @@ import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DelegationService {
-    private final DelegationRepository delegationsRepository;
+    private final DelegationRepository delegationRepository;
 
-    public DelegationService(DelegationRepository delegationsRepository) {
-        this.delegationsRepository = delegationsRepository;}
+    public DelegationService(DelegationRepository delegationRepository) {
+        this.delegationRepository = delegationRepository;}
 
-    public List<Delegation> getAllDelegations(){ return delegationsRepository.findAll();}
+    public List<Delegation> getAllDelegations(){ return delegationRepository.findAll();}
 
     public Delegation getDelegationById(Long delegationId) {
-        return delegationsRepository.findById(delegationId).orElse(null);
+        return delegationRepository.findById(delegationId).orElse(null);
     }
 
-    public Delegation createDelegation(DelegationDTO delegationDTO){return delegationsRepository.save(convertToEntity(delegationDTO));}
+    public Delegation createDelegation(DelegationDTO delegationDTO){return delegationRepository.save(convertToEntity(delegationDTO));}
+
+    public Delegation updateDelegation(Long id, DelegationDTO delegationDTO)
+    {
+        Optional<Delegation> optionalDelegation = delegationRepository.findById(id);
+
+        Delegation updatedDelegation = convertToEntity(delegationDTO);
+
+        if (optionalDelegation.isPresent()) {
+            Delegation delegation = optionalDelegation.get();
+            delegation.setTitle(optionalDelegation.get().getTitle());
+            delegation.setOrigin(optionalDelegation.get().getOrigin());
+            delegation.setDestination(optionalDelegation.get().getDestination());
+            delegation.setStatus(optionalDelegation.get().getStatus());
+            delegation.setStartDate(optionalDelegation.get().getStartDate());
+            delegation.setEndDate(optionalDelegation.get().getEndDate());
+
+            return delegationRepository.save(delegation);
+        } else {
+            throw new RuntimeException("Delegation not found with id: " + id);
+        }
+    }
+
+    public void deleteDelegation(Long id)
+    {
+        delegationRepository.deleteById(id);
+    }
 
     private Delegation convertToEntity(DelegationDTO delegationDTO) {
         return new Delegation(

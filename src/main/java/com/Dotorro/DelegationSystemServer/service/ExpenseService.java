@@ -1,6 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.ExpenseDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Expense;
 import com.Dotorro.DelegationSystemServer.model.User;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -32,6 +34,31 @@ public class ExpenseService {
 
     public Expense createExpense(ExpenseDTO expenseDTO) {
         return expenseRepository.save(convertToEntity(expenseDTO));
+    }
+
+    public Expense updateExpense(Long id, ExpenseDTO expenseDTO)
+    {
+        Optional<Expense> optionalExpense = expenseRepository.findById(id);
+
+        Expense updatedExpense = convertToEntity(expenseDTO);
+
+        if (optionalExpense.isPresent()) {
+            Expense expense = optionalExpense.get();
+            expense.setDelegation(updatedExpense.getDelegation());
+            expense.setUser(updatedExpense.getUser());
+            expense.setDescription(updatedExpense.getDescription());
+            expense.setAmount(updatedExpense.getAmount());
+            expense.setCreateAt(updatedExpense.getCreateAt());
+
+            return expenseRepository.save(expense);
+        } else {
+            throw new RuntimeException("Expense not found with id: " + id);
+        }
+    }
+
+    public void deleteExpense(Long id)
+    {
+        expenseRepository.deleteById(id);
     }
 
     private Expense convertToEntity(ExpenseDTO expenseDTO) {

@@ -1,15 +1,18 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationUserDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.DelegationUser;
+import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DelegationUserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/delegationUsers")
-@CrossOrigin(origins = "*") // Allow frontend requests
+@CrossOrigin(origins = "*")
 public class DelegationUserController {
     private final DelegationUserService delegationUserService;
 
@@ -17,13 +20,34 @@ public class DelegationUserController {
         this.delegationUserService = delegationUserService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/")
     public List<DelegationUser> getDelegationUsers() {
         return delegationUserService.getAllDelegationUsers();
     }
 
-    @PostMapping
-    public DelegationUser createDelegationEmployee(@RequestBody DelegationUserDTO delegationUserDTO) {
-        return delegationUserService.createDelegationUser(delegationUserDTO);
+    @GetMapping(value = "/{delegationId}/{userId}")
+    public DelegationUser getDelegationUserByDelegationIdUserId(@PathVariable Long delegationId, @PathVariable Long userId)
+    {
+        return delegationUserService.getDelegationUserByDelegationIdUserId(delegationId, userId);
+    }
+
+    @PutMapping(value = "/{delegationId}/{userId}")
+    public ResponseEntity<?> updateDelegationUser(@PathVariable Long delegationId, @PathVariable Long userId, @RequestBody DelegationUserDTO delegationUserDTO)
+    {
+        DelegationUser savedDelegationUser = delegationUserService.updateDelegationUser(delegationId, userId, delegationUserDTO);
+        return ResponseEntity.ok(savedDelegationUser);
+    }
+
+    @DeleteMapping(value = "/{delegationId}/{userId}")
+    public void deleteDelegationUserById(@PathVariable Long delegationId, @PathVariable Long userId )
+    {
+        delegationUserService.deleteDelegationUser(delegationId, userId);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<?> createDelegationEmployee(@RequestBody DelegationUserDTO delegationUserDTO) {
+        DelegationUser delegationUser = delegationUserService.createDelegationUser(delegationUserDTO);
+
+        return ResponseEntity.ok(delegationUser);
     }
 }

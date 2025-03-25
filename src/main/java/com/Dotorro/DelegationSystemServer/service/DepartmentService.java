@@ -2,12 +2,15 @@ package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.dto.DepartmentDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Department;
+import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartmentService {
@@ -29,6 +32,27 @@ public class DepartmentService {
 
     public Department createDepartment(DepartmentDTO departmentDTO) {
         return departmentRepository.save(convertToEntity(departmentDTO));
+    }
+
+    public Department updateDepartment(Long id, DepartmentDTO departmentDTO)
+    {
+        Optional<Department> optionalDepartment = departmentRepository.findById(id);
+
+        Department updatedDepartment = convertToEntity(departmentDTO);
+
+        if (optionalDepartment.isPresent()) {
+            Department department = optionalDepartment.get();
+            department.setName(updatedDepartment.getName());
+
+            return departmentRepository.save(department);
+        } else {
+            throw new RuntimeException("Department not found with id: " + id);
+        }
+    }
+
+    public void deleteDepartment(Long id)
+    {
+        departmentRepository.deleteById(id);
     }
 
     private Department convertToEntity(DepartmentDTO departmentDTO) {

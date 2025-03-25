@@ -1,8 +1,11 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.dto.ExpenseDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Expense;
+import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.ExpenseService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,12 +19,31 @@ public class ExpenseController {
         this.expenseService = userService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/")
     public List<Expense> getExpenses() {
         return expenseService.getAllExpenses();
     }
 
-    @PostMapping
+    @GetMapping(value = "/{id}")
+    public Expense getExpenseById(@PathVariable Long id)
+    {
+        return expenseService.getExpenseById(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestBody ExpenseDTO expenseDTO)
+    {
+        Expense savedExpense = expenseService.updateExpense(id, expenseDTO);
+        return ResponseEntity.ok(savedExpense);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteExpenseById(@PathVariable Long id)
+    {
+        expenseService.deleteExpense(id);
+    }
+
+    @PostMapping(value = "/create")
     public Expense createExpense(@RequestBody ExpenseDTO expenseDTO) {
         return expenseService.createExpense(expenseDTO);
     }

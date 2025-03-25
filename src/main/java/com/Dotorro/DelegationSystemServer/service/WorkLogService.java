@@ -8,10 +8,12 @@ import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.model.WorkLog;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogRepository;
+import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WorkLogService {
@@ -36,6 +38,30 @@ public class WorkLogService {
 
     public WorkLog createWorkLog(WorkLogDTO workLogDTO) {
         return workLogRepository.save(convertToEntity(workLogDTO));
+    }
+
+    public WorkLog updateWorkLog(Long id, WorkLogDTO workLogDTO)
+    {
+        Optional<WorkLog> optionalWorkLog = workLogRepository.findById(id);
+
+        WorkLog updatedWorkLog = convertToEntity(workLogDTO);
+
+        if (optionalWorkLog.isPresent()) {
+            WorkLog workLog = optionalWorkLog.get();
+            workLog.setDelegation(updatedWorkLog.getDelegation());
+            workLog.setUser(updatedWorkLog.getUser());
+            workLog.setStartTime(updatedWorkLog.getStartTime());
+            workLog.setEndTime(updatedWorkLog.getEndTime());
+
+            return workLogRepository.save(updatedWorkLog);
+        } else {
+            throw new RuntimeException("WorkLog not found with id: " + id);
+        }
+    }
+
+    public void deleteWorkLog(Long id)
+    {
+        workLogRepository.deleteById(id);
     }
 
     private WorkLog convertToEntity(WorkLogDTO workLogDTO) {

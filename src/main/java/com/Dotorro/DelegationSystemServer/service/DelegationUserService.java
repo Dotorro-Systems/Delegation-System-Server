@@ -9,6 +9,7 @@ import com.Dotorro.DelegationSystemServer.repository.DelegationUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DelegationUserService {
@@ -28,20 +29,48 @@ public class DelegationUserService {
         return delegationUserRepository.findAll();
     }
 
+    public DelegationUser getDelegationUserByDelegationIdUserId(Long delegationId, Long userId)
+    {
+        DelegationUserKey id = new DelegationUserKey(delegationId,userId);
+
+        return delegationUserRepository.findById(id).orElse(null);
+    }
+
     public DelegationUser createDelegationUser(DelegationUserDTO delegationUserDTO) {
         return delegationUserRepository.save(convertToEntity(delegationUserDTO));
     }
 
+    public DelegationUser updateDelegationUser(Long delegationId, Long userId, DelegationUserDTO delegationUserDTO)
+    {
+        DelegationUserKey id = new DelegationUserKey(delegationId,userId);
+
+        Optional<DelegationUser> optionalDelegationUser = delegationUserRepository.findById(id);
+
+        if (optionalDelegationUser.isPresent()) {
+            DelegationUser updatedDelegationUser = convertToEntity(delegationUserDTO);
+
+            DelegationUser delegationUser = optionalDelegationUser.get();
+            delegationUser.setId(updatedDelegationUser.getId());
+            delegationUser.setDelegation(updatedDelegationUser.getDelegation());
+            delegationUser.setUser(updatedDelegationUser.getUser());
+
+            return delegationUserRepository.save(delegationUser);
+        } else {
+            throw new RuntimeException("DelegationUser not found with DelegationId: " + delegationId + " and UserId: " + userId);
+        }
+    }
+
+    public void deleteDelegationUser(Long delegationId, Long userId)
+    {
+        DelegationUserKey id = new DelegationUserKey(delegationId,userId);
+        delegationUserRepository.deleteById(id);
+    }
+
     private DelegationUser convertToEntity(DelegationUserDTO delegationUserDTO) {
         Delegation delegation = delegationService.getDelegationById(delegationUserDTO.getDelegationId());
-
         User user = userService.getUserById(delegationUserDTO.getUserId());
 
         return new DelegationUser(
-                new DelegationUserKey(
-                        delegationUserDTO.getDelegationId(),
-                        delegationUserDTO.getUserId()
-                ),
                 delegation,
                 user
         );

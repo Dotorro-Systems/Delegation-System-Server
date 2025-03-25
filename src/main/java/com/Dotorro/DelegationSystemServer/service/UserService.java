@@ -15,10 +15,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final DepartmentService departmentService;
+    private final AuthenticationService authenticationService;
 
-    public UserService(UserRepository userRepository, DepartmentService departmentService) {
+    public UserService(UserRepository userRepository,
+                       DepartmentService departmentService,
+                       AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.departmentService = departmentService;
+        this.authenticationService = authenticationService;
     }
 
     public List<User> getAllUsers() {
@@ -30,7 +34,14 @@ public class UserService {
     }
 
     public User createUser(UserDTO userDto) {
-        return userRepository.save(convertToEntity(userDto));
+        User user = convertToEntity(userDto);
+
+        authenticationService.validateEmail(user.getEmail());
+        authenticationService.validatePassword(user.getPassword());
+
+        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+
+        return userRepository.save(user);
     }
 
     public User updateUser(Long id, UserDTO userDTO)
@@ -54,9 +65,38 @@ public class UserService {
         }
     }
 
+    public User updatePassword(Long id, String newPassword)
+    {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            authenticationService.validatePassword(newPassword);
+
+            User user = optionalUser.get();
+            user.setPassword(authenticationService.hashPassword(newPassword));
+
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+    }
+
     public void deleteUser(Long id)
     {
         userRepository.deleteById(id);
+    }
+
+    public boolean authenticateUser(Long id, String password)
+    {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            return authenticationService.matchPassword(password, user.getPassword());
+        } else {
+            throw new RuntimeException("User not found with id: " + id);
+        }
     }
 
     private User convertToEntity(UserDTO userDTO) {
@@ -65,7 +105,7 @@ public class UserService {
         return new User(
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
-                userDTO.getHashedPassword(),
+                userDTO.getPassword(),
                 userDTO.getPhone(),
                 userDTO.getEmail(),
                 UserRole.valueOf(userDTO.getRole()),

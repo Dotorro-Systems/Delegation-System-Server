@@ -71,8 +71,8 @@ public class User {
         return password;
     }
 
-    public void setPassword(String hashedPassword) {
-        this.password = hashedPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhone() {

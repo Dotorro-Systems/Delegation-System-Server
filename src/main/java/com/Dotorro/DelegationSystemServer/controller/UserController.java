@@ -28,10 +28,23 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping(value = "/{id}/authenticate")
+    public boolean authenticateUser(@PathVariable Long id, @RequestBody String password)
+    {
+        return userService.authenticateUser(id, password);
+    }
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO)
     {
         User savedUser = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(savedUser);
+    }
+
+    @PutMapping(value = "/{id}/password")
+    public ResponseEntity<?> updateUserPassword(@PathVariable Long id, @RequestBody String newPassword)
+    {
+        User savedUser = userService.updatePassword(id, newPassword);
         return ResponseEntity.ok(savedUser);
     }
 

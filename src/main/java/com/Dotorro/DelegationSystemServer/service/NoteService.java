@@ -1,6 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.repository.NoteRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoteService {
@@ -32,6 +34,30 @@ public class NoteService {
 
     public Note createNote(NoteDTO noteDTO) {
         return noteRepository.save(convertToEntity(noteDTO));
+    }
+
+    public Note updateNote(Long id, NoteDTO noteDTO)
+    {
+        Optional<Note> optionalNote = noteRepository.findById(id);
+
+        Note updatedNote = convertToEntity(noteDTO);
+
+        if (optionalNote.isPresent()) {
+            Note note = optionalNote.get();
+            note.setDelegation(updatedNote.getDelegation());
+            note.setUser(updatedNote.getUser());
+            note.setContent(updatedNote.getContent());
+            note.setCreatedAt(updatedNote.getCreatedAt());
+
+            return noteRepository.save(note);
+        } else {
+            throw new RuntimeException("Note not found with id: " + id);
+        }
+    }
+
+    public void deleteNote(Long id)
+    {
+        noteRepository.deleteById(id);
     }
 
     private Note convertToEntity(NoteDTO noteDTO) {

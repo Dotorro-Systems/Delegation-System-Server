@@ -23,6 +23,13 @@ public class DelegationUser {
 
     public DelegationUser() { }
 
+    public DelegationUser(Delegation delegation, User user)
+    {
+        this.id = new DelegationUserKey(delegation.getId(), user.getId());
+        this.delegation = delegation;
+        this.user = user;
+    }
+
     public DelegationUser(DelegationUserKey id, Delegation delegation, User user) {
         this.id = id;
         this.delegation = delegation;

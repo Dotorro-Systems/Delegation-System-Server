@@ -1,15 +1,14 @@
 package com.Dotorro.DelegationSystemServer.service;
 
+import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
-import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.Department;
-import com.Dotorro.DelegationSystemServer.model.WorkLog;
-import com.Dotorro.DelegationSystemServer.model.WorkLogBreak;
+import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogBreakRepository;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WorkLogBreakService {
@@ -33,6 +32,30 @@ public class WorkLogBreakService {
     public WorkLogBreak createWorkLogBreak(WorkLogBreakDTO workLogBreakDTO) {
         return workLogBreakRepository.save(convertToEntity(workLogBreakDTO));
     }
+
+    public WorkLogBreak updateWorkLogBreak(Long id, WorkLogBreakDTO workLogBreakDTO)
+    {
+        Optional<WorkLogBreak> optionalWorkLogBreak = workLogBreakRepository.findById(id);
+
+        WorkLogBreak updatedWorkLogBreak = convertToEntity(workLogBreakDTO);
+
+        if (optionalWorkLogBreak.isPresent()) {
+            WorkLogBreak workLogBreak = optionalWorkLogBreak.get();
+            workLogBreak.setWorkLog(updatedWorkLogBreak.getWorkLog());
+            workLogBreak.setStartTime(updatedWorkLogBreak.getStartTime());
+            workLogBreak.setEndTime(updatedWorkLogBreak.getEndTime());
+
+            return workLogBreakRepository.save(workLogBreak);
+        } else {
+            throw new RuntimeException("WorkLogBreak not found with id: " + id);
+        }
+    }
+
+    public void deleteWorkLogBrak(Long id)
+    {
+        workLogBreakRepository.deleteById(id);
+    }
+
 
     private WorkLogBreak convertToEntity(WorkLogBreakDTO workLogBreakDTO) {
         WorkLog workLog = workLogService.getWorkLogById(workLogBreakDTO.getWorkLogId());

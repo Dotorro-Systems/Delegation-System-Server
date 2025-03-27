@@ -33,6 +33,10 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
     public User createUser(UserDTO userDto) {
         User user = convertToEntity(userDto);
 

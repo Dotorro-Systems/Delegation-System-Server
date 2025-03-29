@@ -8,7 +8,7 @@ public class UserDTO {
     private String password;
     private String phone;
     private String email;
-    private String role = UserRole.Employee.toString();
+    private String role;
     private Long departmentId;
 
     public UserDTO(String firstName, String lastName, String password, String phone, String email, String role, Long departmentId) {

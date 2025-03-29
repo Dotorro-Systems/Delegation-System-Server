@@ -28,7 +28,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping(value = "/{id}/authenticate")
+    @PostMapping(value = "/{id}/authenticate")
     public boolean authenticateUser(@PathVariable Long id, @RequestBody String password)
     {
         return userService.authenticateUser(id, password);

@@ -8,6 +8,7 @@ import com.Dotorro.DelegationSystemServer.service.UserService;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,10 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -140,5 +140,37 @@ public class UserControllerTest
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.firstName").value("testFirstNameUpdated"));
+    }
+
+    @Test
+    public void updatePasswordTest() throws Exception
+    {
+        String password = "testUpdatedPassword";
+        Department testDepartment = new Department(1L,"testDepartment");
+        UserRole testRole = UserRole.Employee;
+        User updatedUser = new User(1L,"testFirstNameUpdated","testLastName",password,"testPhone","testEmail",testRole,testDepartment);
+
+        when(userService.updatePassword(anyLong(),anyString())).thenReturn(updatedUser);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String testUpdatedPasswordJson = objectMapper.writeValueAsString(password);
+
+        mvc.perform(put("/users/{id}/password",1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testUpdatedPasswordJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.password").value("testUpdatedPassword"));
+    }
+
+    @Test
+    public void deleteUserByIdTest() throws Exception
+    {
+        Long id = 1L;
+
+        doNothing().when(userService).deleteUser(id);
+
+        mvc.perform(delete("/users/{id}",id))
+                .andExpect(status().isOk());
     }
 }

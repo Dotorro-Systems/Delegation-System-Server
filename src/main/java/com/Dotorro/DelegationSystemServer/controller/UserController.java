@@ -3,6 +3,7 @@ package com.Dotorro.DelegationSystemServer.controller;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -58,7 +59,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
             User savedUser = userService.createUser(userDTO);
-            return ResponseEntity.ok(savedUser);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

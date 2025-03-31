@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.AuthenticationService;
@@ -28,10 +29,10 @@ public class AuthorizationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody String email, @RequestBody String password) {
-        User user = userService.getUserByEmail(email);
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        User user = userService.getUserByEmail(loginRequestDTO.getEmail());
 
-        if (!authenticationService.matchPassword(password, user.getPassword())) {
+        if (!authenticationService.matchPassword(loginRequestDTO.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 

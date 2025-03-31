@@ -8,6 +8,7 @@ import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,14 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
-    public User getUserByEmail(String email) { return userRepository.findByEmail(email); }
+    public User getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null)
+            throw new NoSuchElementException("No user with provided email found");
+
+        return user;
+    }
 
     public User createUser(UserDTO userDto) {
         User user = convertToEntity(userDto);

@@ -21,9 +21,9 @@ public class AuthorizationService {
     public String generateToken(UserDTO userDTO){
         return Jwts.builder()
                 .setSubject(userDTO.getEmail())
-                .claim("role", userDTO.getRole().toString())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_IN_MS))
+                .claim("role", userDTO.getRole())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_IN_MS))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -13,7 +13,6 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
     private final DepartmentService departmentService;
     private final AuthenticationService authenticationService;
 
@@ -32,6 +31,7 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
+    public User getUserByEmail(String email) { return userRepository.findByEmail(email); }
 
     public User createUser(UserDTO userDto) {
         User user = convertToEntity(userDto);
@@ -100,7 +100,7 @@ public class UserService {
         }
     }
 
-    private User convertToEntity(UserDTO userDTO) {
+    public User convertToEntity(UserDTO userDTO) {
         Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 
         return new User(
@@ -114,7 +114,7 @@ public class UserService {
         );
     }
 
-    private UserDTO convertToDTO(User user)
+    public UserDTO convertToDTO(User user)
     {
         return new UserDTO(
                 user.getFirstName(),

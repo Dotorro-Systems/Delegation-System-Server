@@ -1,5 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.UserService;
@@ -54,13 +55,18 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    @PostMapping(value = "/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
-            User savedUser = userService.createUser(userDTO);
+            User savedUser = userService.registerUser(userDTO);
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        return userService.verify(loginRequestDTO);
     }
 }

@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 @Service
 public class AuthenticationService {
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     public AuthenticationService() { }
 
     public boolean validateEmail(String email)
@@ -38,13 +36,5 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Password doesn't meet requirements");
 
         return true;
-    }
-
-    public String hashPassword(String password) {
-        return passwordEncoder.encode(password);
-    }
-
-    public boolean matchPassword(String password, String hashedPassword) {
-        return passwordEncoder.matches(password, hashedPassword);
     }
 }

@@ -16,9 +16,8 @@ import java.util.Date;
 @Service
 public class AuthorizationService {
     public static String SECRET_KEY = "905310c638dfbc8c48f27a4d34ab725e1cf3cc82136ffc09c4aaa27dd181d972";
-    public static long EXPIRATION_TIME_IN_MS = 1000 * 60 * 60; // 1 h
+    public static long EXPIRATION_TIME_IN_MS = 1000 * 60 * 60; // 1h
 
-    //private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);

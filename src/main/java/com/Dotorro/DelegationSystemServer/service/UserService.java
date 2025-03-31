@@ -1,10 +1,16 @@
 package com.Dotorro.DelegationSystemServer.service;
 
+import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +19,14 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
     private final UserRepository userRepository;
     private final DepartmentService departmentService;
     private final AuthenticationService authenticationService;
@@ -41,13 +55,13 @@ public class UserService {
         return user;
     }
 
-    public User createUser(UserDTO userDto) {
+    public User registerUser(UserDTO userDto) {
         User user = convertToEntity(userDto);
 
         authenticationService.validateEmail(user.getEmail());
         authenticationService.validatePassword(user.getPassword());
 
-        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+        user.setPassword(encoder.encode(user.getPassword()));
 
         return userRepository.save(user);
     }
@@ -133,5 +147,15 @@ public class UserService {
                 user.getRole().toString(),
                 user.getDepartment().getId()
         );
+    }
+
+    public String verify(LoginRequestDTO loginRequestDTO) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
+
+        if (authentication.isAuthenticated()) {
+            return authorizationService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
+        }
+
+        return "Fail";
     }
 }

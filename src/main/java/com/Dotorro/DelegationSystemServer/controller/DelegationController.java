@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DelegationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -40,6 +41,13 @@ public class DelegationController {
     }
 
     @PostMapping(value = "/create")
-    public Delegation createDelegation(@RequestBody DelegationDTO delegationDTO){
-        return delegationService.createDelegation(delegationDTO);}
+    public ResponseEntity<?> createDelegation(@RequestBody DelegationDTO delegationDTO)
+    {
+        try {
+            Delegation savedDelegation = delegationService.createDelegation(delegationDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedDelegation);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

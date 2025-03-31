@@ -16,6 +16,13 @@ import java.util.Optional;
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
+    public boolean validateDepartment(DepartmentDTO departmentDTO){
+        if(departmentDTO.getName().matches(".*[^a-zA-Z0-9].*") || departmentDTO.getName().matches(".*\\d.*")){
+            return false;
+        }
+        return true;
+    }
+
     public DepartmentService(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
     }
@@ -31,7 +38,7 @@ public class DepartmentService {
     }
 
     public Department createDepartment(DepartmentDTO departmentDTO) {
-        return departmentRepository.save(convertToEntity(departmentDTO));
+            return departmentRepository.save(convertToEntity(departmentDTO));
     }
 
     public Department updateDepartment(Long id, DepartmentDTO departmentDTO)

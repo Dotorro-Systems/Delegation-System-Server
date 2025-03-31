@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DepartmentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -33,8 +34,13 @@ public class DepartmentController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateDepartment(@PathVariable Long id, @RequestBody DepartmentDTO departmentDTO)
     {
-        Department savedDepartment = departmentService.updateDepartment(id, departmentDTO);
-        return ResponseEntity.ok(savedDepartment);
+        if(departmentService.validateDepartment(departmentDTO)) {
+            Department savedDepartment = departmentService.updateDepartment(id, departmentDTO);
+            return ResponseEntity.ok(savedDepartment);
+        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Wrong input!");
     }
 
     @DeleteMapping(value = "/{id}")
@@ -44,7 +50,13 @@ public class DepartmentController {
     }
 
     @PostMapping(value = "/create")
-    public Department createDepartment(@RequestBody DepartmentDTO departmentDTO) {
-        return departmentService.createDepartment(departmentDTO);
+    public ResponseEntity<?> createDepartment(@RequestBody DepartmentDTO departmentDTO) {
+        if(departmentService.validateDepartment(departmentDTO)){
+            Department savedDepartment = departmentService.createDepartment(departmentDTO);
+            return ResponseEntity.ok(savedDepartment);
+        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Wrong input!");
     }
 }

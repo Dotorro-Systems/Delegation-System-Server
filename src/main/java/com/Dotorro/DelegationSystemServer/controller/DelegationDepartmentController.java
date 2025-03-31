@@ -2,9 +2,11 @@ package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDepartmentDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.DelegationDepartment;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,8 +48,11 @@ public class DelegationDepartmentController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<?> createDelegationDepartment(@RequestBody DelegationDepartmentDTO delegationDepartmentDTO) {
-        DelegationDepartment delegationDepartment = delegationDepartmentService.createDelegationDepartment(delegationDepartmentDTO);
-
-        return ResponseEntity.ok(delegationDepartment);
+        try {
+            DelegationDepartment savedDelegationDepartment = delegationDepartmentService.createDelegationDepartment(delegationDepartmentDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedDelegationDepartment);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

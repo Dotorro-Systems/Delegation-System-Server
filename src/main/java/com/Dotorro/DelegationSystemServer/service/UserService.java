@@ -23,7 +23,7 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private AuthorizationService authorizationService;
+    private JWTService JWTService;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -61,7 +61,7 @@ public class UserService {
         authenticationService.validateEmail(user.getEmail());
         authenticationService.validatePassword(user.getPassword());
 
-        user.setPassword(encoder.encode(user.getPassword()));
+        user.setPassword(hashPassword(user.getPassword()));
 
         return userRepository.save(user);
     }
@@ -96,7 +96,7 @@ public class UserService {
             authenticationService.validatePassword(newPassword);
 
             User user = optionalUser.get();
-            user.setPassword(authenticationService.hashPassword(newPassword));
+            user.setPassword(hashPassword(newPassword));
 
             return userRepository.save(user);
         } else {
@@ -104,22 +104,14 @@ public class UserService {
         }
     }
 
+    private String hashPassword(String password)
+    {
+        return encoder.encode(password);
+    }
+
     public void deleteUser(Long id)
     {
         userRepository.deleteById(id);
-    }
-
-    public boolean authenticateUser(Long id, String password)
-    {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-
-            return authenticationService.matchPassword(password, user.getPassword());
-        } else {
-            throw new RuntimeException("User not found with id: " + id);
-        }
     }
 
     public User convertToEntity(UserDTO userDTO) {
@@ -153,7 +145,7 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return authorizationService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
+            return JWTService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
         }
 
         return "Fail";

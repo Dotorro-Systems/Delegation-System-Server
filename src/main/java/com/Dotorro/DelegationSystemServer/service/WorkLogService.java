@@ -1,17 +1,13 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+
 import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.Department;
+
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.model.WorkLog;
-import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogRepository;
-import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.FindException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +34,6 @@ public class WorkLogService {
         if(workLogDTO.getEndTime().isBefore(workLogDTO.getStartTime())){
             throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
         }
-
     }
 
     public List<WorkLog> getAllWorkLogs() {

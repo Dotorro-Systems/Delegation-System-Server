@@ -33,6 +33,10 @@ public class DelegationService {
         if(!delegationDTO.getDestination().matches("[A-Z][a-zA-Z]*")) {
             throw new IllegalArgumentException("The destination is not valid.");
         }
+        if(delegationDTO.getTitle().matches(".*[^a-zA-Z ].*")) {
+            throw new IllegalArgumentException("The title is not valid.");
+        }
+
     }
 
     public List<Delegation> getAllDelegations(){ return delegationRepository.findAll();}

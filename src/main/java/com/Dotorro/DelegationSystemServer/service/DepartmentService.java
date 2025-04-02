@@ -13,7 +13,7 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
     public void validateDepartment(DepartmentDTO departmentDTO){
-        if(departmentDTO.getName().matches(".*[^a-zA-Z].*")){
+        if(departmentDTO.getName().matches(".*[^a-zA-Z ].*")){
             throw new IllegalArgumentException("Department name is not valid");
         }
     }

@@ -1,12 +1,10 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogBreakRepository;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.FindException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +18,18 @@ public class WorkLogBreakService {
         this.workLogService = workLogService;
     }
 
+    public void workLogBreakValidation(WorkLogBreakDTO workLogBreakDTO){
+        if(workLogBreakDTO.getStartTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("time can't be from the past!");
+        }
+        if(workLogBreakDTO.getEndTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("time can't be from the past!");
+        }
+        if(workLogBreakDTO.getEndTime().isBefore(workLogBreakDTO.getStartTime())){
+            throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
+        }
+    }
+
     public List<WorkLogBreak> getAllWorkLogBreaks() {
         return workLogBreakRepository.findAll();
     }
@@ -30,13 +40,14 @@ public class WorkLogBreakService {
     }
 
     public WorkLogBreak createWorkLogBreak(WorkLogBreakDTO workLogBreakDTO) {
+        workLogBreakValidation(workLogBreakDTO);
         return workLogBreakRepository.save(convertToEntity(workLogBreakDTO));
     }
 
     public WorkLogBreak updateWorkLogBreak(Long id, WorkLogBreakDTO workLogBreakDTO)
     {
         Optional<WorkLogBreak> optionalWorkLogBreak = workLogBreakRepository.findById(id);
-
+        workLogBreakValidation(workLogBreakDTO);
         WorkLogBreak updatedWorkLogBreak = convertToEntity(workLogBreakDTO);
 
         if (optionalWorkLogBreak.isPresent()) {
@@ -51,7 +62,7 @@ public class WorkLogBreakService {
         }
     }
 
-    public void deleteWorkLogBrak(Long id)
+    public void deleteWorkLogBreak(Long id)
     {
         workLogBreakRepository.deleteById(id);
     }

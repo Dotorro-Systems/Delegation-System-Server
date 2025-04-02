@@ -12,6 +12,7 @@ import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,19 @@ public class WorkLogService {
         this.delegationService = delegationService;
     }
 
+    public void workLogValidation(WorkLogDTO workLogDTO){
+        if(workLogDTO.getStartTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("time can't be from the past!");
+        }
+        if(workLogDTO.getEndTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("time can't be from the past!");
+        }
+        if(workLogDTO.getEndTime().isBefore(workLogDTO.getStartTime())){
+            throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
+        }
+
+    }
+
     public List<WorkLog> getAllWorkLogs() {
         return workLogRepository.findAll();
     }
@@ -37,13 +51,14 @@ public class WorkLogService {
     }
 
     public WorkLog createWorkLog(WorkLogDTO workLogDTO) {
+        workLogValidation(workLogDTO);
         return workLogRepository.save(convertToEntity(workLogDTO));
     }
 
     public WorkLog updateWorkLog(Long id, WorkLogDTO workLogDTO)
     {
         Optional<WorkLog> optionalWorkLog = workLogRepository.findById(id);
-
+        workLogValidation(workLogDTO);
         WorkLog updatedWorkLog = convertToEntity(workLogDTO);
 
         if (optionalWorkLog.isPresent()) {

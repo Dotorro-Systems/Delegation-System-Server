@@ -34,8 +34,12 @@ public class WorkLogController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDTO workLogDTO)
     {
-        WorkLog savedWorkLog = workLogService.updateWorkLog(id, workLogDTO);
-        return ResponseEntity.ok(savedWorkLog);
+        try {
+            WorkLog savedWorkLog = workLogService.updateWorkLog(id, workLogDTO);
+            return ResponseEntity.ok(savedWorkLog);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}")
@@ -45,7 +49,12 @@ public class WorkLogController {
     }
 
     @PostMapping(value = "/create")
-    public WorkLog createWorkLog(@RequestBody WorkLogDTO workLogDTO) {
-        return workLogService.createWorkLog(workLogDTO);
+    public ResponseEntity<?> createWorkLog(@RequestBody WorkLogDTO workLogDTO) {
+        try {
+            WorkLog savedWorkLog = workLogService.createWorkLog(workLogDTO);
+            return ResponseEntity.ok(savedWorkLog);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

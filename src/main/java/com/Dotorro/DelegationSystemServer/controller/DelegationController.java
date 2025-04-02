@@ -29,8 +29,12 @@ public class DelegationController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateDelegation(@PathVariable Long id, @RequestBody DelegationDTO delegationDTO)
     {
-        Delegation savedDelegation = delegationService.updateDelegation(id, delegationDTO);
-        return ResponseEntity.ok(savedDelegation);
+        try {
+            Delegation savedDelegation = delegationService.updateDelegation(id, delegationDTO);
+            return ResponseEntity.ok(savedDelegation);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}")
@@ -40,6 +44,12 @@ public class DelegationController {
     }
 
     @PostMapping(value = "/create")
-    public Delegation createDelegation(@RequestBody DelegationDTO delegationDTO){
-        return delegationService.createDelegation(delegationDTO);}
+    public ResponseEntity<?> createDelegation(@RequestBody DelegationDTO delegationDTO){
+        try {
+            Delegation savedDelegation = delegationService.createDelegation(delegationDTO);
+            return ResponseEntity.ok(savedDelegation);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

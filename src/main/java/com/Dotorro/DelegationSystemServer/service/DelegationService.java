@@ -6,6 +6,7 @@ import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,18 +17,38 @@ public class DelegationService {
     public DelegationService(DelegationRepository delegationRepository) {
         this.delegationRepository = delegationRepository;}
 
+    public void delegationValidate(DelegationDTO delegationDTO){
+        if(delegationDTO.getStartDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("date can't be from the past!");
+        }
+        if(delegationDTO.getEndDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("date can't be from the past!");
+        }
+        if(delegationDTO.getEndDate().isBefore(delegationDTO.getStartDate())){
+            throw new IllegalArgumentException("The endDate cannot be earlier than the startDate");
+        }
+        if(!delegationDTO.getOrigin().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("The origin is not valid.");
+        }
+        if(!delegationDTO.getDestination().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("The destination is not valid.");
+        }
+    }
+
     public List<Delegation> getAllDelegations(){ return delegationRepository.findAll();}
 
     public Delegation getDelegationById(Long delegationId) {
         return delegationRepository.findById(delegationId).orElse(null);
     }
 
-    public Delegation createDelegation(DelegationDTO delegationDTO){return delegationRepository.save(convertToEntity(delegationDTO));}
+    public Delegation createDelegation(DelegationDTO delegationDTO){
+        delegationValidate(delegationDTO);
+        return delegationRepository.save(convertToEntity(delegationDTO));}
 
     public Delegation updateDelegation(Long id, DelegationDTO delegationDTO)
     {
         Optional<Delegation> optionalDelegation = delegationRepository.findById(id);
-
+        delegationValidate(delegationDTO);
         Delegation updatedDelegation = convertToEntity(delegationDTO);
 
         if (optionalDelegation.isPresent()) {

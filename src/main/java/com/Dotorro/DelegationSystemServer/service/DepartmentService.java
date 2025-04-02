@@ -1,11 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.dto.DepartmentDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
-import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Department;
-import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +12,10 @@ import java.util.Optional;
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
-    public boolean validateDepartment(DepartmentDTO departmentDTO){
-        if(departmentDTO.getName().matches(".*[^a-zA-Z0-9].*") || departmentDTO.getName().matches(".*\\d.*")){
-            return false;
+    public void validateDepartment(DepartmentDTO departmentDTO){
+        if(departmentDTO.getName().matches(".*[^a-zA-Z].*")){
+            throw new IllegalArgumentException("Department name is not valid");
         }
-        return true;
     }
 
     public DepartmentService(DepartmentRepository departmentRepository) {
@@ -38,14 +33,15 @@ public class DepartmentService {
     }
 
     public Department createDepartment(DepartmentDTO departmentDTO) {
-            return departmentRepository.save(convertToEntity(departmentDTO));
+        validateDepartment(departmentDTO);
+        return departmentRepository.save(convertToEntity(departmentDTO));
     }
 
     public Department updateDepartment(Long id, DepartmentDTO departmentDTO)
     {
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
-
         Department updatedDepartment = convertToEntity(departmentDTO);
+        validateDepartment(departmentDTO);
 
         if (optionalDepartment.isPresent()) {
             Department department = optionalDepartment.get();

@@ -37,8 +37,12 @@ public class UserController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO)
     {
-        User savedUser = userService.updateUser(id, userDTO);
-        return ResponseEntity.ok(savedUser);
+        try {
+            User savedUser = userService.updateUser(id, userDTO);
+            return ResponseEntity.ok(savedUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping(value = "/{id}/password")

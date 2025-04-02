@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -23,6 +25,19 @@ public class UserService {
         this.userRepository = userRepository;
         this.departmentService = departmentService;
         this.authenticationService = authenticationService;
+    }
+
+    public void userValidation(UserDTO userDTO){
+        if(!userDTO.getFirstName().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("First name is not valid");
+        }
+        if(!userDTO.getLastName().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("Last name is not valid");
+        }
+        if(!userDTO.getPhone().matches("\\d{9}")){
+            throw new IllegalArgumentException("Phone number is not valid");
+        }
+
     }
 
     public List<User> getAllUsers() {
@@ -43,7 +58,7 @@ public class UserService {
 
     public User createUser(UserDTO userDto) {
         User user = convertToEntity(userDto);
-
+        userValidation(userDto);
         authenticationService.validateEmail(user.getEmail());
         authenticationService.validatePassword(user.getPassword());
 
@@ -55,7 +70,7 @@ public class UserService {
     public User updateUser(Long id, UserDTO userDTO)
     {
         Optional<User> optionalUser = userRepository.findById(id);
-
+        userValidation(userDTO);
         User updatedUser = convertToEntity(userDTO);
 
         if (optionalUser.isPresent()) {

@@ -34,14 +34,14 @@ public class DepartmentController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateDepartment(@PathVariable Long id, @RequestBody DepartmentDTO departmentDTO)
     {
-        if(departmentService.validateDepartment(departmentDTO)) {
-            Department savedDepartment = departmentService.updateDepartment(id, departmentDTO);
-            return ResponseEntity.ok(savedDepartment);
+            try {
+                Department savedDepartment = departmentService.updateDepartment(id, departmentDTO);
+                return ResponseEntity.ok(savedDepartment);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         }
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Wrong input!");
-    }
+
 
     @DeleteMapping(value = "/{id}")
     public void deleteDepartmentById(@PathVariable Long id)
@@ -51,12 +51,11 @@ public class DepartmentController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<?> createDepartment(@RequestBody DepartmentDTO departmentDTO) {
-        if(departmentService.validateDepartment(departmentDTO)){
-            Department savedDepartment = departmentService.createDepartment(departmentDTO);
-            return ResponseEntity.ok(savedDepartment);
-        }
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Wrong input!");
+            try {
+                Department savedDepartment = departmentService.createDepartment(departmentDTO);
+                return ResponseEntity.ok(savedDepartment);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
     }
 }

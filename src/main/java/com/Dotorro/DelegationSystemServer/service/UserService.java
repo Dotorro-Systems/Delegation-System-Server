@@ -6,12 +6,15 @@ import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,7 +26,7 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JWTService JWTService;
+    private JWTService jwtService;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -145,9 +148,17 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return JWTService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
+            return jwtService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
         }
 
         return "Fail";
+    }
+
+    public User getUserByRequest(HttpServletRequest request)
+    {
+        Cookie cookie = WebUtils.getCookie(request, "jwt");
+        String token = cookie.getValue();
+
+        return getUserByEmail(jwtService.extractEmail(token));
     }
 }

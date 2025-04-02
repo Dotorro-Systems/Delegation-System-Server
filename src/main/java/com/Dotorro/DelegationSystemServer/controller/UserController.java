@@ -3,30 +3,32 @@ package com.Dotorro.DelegationSystemServer.controller;
 import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.User;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.coyote.Response;
 import org.apache.tomcat.util.http.SameSiteCookies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "*")
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private JWTService jwtService;
 
     @GetMapping(value = "/")
-    public List<User> getUsers() {
+    public List<User> getUsers(HttpServletRequest request) {
+
         return userService.getAllUsers();
     }
 
@@ -66,16 +68,22 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/me")
+    public User getMe(HttpServletRequest request)
+    {
+        return userService.getUserByRequest(request);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response) {
         String token = userService.verify(loginRequestDTO);
 
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
-                //.secure(true)
+                .secure(true)
                 .path("/")
-                .maxAge(60 * 60)
-                //.sameSite(SameSiteCookies.STRICT.toString())
+                .maxAge(7 * 24 * 60 * 60)
+                .sameSite(SameSiteCookies.STRICT.toString())
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -87,19 +95,14 @@ public class UserController {
     public ResponseEntity<?> logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("jwt", null)
                 .httpOnly(true)
-                //.secure(true)
+                .secure(true)
                 .path("/")
                 .maxAge(0)
-                //.sameSite(SameSiteCookies.STRICT.toString())
+                .sameSite(SameSiteCookies.STRICT.toString())
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ResponseEntity.ok("Logout successful");
-    }
-
-    @GetMapping("/manager")
-    public ResponseEntity<?> managerAccess() {
-        return ResponseEntity.ok("Hello manager!");
     }
 }

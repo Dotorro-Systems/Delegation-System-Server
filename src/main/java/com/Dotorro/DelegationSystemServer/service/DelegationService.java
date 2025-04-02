@@ -17,7 +17,7 @@ public class DelegationService {
     public DelegationService(DelegationRepository delegationRepository) {
         this.delegationRepository = delegationRepository;}
 
-    public void delegationValidate(DelegationDTO delegationDTO){
+    public void delegationValidation(DelegationDTO delegationDTO){
         if(delegationDTO.getStartDate().isBefore(LocalDateTime.now())){
             throw new IllegalArgumentException("date can't be from the past!");
         }
@@ -42,13 +42,13 @@ public class DelegationService {
     }
 
     public Delegation createDelegation(DelegationDTO delegationDTO){
-        delegationValidate(delegationDTO);
+        delegationValidation(delegationDTO);
         return delegationRepository.save(convertToEntity(delegationDTO));}
 
     public Delegation updateDelegation(Long id, DelegationDTO delegationDTO)
     {
         Optional<Delegation> optionalDelegation = delegationRepository.findById(id);
-        delegationValidate(delegationDTO);
+        delegationValidation(delegationDTO);
         Delegation updatedDelegation = convertToEntity(delegationDTO);
 
         if (optionalDelegation.isPresent()) {

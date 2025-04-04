@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.NoteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -42,7 +43,12 @@ public class NoteController {
     }
 
     @PostMapping(value = "/create")
-    public Note createNote(@RequestBody NoteDTO noteDTO) {
-        return noteService.createNote(noteDTO);
+    public ResponseEntity<?> createNote(@RequestBody NoteDTO noteDTO) {
+        try {
+            Note savedNote = noteService.createNote(noteDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedNote);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

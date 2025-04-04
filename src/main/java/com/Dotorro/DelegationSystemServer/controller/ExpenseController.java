@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Expense;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.ExpenseService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -44,7 +45,12 @@ public class ExpenseController {
     }
 
     @PostMapping(value = "/create")
-    public Expense createExpense(@RequestBody ExpenseDTO expenseDTO) {
-        return expenseService.createExpense(expenseDTO);
+    public ResponseEntity<?> createExpense(@RequestBody ExpenseDTO expenseDTO) {
+        try {
+            Expense savedExpense = expenseService.createExpense(expenseDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

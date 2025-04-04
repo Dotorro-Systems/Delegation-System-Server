@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.model.WorkLogBreak;
 import com.Dotorro.DelegationSystemServer.service.WorkLogBreakService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -44,7 +45,12 @@ public class WorkLogBreakController {
     }
 
     @PostMapping(value = "/create")
-    public WorkLogBreak createWorkLogBreak(@RequestBody WorkLogBreakDTO workLogBreakDTO) {
-        return workLogBreakService.createWorkLogBreak(workLogBreakDTO);
+    public ResponseEntity<?> createWorkLogBreak(@RequestBody WorkLogBreakDTO workLogBreakDTO) {
+        try {
+            WorkLogBreak savedWorkLogBreak = workLogBreakService.createWorkLogBreak(workLogBreakDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkLogBreak);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

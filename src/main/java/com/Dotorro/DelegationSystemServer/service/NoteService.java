@@ -8,6 +8,7 @@ import com.Dotorro.DelegationSystemServer.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,21 @@ public class NoteService {
         this.userService = userService;
     }
 
+    public void noteValidation(NoteDTO noteDTO){
+        User user = userService.getUserById(noteDTO.getUserId());
+        if (user == null){
+            throw new RuntimeException("User not found with id: "+noteDTO.getUserId());
+        }
+        Delegation delegation = delegationService.getDelegationById(noteDTO.getDelegationId());
+        if (delegation == null){
+            throw new RuntimeException("Delegation not found with id: "+noteDTO.getDelegationId());
+        }
+
+        if(noteDTO.getCreatedAt().isAfter(LocalDateTime.now())){
+            throw new IllegalArgumentException("The date can not be from the future");
+        }
+    }
+
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
@@ -33,13 +49,14 @@ public class NoteService {
     }
 
     public Note createNote(NoteDTO noteDTO) {
+        noteValidation(noteDTO);
         return noteRepository.save(convertToEntity(noteDTO));
     }
 
     public Note updateNote(Long id, NoteDTO noteDTO)
     {
         Optional<Note> optionalNote = noteRepository.findById(id);
-
+        noteValidation(noteDTO);
         Note updatedNote = convertToEntity(noteDTO);
 
         if (optionalNote.isPresent()) {

@@ -31,8 +31,12 @@ public class NoteController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateNote(@PathVariable Long id, @RequestBody NoteDTO noteDTO)
     {
-        Note savedNote = noteService.updateNote(id, noteDTO);
-        return ResponseEntity.ok(savedNote);
+        try {
+            Note savedNote = noteService.updateNote(id, noteDTO);
+            return ResponseEntity.ok(savedNote);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}")
@@ -42,7 +46,12 @@ public class NoteController {
     }
 
     @PostMapping(value = "/create")
-    public Note createNote(@RequestBody NoteDTO noteDTO) {
-        return noteService.createNote(noteDTO);
+    public ResponseEntity<?> createNote(@RequestBody NoteDTO noteDTO) {
+        try {
+            Note savedNote = noteService.createNote(noteDTO);
+            return ResponseEntity.ok(savedNote);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -23,7 +23,7 @@ public class WorkLogBreakService {
 
         WorkLog workLog = workLogService.getWorkLogById(workLogBreakDTO.getWorkLogId());
         if (workLog == null){
-            throw new RuntimeException("WorkLogBreak not found with id: "+workLogBreakDTO.getWorkLogId());
+            throw new RuntimeException("WorkLog not found with id: "+workLogBreakDTO.getWorkLogId());
         }
 
         if(workLogBreakDTO.getEndTime().isAfter(workLog.getEndTime())) {

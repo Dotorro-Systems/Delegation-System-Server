@@ -1,37 +1,51 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
+import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.User;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.SameSiteCookies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "*")
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private JWTService jwtService;
 
     @GetMapping(value = "/")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping(value = "/in-my-department")
+    @PreAuthorize("!hasAuthority('EMPLOYEE')")
+    public List<User> getUsersInDepartment(HttpServletRequest request) throws ApiException {
+        User user = userService.getUserByRequest(request);
+
+        return userService.getUsersByDepartment(user.getDepartment().getId());
     }
 
     @GetMapping(value = "/{id}")
     public User getUserById(@PathVariable Long id)
     {
         return userService.getUserById(id);
-    }
-
-    @PostMapping(value = "/{id}/authenticate")
-    public boolean authenticateUser(@PathVariable Long id, @RequestBody String password)
-    {
-        return userService.authenticateUser(id, password);
     }
 
     @PutMapping(value = "/{id}")
@@ -54,13 +68,50 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    @GetMapping(value = "/me")
+    public User getMe(HttpServletRequest request) throws ApiException {
+        return userService.getUserByRequest(request);
+    }
+
+    @PostMapping(value = "/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
-            User savedUser = userService.createUser(userDTO);
+            User savedUser = userService.registerUser(userDTO);
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response) throws ApiException {
+        String token = userService.verify(loginRequestDTO);
+
+        ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60)
+                .sameSite(SameSiteCookies.STRICT.toString())
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        return ResponseEntity.ok("Login successful");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("jwt", null)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite(SameSiteCookies.STRICT.toString())
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        return ResponseEntity.ok("Logout successful");
     }
 }

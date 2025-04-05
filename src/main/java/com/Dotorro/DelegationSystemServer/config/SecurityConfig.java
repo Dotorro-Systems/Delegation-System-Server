@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(bearerTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter, BearerTokenFilter.class)
                 .build();
     }
 

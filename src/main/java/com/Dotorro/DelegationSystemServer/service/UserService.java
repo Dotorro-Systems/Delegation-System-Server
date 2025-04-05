@@ -150,14 +150,14 @@ public class UserService {
         );
     }
 
-    public String verify(LoginRequestDTO loginRequestDTO) {
+    public String verify(LoginRequestDTO loginRequestDTO) throws ApiException {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
 
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
         }
 
-        return "Fail";
+        throw new ApiException(HttpStatus.UNAUTHORIZED, "Cannot verify user");
     }
 
     public User getUserByRequest(HttpServletRequest request) throws ApiException {

@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response) throws ApiException {
         String token = userService.verify(loginRequestDTO);
 
         ResponseCookie cookie = ResponseCookie.from("jwt", token)

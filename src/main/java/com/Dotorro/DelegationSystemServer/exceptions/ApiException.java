@@ -28,10 +28,49 @@ public class ApiException extends Exception {
         this.debugMessage = ex.getLocalizedMessage();
     }
 
+    public ApiException(HttpStatus status, String message) {
+        this();
+        this.status = status;
+        this.message = message;
+    }
+
     public ApiException(HttpStatus status, String message, Throwable ex) {
         this();
         this.status = status;
         this.message = message;
         this.debugMessage = ex.getLocalizedMessage();
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(HttpStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getDebugMessage() {
+        return debugMessage;
+    }
+
+    public void setDebugMessage(String debugMessage) {
+        this.debugMessage = debugMessage;
     }
 }

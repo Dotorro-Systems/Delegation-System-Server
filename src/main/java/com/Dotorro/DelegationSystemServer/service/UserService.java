@@ -2,6 +2,7 @@ package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
@@ -9,6 +10,7 @@ import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,6 +58,10 @@ public class UserService {
             throw new NoSuchElementException("No user with provided email found");
 
         return user;
+    }
+
+    public List<User> getUsersByDepartment(Long departmentId) {
+        return userRepository.findByDepartmentId(departmentId);
     }
 
     public User registerUser(UserDTO userDto) {
@@ -154,11 +160,7 @@ public class UserService {
         return "Fail";
     }
 
-    public User getUserByRequest(HttpServletRequest request)
-    {
-        Cookie cookie = WebUtils.getCookie(request, "jwt");
-        String token = cookie.getValue();
-
-        return getUserByEmail(jwtService.extractEmail(token));
+    public User getUserByRequest(HttpServletRequest request) throws ApiException {
+        return getUserByEmail(jwtService.extractEmail(jwtService.getTokenFromRequest(request)));
     }
 }

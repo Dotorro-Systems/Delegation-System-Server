@@ -2,6 +2,7 @@ package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +29,17 @@ public class UserController {
     private JWTService jwtService;
 
     @GetMapping(value = "/")
-    public List<User> getUsers(HttpServletRequest request) {
-
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping(value = "/in-my-department")
+    @PreAuthorize("!hasAuthority('EMPLOYEE')")
+    public List<User> getUsersInDepartment(HttpServletRequest request) throws ApiException {
+        User user = userService.getUserByRequest(request);
+
+        return userService.getUsersByDepartment(user.getDepartment().getId());
     }
 
     @GetMapping(value = "/{id}")
@@ -58,6 +68,11 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    @GetMapping(value = "/me")
+    public User getMe(HttpServletRequest request) throws ApiException {
+        return userService.getUserByRequest(request);
+    }
+
     @PostMapping(value = "/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
@@ -66,12 +81,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @GetMapping(value = "/me")
-    public User getMe(HttpServletRequest request)
-    {
-        return userService.getUserByRequest(request);
     }
 
     @PostMapping("/login")

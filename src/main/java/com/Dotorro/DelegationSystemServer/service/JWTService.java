@@ -1,18 +1,23 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 @Service
@@ -56,10 +61,24 @@ public class JWTService {
                 .getPayload();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateTokenWithEmail(String token, String userEmail) {
         final String email = extractEmail(token);
 
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (email.equals(userEmail) && !isTokenExpired(token));
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts
+                    .parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(token);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token)
@@ -70,5 +89,13 @@ public class JWTService {
     private Date extractExpiration(String token)
     {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public String getTokenFromRequest(HttpServletRequest request) throws ApiException {
+        Cookie cookie = WebUtils.getCookie(request, "jwt");
+        if (cookie == null)
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Authorization cookie is not set", new NoSuchElementException());
+
+        return cookie.getValue();
     }
 }

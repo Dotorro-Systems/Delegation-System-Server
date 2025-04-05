@@ -24,9 +24,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "departmentId")
     private Department department;
 
-    public User() {
-
-    }
+    public User() { }
 
     public User(String firstName, String lastName, String password, String phone, String email, UserRole role, Department department) {
         this.firstName = firstName;

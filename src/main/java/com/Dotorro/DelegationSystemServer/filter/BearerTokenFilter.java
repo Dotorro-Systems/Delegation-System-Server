@@ -42,7 +42,7 @@ public class BearerTokenFilter extends OncePerRequestFilter {
         {
             UserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(email);
 
-            if (jwtService.validateToken(token, userDetails))
+            if (jwtService.validateTokenWithEmail(token, userDetails.getUsername()))
             {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

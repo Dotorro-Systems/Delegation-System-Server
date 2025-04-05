@@ -37,15 +37,4 @@ public class AuthenticationService {
 
         return true;
     }
-
-    public String hashPassword(String password) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
-
-    public boolean matchPassword(String password, String hashedPassword)
-    {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.matches(password, hashedPassword);
-    }
 }

@@ -1,19 +1,38 @@
 package com.Dotorro.DelegationSystemServer.service;
 
+import com.Dotorro.DelegationSystemServer.dto.LoginRequestDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JWTService jwtService;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+    private final UserRepository userRepository;
     private final DepartmentService departmentService;
     private final AuthenticationService authenticationService;
 
@@ -32,14 +51,26 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
+    public User getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
 
-    public User createUser(UserDTO userDto) {
+        if (user == null)
+            throw new NoSuchElementException("No user with provided email found");
+
+        return user;
+    }
+
+    public List<User> getUsersByDepartment(Long departmentId) {
+        return userRepository.findByDepartmentId(departmentId);
+    }
+
+    public User registerUser(UserDTO userDto) {
         User user = convertToEntity(userDto);
 
         authenticationService.validateEmail(user.getEmail());
         authenticationService.validatePassword(user.getPassword());
 
-        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+        user.setPassword(hashPassword(user.getPassword()));
 
         return userRepository.save(user);
     }
@@ -56,6 +87,7 @@ public class UserService {
             user.setLastName(updatedUser.getLastName());
             user.setPassword(updatedUser.getPassword());
             user.setEmail(updatedUser.getEmail());
+            user.setPhone(updatedUser.getPhone());
             user.setRole(updatedUser.getRole());
             user.setDepartment(updatedUser.getDepartment());
 
@@ -73,7 +105,7 @@ public class UserService {
             authenticationService.validatePassword(newPassword);
 
             User user = optionalUser.get();
-            user.setPassword(authenticationService.hashPassword(newPassword));
+            user.setPassword(hashPassword(newPassword));
 
             return userRepository.save(user);
         } else {
@@ -81,25 +113,17 @@ public class UserService {
         }
     }
 
+    private String hashPassword(String password)
+    {
+        return encoder.encode(password);
+    }
+
     public void deleteUser(Long id)
     {
         userRepository.deleteById(id);
     }
 
-    public boolean authenticateUser(Long id, String password)
-    {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-
-            return authenticationService.matchPassword(password, user.getPassword());
-        } else {
-            throw new RuntimeException("User not found with id: " + id);
-        }
-    }
-
-    private User convertToEntity(UserDTO userDTO) {
+    public User convertToEntity(UserDTO userDTO) {
         Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 
         return new User(
@@ -113,7 +137,7 @@ public class UserService {
         );
     }
 
-    private UserDTO convertToDTO(User user)
+    public UserDTO convertToDTO(User user)
     {
         return new UserDTO(
                 user.getFirstName(),
@@ -124,5 +148,19 @@ public class UserService {
                 user.getRole().toString(),
                 user.getDepartment().getId()
         );
+    }
+
+    public String verify(LoginRequestDTO loginRequestDTO) throws ApiException {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
+
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(convertToDTO(getUserByEmail(loginRequestDTO.getEmail())));
+        }
+
+        throw new ApiException(HttpStatus.UNAUTHORIZED, "Cannot verify user");
+    }
+
+    public User getUserByRequest(HttpServletRequest request) throws ApiException {
+        return getUserByEmail(jwtService.extractEmail(jwtService.getTokenFromRequest(request)));
     }
 }

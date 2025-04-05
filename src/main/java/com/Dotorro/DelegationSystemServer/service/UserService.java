@@ -35,7 +35,10 @@ public class UserService {
         if(!userDTO.getPhone().matches("\\d{9}")){
             throw new IllegalArgumentException("Phone number is not valid");
         }
-
+        Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
+        if (department == null){
+            throw new RuntimeException("Department not found with id: "+userDTO.getDepartmentId());
+        }
     }
 
     public List<User> getAllUsers() {

@@ -34,6 +34,14 @@ public class WorkLogService {
         if(workLogDTO.getEndTime().isBefore(workLogDTO.getStartTime())){
             throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
         }
+        User user = userService.getUserById(workLogDTO.getUserId());
+        if (user == null){
+            throw new RuntimeException("User not found with id: "+workLogDTO.getUserId());
+        }
+        Delegation delegation = delegationService.getDelegationById(workLogDTO.getDelegationId());
+        if (delegation == null){
+            throw new RuntimeException("Delegation not found with id: "+workLogDTO.getDelegationId());
+        }
     }
 
     public List<WorkLog> getAllWorkLogs() {

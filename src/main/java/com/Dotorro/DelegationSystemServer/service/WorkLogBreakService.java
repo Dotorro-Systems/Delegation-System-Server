@@ -1,6 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
+import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogBreakRepository;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,17 @@ public class WorkLogBreakService {
     }
 
     public void workLogBreakValidation(WorkLogBreakDTO workLogBreakDTO){
-        if(workLogBreakDTO.getStartTime().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("time can't be from the past!");
+
+        WorkLog workLog = workLogService.getWorkLogById(workLogBreakDTO.getWorkLogId());
+        if (workLog == null){
+            throw new RuntimeException("WorkLogBreak not found with id: "+workLogBreakDTO.getWorkLogId());
         }
-        if(workLogBreakDTO.getEndTime().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("time can't be from the past!");
+
+        if(workLogBreakDTO.getEndTime().isAfter(workLog.getEndTime())) {
+            workLogBreakDTO.setEndTime(workLog.getEndTime());
+        }
+        if(workLogBreakDTO.getStartTime().isBefore(workLog.getStartTime())) {
+            workLogBreakDTO.setStartTime(workLog.getStartTime());
         }
         if(workLogBreakDTO.getEndTime().isBefore(workLogBreakDTO.getStartTime())){
             throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");

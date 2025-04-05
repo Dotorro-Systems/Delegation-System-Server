@@ -45,7 +45,7 @@ public class NoteControllerTest
     public void getNotesTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -68,7 +68,7 @@ public class NoteControllerTest
     public void getNoteByIdTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -91,7 +91,7 @@ public class NoteControllerTest
     public void updateNoteTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -128,7 +128,7 @@ public class NoteControllerTest
     public void createNoteTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);

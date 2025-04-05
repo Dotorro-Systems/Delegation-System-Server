@@ -45,7 +45,7 @@ public class WorkLogBreakControllerTest
     public void getWorkLogsTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -69,7 +69,7 @@ public class WorkLogBreakControllerTest
     public void getWorkLogBreakByIdTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -92,7 +92,7 @@ public class WorkLogBreakControllerTest
     public void updateWorkLogBreakTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -130,7 +130,7 @@ public class WorkLogBreakControllerTest
     public void createWorkLogBreakTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);

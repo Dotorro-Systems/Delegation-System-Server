@@ -8,11 +8,9 @@ import com.Dotorro.DelegationSystemServer.service.UserService;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,19 +36,19 @@ public class UserControllerTest
     private UserService userService;
 
     @Test
-    public void createUserTest() throws Exception
+    public void registerUserTest() throws Exception
     {
         UserDTO testUserDTO = new UserDTO("testFirstName","testLastName","testPassword","testPhone","testEmail","Employee",1L);
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
 
-        when(userService.createUser(any(UserDTO.class))).thenReturn(testUser);
+        when(userService.registerUser(any(UserDTO.class))).thenReturn(testUser);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String testUserDTOJson = objectMapper.writeValueAsString(testUserDTO);
 
-        mvc.perform(post("/users/create")
+        mvc.perform(post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(testUserDTOJson))
                 .andExpect(status().isCreated())
@@ -69,7 +67,7 @@ public class UserControllerTest
     public void getUsersTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser1 = new User(1L,"testFirstName1","testLastName1","testPassword1","testPhone1","testEmail1",testRole,testDepartment);
         User testUser2 = new User(2L,"testFirstName2","testLastName2","testPassword2","testPhone2","testEmail2",testRole,testDepartment);
         List<User> testUsers = Arrays.asList(testUser1, testUser2);
@@ -103,7 +101,7 @@ public class UserControllerTest
     public void getUserByIdTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
 
         when(userService.getUserById(anyLong())).thenReturn(testUser);
@@ -126,7 +124,7 @@ public class UserControllerTest
     {
         UserDTO testUserDTO = new UserDTO("testFirstNameUpdated","testLastName","testPassword","testPhone","testEmail","Employee",1L);
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User updatedUser = new User(1L,"testFirstNameUpdated","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
 
         when(userService.updateUser(anyLong(),any(UserDTO.class))).thenReturn(updatedUser);
@@ -147,7 +145,7 @@ public class UserControllerTest
     {
         String password = "testUpdatedPassword";
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User updatedUser = new User(1L,"testFirstNameUpdated","testLastName",password,"testPhone","testEmail",testRole,testDepartment);
 
         when(userService.updatePassword(anyLong(),anyString())).thenReturn(updatedUser);

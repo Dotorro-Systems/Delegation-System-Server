@@ -47,7 +47,7 @@ public class DelegationUserControllerTest
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
         Delegation testDelegation = new Delegation(1L,"testTitle","testOrigin","testDestination",status,testDate,testDate);
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser1 = new User(1L,"testFirstName1","testLastName1","testPassword1","testPhone1","testEmail1",testRole,testDepartment);
         User testUser2 = new User(2L,"testFirstName2","testLastName2","testPassword2","testPhone2","testEmail2",testRole,testDepartment);
 
@@ -80,7 +80,7 @@ public class DelegationUserControllerTest
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
         Delegation testDelegation = new Delegation(1L,"testTitle","testOrigin","testDestination",status,testDate,testDate);
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationUserKey testDelegationUserKey = new DelegationUserKey(1L,1L);
 
@@ -103,7 +103,7 @@ public class DelegationUserControllerTest
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
         Delegation testDelegation = new Delegation(1L,"testTitle","testOrigin","testDestination",status,testDate,testDate);
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationUserKey testDelegationUserKey = new DelegationUserKey(1L,1L);
 
@@ -144,7 +144,7 @@ public class DelegationUserControllerTest
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
         Delegation testDelegation = new Delegation(1L,"testTitle","testOrigin","testDestination",status,testDate,testDate);
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationUserKey testDelegationUserKey = new DelegationUserKey(1L,1L);
 

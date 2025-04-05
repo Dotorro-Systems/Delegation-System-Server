@@ -45,8 +45,8 @@ public class WorkLogControllerTest
     public void getWorkLogsTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
-        User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
+        UserRole testRole = UserRole.EMPLOYEE;
+        User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail", testRole, testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
         Delegation testDelegation = new Delegation(1L,"testTitle","testOrigin","testDestination",status,testDate,testDate);
@@ -68,7 +68,7 @@ public class WorkLogControllerTest
     public void getWorkLogByIdTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -91,7 +91,7 @@ public class WorkLogControllerTest
     public void updateWorkLogTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);
@@ -128,7 +128,7 @@ public class WorkLogControllerTest
     public void createWorkLogTest() throws Exception
     {
         Department testDepartment = new Department(1L,"testDepartment");
-        UserRole testRole = UserRole.Employee;
+        UserRole testRole = UserRole.EMPLOYEE;
         User testUser = new User(1L,"testFirstName","testLastName","testPassword","testPhone","testEmail",testRole,testDepartment);
         DelegationStatus status = DelegationStatus.Active;
         LocalDateTime testDate = LocalDateTime.of(2025,1,1,1,1,1);

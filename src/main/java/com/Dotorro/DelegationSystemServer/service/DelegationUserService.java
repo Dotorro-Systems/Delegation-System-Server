@@ -24,6 +24,16 @@ public class DelegationUserService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
+    public void delegationUserValidation(DelegationUserDTO delegationUserDTO){
+        User user = userService.getUserById(delegationUserDTO.getUserId());
+        if (user == null){
+            throw new RuntimeException("User not found with id: "+delegationUserDTO.getUserId());
+        }
+        Delegation delegation = delegationService.getDelegationById(delegationUserDTO.getDelegationId());
+        if (delegation == null){
+            throw new RuntimeException("Delegation not found with id: "+delegationUserDTO.getDelegationId());
+        }
+    }
 
     public List<DelegationUser> getAllDelegationUsers() {
         return delegationUserRepository.findAll();
@@ -37,13 +47,14 @@ public class DelegationUserService {
     }
 
     public DelegationUser createDelegationUser(DelegationUserDTO delegationUserDTO) {
+        delegationUserValidation(delegationUserDTO);
         return delegationUserRepository.save(convertToEntity(delegationUserDTO));
     }
 
     public DelegationUser updateDelegationUser(Long delegationId, Long userId, DelegationUserDTO delegationUserDTO)
     {
         DelegationUserKey id = new DelegationUserKey(delegationId,userId);
-
+        delegationUserValidation(delegationUserDTO);
         Optional<DelegationUser> optionalDelegationUser = delegationUserRepository.findById(id);
 
         if (optionalDelegationUser.isPresent()) {

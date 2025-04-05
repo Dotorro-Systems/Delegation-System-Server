@@ -1,6 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDepartmentDTO;
+import com.Dotorro.DelegationSystemServer.dto.DelegationUserDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.DelegationDepartmentRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,16 @@ public class DelegationDepartmentService {
         this.delegationService = delegationService;
         this.departmentService = departmentService;
     }
+    public void delegationDepartmentValidation(DelegationDepartmentDTO delegationDepartmentDTO){
+        Department department = departmentService.getDepartmentById(delegationDepartmentDTO.getDepartmentId());
+        if (department == null){
+            throw new RuntimeException("Department not found with id: "+delegationDepartmentDTO.getDepartmentId());
+        }
+        Delegation delegation = delegationService.getDelegationById(delegationDepartmentDTO.getDelegationId());
+        if (delegation == null){
+            throw new RuntimeException("Delegation not found with id: "+delegationDepartmentDTO.getDelegationId());
+        }
+    }
 
     public List<DelegationDepartment> getAllDelegationDepartments() {
         return delegationDepartmentRepository.findAll();
@@ -34,6 +45,7 @@ public class DelegationDepartmentService {
     }
 
     public DelegationDepartment createDelegationDepartment(DelegationDepartmentDTO delegationDepartmentDTO) {
+        delegationDepartmentValidation(delegationDepartmentDTO);
         return delegationDepartmentRepository.save(convertToEntity(delegationDepartmentDTO));
     }
 
@@ -42,7 +54,7 @@ public class DelegationDepartmentService {
         DelegationDepartmentKey id = new DelegationDepartmentKey(delegationId, departmentId);
 
         Optional<DelegationDepartment> optionalDelegationDepartment = delegationDepartmentRepository.findById(id);
-
+        delegationDepartmentValidation(delegationDepartmentDTO);
         DelegationDepartment updatedDelegationDepartment = convertToEntity(delegationDepartmentDTO);
 
         if (optionalDelegationDepartment.isPresent()) {

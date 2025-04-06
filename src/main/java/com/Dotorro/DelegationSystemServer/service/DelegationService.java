@@ -17,24 +17,24 @@ public class DelegationService {
     public DelegationService(DelegationRepository delegationRepository) {
         this.delegationRepository = delegationRepository;}
 
-    public void delegationValidation(DelegationDTO delegationDTO){
-        if(delegationDTO.getStartDate().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("date can't be from the past!");
+    public void validateDelegation(Delegation delegation){
+        if(delegation.getStartDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("The start date can't be from the past!");
         }
-        if(delegationDTO.getEndDate().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("date can't be from the past!");
+        if(delegation.getEndDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("The end date can't be from the past!");
         }
-        if(delegationDTO.getEndDate().isBefore(delegationDTO.getStartDate())){
-            throw new IllegalArgumentException("The endDate cannot be earlier than the startDate");
+        if(delegation.getEndDate().isBefore(delegation.getStartDate())){
+            throw new IllegalArgumentException("The end date cannot be earlier than the start date");
         }
-        if(!delegationDTO.getOrigin().matches("[A-Z][a-zA-Z]*")) {
-            throw new IllegalArgumentException("The origin is not valid.");
+        if(!delegation.getOrigin().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("The origin must only contain letters.");
         }
-        if(!delegationDTO.getDestination().matches("[A-Z][a-zA-Z]*")) {
-            throw new IllegalArgumentException("The destination is not valid.");
+        if(!delegation.getDestination().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("The destination must only contain letters.");
         }
-        if(delegationDTO.getTitle().matches(".*[^a-zA-Z ].*")) {
-            throw new IllegalArgumentException("The title is not valid.");
+        if(delegation.getTitle().matches(".*[^a-zA-Z ].*")) {
+            throw new IllegalArgumentException("The title must only contain letters.");
         }
 
     }
@@ -46,23 +46,22 @@ public class DelegationService {
     }
 
     public Delegation createDelegation(DelegationDTO delegationDTO){
-        delegationValidation(delegationDTO);
         return delegationRepository.save(convertToEntity(delegationDTO));}
 
     public Delegation updateDelegation(Long id, DelegationDTO delegationDTO)
     {
         Optional<Delegation> optionalDelegation = delegationRepository.findById(id);
-        delegationValidation(delegationDTO);
+
         Delegation updatedDelegation = convertToEntity(delegationDTO);
 
         if (optionalDelegation.isPresent()) {
             Delegation delegation = optionalDelegation.get();
-            delegation.setTitle(optionalDelegation.get().getTitle());
-            delegation.setOrigin(optionalDelegation.get().getOrigin());
-            delegation.setDestination(optionalDelegation.get().getDestination());
-            delegation.setStatus(optionalDelegation.get().getStatus());
-            delegation.setStartDate(optionalDelegation.get().getStartDate());
-            delegation.setEndDate(optionalDelegation.get().getEndDate());
+            delegation.setTitle(updatedDelegation.getTitle());
+            delegation.setOrigin(updatedDelegation.getOrigin());
+            delegation.setDestination(updatedDelegation.getDestination());
+            delegation.setStatus(updatedDelegation.getStatus());
+            delegation.setStartDate(updatedDelegation.getStartDate());
+            delegation.setEndDate(updatedDelegation.getEndDate());
 
             return delegationRepository.save(delegation);
         } else {
@@ -76,7 +75,7 @@ public class DelegationService {
     }
 
     private Delegation convertToEntity(DelegationDTO delegationDTO) {
-        return new Delegation(
+        Delegation delegation = new Delegation(
                 delegationDTO.getTitle(),
                 delegationDTO.getOrigin(),
                 delegationDTO.getDestination(),
@@ -84,6 +83,8 @@ public class DelegationService {
                 delegationDTO.getStartDate(),
                 delegationDTO.getEndDate()
         );
+        validateDelegation(delegation);
+        return delegation;
     }
 
     private DelegationDTO convertToDTO(Delegation delegation)

@@ -12,9 +12,9 @@ import java.util.Optional;
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
-    public void validateDepartment(DepartmentDTO departmentDTO){
-        if(departmentDTO.getName().matches(".*[^a-zA-Z ].*")){
-            throw new IllegalArgumentException("Department name is not valid");
+    public void validateDepartment(Department department){
+        if(department.getName().matches(".*[^a-zA-Z ].*")){
+            throw new IllegalArgumentException("Department must only contain letters");
         }
     }
 
@@ -33,15 +33,14 @@ public class DepartmentService {
     }
 
     public Department createDepartment(DepartmentDTO departmentDTO) {
-        validateDepartment(departmentDTO);
         return departmentRepository.save(convertToEntity(departmentDTO));
     }
 
     public Department updateDepartment(Long id, DepartmentDTO departmentDTO)
     {
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
+
         Department updatedDepartment = convertToEntity(departmentDTO);
-        validateDepartment(departmentDTO);
 
         if (optionalDepartment.isPresent()) {
             Department department = optionalDepartment.get();
@@ -59,9 +58,11 @@ public class DepartmentService {
     }
 
     private Department convertToEntity(DepartmentDTO departmentDTO) {
-        return new Department(
+        Department department = new Department(
             departmentDTO.getName()
         );
+        validateDepartment(department);
+        return department;
     }
 
     private DepartmentDTO convertToDTO(Department department)

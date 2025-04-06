@@ -1,13 +1,10 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.repository.NoteRepository;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.FindException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

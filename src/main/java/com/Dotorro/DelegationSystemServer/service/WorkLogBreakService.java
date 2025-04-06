@@ -20,7 +20,7 @@ public class WorkLogBreakService {
     public void validateWorkLogBreak(WorkLogBreak workLogBreak){
 
         if (workLogBreak.getWorkLog() == null){
-            throw new RuntimeException("WorkLog not found with id: "+workLogBreak.getWorkLog());
+            throw new RuntimeException("WorkLog not found");
         }
         if(workLogBreak.getEndTime().isAfter(workLogBreak.getWorkLog().getEndTime())) {
             workLogBreak.setEndTime(workLogBreak.getWorkLog().getEndTime());

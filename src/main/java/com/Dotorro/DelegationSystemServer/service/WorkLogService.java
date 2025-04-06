@@ -24,23 +24,21 @@ public class WorkLogService {
         this.delegationService = delegationService;
     }
 
-    public void workLogValidation(WorkLogDTO workLogDTO){
-        if(workLogDTO.getStartTime().isBefore(LocalDateTime.now())){
+    public void validateWorkLog(WorkLog workLog){
+        if(workLog.getStartTime().isBefore(LocalDateTime.now())){
             throw new IllegalArgumentException("time can't be from the past!");
         }
-        if(workLogDTO.getEndTime().isBefore(LocalDateTime.now())){
+        if(workLog.getEndTime().isBefore(LocalDateTime.now())){
             throw new IllegalArgumentException("time can't be from the past!");
         }
-        if(workLogDTO.getEndTime().isBefore(workLogDTO.getStartTime())){
+        if(workLog.getEndTime().isBefore(workLog.getStartTime())){
             throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
         }
-        User user = userService.getUserById(workLogDTO.getUserId());
-        if (user == null){
-            throw new RuntimeException("User not found with id: "+workLogDTO.getUserId());
+        if (workLog.getUser() == null){
+            throw new RuntimeException("User not found ");
         }
-        Delegation delegation = delegationService.getDelegationById(workLogDTO.getDelegationId());
-        if (delegation == null){
-            throw new RuntimeException("Delegation not found with id: "+workLogDTO.getDelegationId());
+        if (workLog.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
         }
     }
 
@@ -54,14 +52,14 @@ public class WorkLogService {
     }
 
     public WorkLog createWorkLog(WorkLogDTO workLogDTO) {
-        workLogValidation(workLogDTO);
+
         return workLogRepository.save(convertToEntity(workLogDTO));
     }
 
     public WorkLog updateWorkLog(Long id, WorkLogDTO workLogDTO)
     {
         Optional<WorkLog> optionalWorkLog = workLogRepository.findById(id);
-        workLogValidation(workLogDTO);
+
         WorkLog updatedWorkLog = convertToEntity(workLogDTO);
 
         if (optionalWorkLog.isPresent()) {
@@ -87,12 +85,14 @@ public class WorkLogService {
 
         Delegation delegation = delegationService.getDelegationById(workLogDTO.getDelegationId());
 
-        return new WorkLog(
+        WorkLog workLog = new WorkLog(
                 delegation,
                 user,
                 workLogDTO.getStartTime(),
                 workLogDTO.getEndTime()
         );
+        validateWorkLog(workLog);
+        return workLog;
     }
 
     private WorkLogDTO convertToDTO(WorkLog workLog)

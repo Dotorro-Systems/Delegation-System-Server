@@ -25,18 +25,17 @@ public class UserService {
         this.authenticationService = authenticationService;
     }
 
-    public void userValidation(UserDTO userDTO){
+    public void validateUser(UserDTO userDTO){
         if(!userDTO.getFirstName().matches("[A-Z][a-zA-Z]*")) {
-            throw new IllegalArgumentException("First name is not valid");
+            throw new IllegalArgumentException("First name must start with a capital letter and only contains letters");
         }
         if(!userDTO.getLastName().matches("[A-Z][a-zA-Z]*")) {
-            throw new IllegalArgumentException("Last name is not valid");
+            throw new IllegalArgumentException("Last name must start with a capital letter and only contains letters");
         }
         if(!userDTO.getPhone().matches("\\d{9}")){
-            throw new IllegalArgumentException("Phone number is not valid");
+            throw new IllegalArgumentException("Phone number must only contain numbers.");
         }
-        Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
-        if (department == null){
+        if (departmentService.getDepartmentById(userDTO.getDepartmentId()) == null){
             throw new RuntimeException("Department not found with id: "+userDTO.getDepartmentId());
         }
     }
@@ -59,7 +58,7 @@ public class UserService {
 
     public User createUser(UserDTO userDto) {
         User user = convertToEntity(userDto);
-        userValidation(userDto);
+
         authenticationService.validateEmail(user.getEmail());
         authenticationService.validatePassword(user.getPassword());
 
@@ -71,7 +70,7 @@ public class UserService {
     public User updateUser(Long id, UserDTO userDTO)
     {
         Optional<User> optionalUser = userRepository.findById(id);
-        userValidation(userDTO);
+
         User updatedUser = convertToEntity(userDTO);
 
         if (optionalUser.isPresent()) {
@@ -125,6 +124,7 @@ public class UserService {
     }
 
     public User convertToEntity(UserDTO userDTO) {
+        validateUser(userDTO);
         Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 
         return new User(

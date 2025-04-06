@@ -24,17 +24,14 @@ public class NoteService {
         this.userService = userService;
     }
 
-    public void noteValidation(NoteDTO noteDTO){
-        User user = userService.getUserById(noteDTO.getUserId());
-        if (user == null){
-            throw new RuntimeException("User not found with id: "+noteDTO.getUserId());
+    public void validateNote(Note note){
+        if (note.getUser() == null){
+            throw new RuntimeException("User not found ");
         }
-        Delegation delegation = delegationService.getDelegationById(noteDTO.getDelegationId());
-        if (delegation == null){
-            throw new RuntimeException("Delegation not found with id: "+noteDTO.getDelegationId());
+        if (note.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
         }
-
-        if(noteDTO.getCreatedAt().isAfter(LocalDateTime.now())){
+        if(note.getCreatedAt().isAfter(LocalDateTime.now())){
             throw new IllegalArgumentException("The date can not be from the future");
         }
     }
@@ -49,14 +46,13 @@ public class NoteService {
     }
 
     public Note createNote(NoteDTO noteDTO) {
-        noteValidation(noteDTO);
         return noteRepository.save(convertToEntity(noteDTO));
     }
 
     public Note updateNote(Long id, NoteDTO noteDTO)
     {
         Optional<Note> optionalNote = noteRepository.findById(id);
-        noteValidation(noteDTO);
+
         Note updatedNote = convertToEntity(noteDTO);
 
         if (optionalNote.isPresent()) {
@@ -82,12 +78,14 @@ public class NoteService {
 
         User user = userService.getUserById(noteDTO.getUserId());
 
-        return new Note(
+        Note note = new Note(
                 delegation,
                 user,
                 noteDTO.getContent(),
                 noteDTO.getCreatedAt()
         );
+        validateNote(note);
+        return note;
     }
 
     private NoteDTO convertToDTO(Note note)

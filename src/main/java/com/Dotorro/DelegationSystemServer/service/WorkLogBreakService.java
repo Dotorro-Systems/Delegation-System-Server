@@ -1,11 +1,9 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
-import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogBreakRepository;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,21 +17,19 @@ public class WorkLogBreakService {
         this.workLogService = workLogService;
     }
 
-    public void workLogBreakValidation(WorkLogBreakDTO workLogBreakDTO){
+    public void validateWorkLogBreak(WorkLogBreak workLogBreak){
 
-        WorkLog workLog = workLogService.getWorkLogById(workLogBreakDTO.getWorkLogId());
-        if (workLog == null){
-            throw new RuntimeException("WorkLog not found with id: "+workLogBreakDTO.getWorkLogId());
+        if (workLogBreak.getWorkLog() == null){
+            throw new RuntimeException("WorkLog not found with id: "+workLogBreak.getWorkLog());
         }
-
-        if(workLogBreakDTO.getEndTime().isAfter(workLog.getEndTime())) {
-            workLogBreakDTO.setEndTime(workLog.getEndTime());
+        if(workLogBreak.getEndTime().isAfter(workLogBreak.getWorkLog().getEndTime())) {
+            workLogBreak.setEndTime(workLogBreak.getWorkLog().getEndTime());
         }
-        if(workLogBreakDTO.getStartTime().isBefore(workLog.getStartTime())) {
-            workLogBreakDTO.setStartTime(workLog.getStartTime());
+        if(workLogBreak.getStartTime().isBefore(workLogBreak.getWorkLog().getStartTime())) {
+            workLogBreak.setStartTime(workLogBreak.getWorkLog().getStartTime());
         }
-        if(workLogBreakDTO.getEndTime().isBefore(workLogBreakDTO.getStartTime())){
-            throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
+        if(workLogBreak.getEndTime().isBefore(workLogBreak.getStartTime())){
+            throw new IllegalArgumentException("The end time cannot be earlier than the start time");
         }
     }
 
@@ -47,14 +43,13 @@ public class WorkLogBreakService {
     }
 
     public WorkLogBreak createWorkLogBreak(WorkLogBreakDTO workLogBreakDTO) {
-        workLogBreakValidation(workLogBreakDTO);
         return workLogBreakRepository.save(convertToEntity(workLogBreakDTO));
     }
 
     public WorkLogBreak updateWorkLogBreak(Long id, WorkLogBreakDTO workLogBreakDTO)
     {
         Optional<WorkLogBreak> optionalWorkLogBreak = workLogBreakRepository.findById(id);
-        workLogBreakValidation(workLogBreakDTO);
+
         WorkLogBreak updatedWorkLogBreak = convertToEntity(workLogBreakDTO);
 
         if (optionalWorkLogBreak.isPresent()) {
@@ -78,11 +73,13 @@ public class WorkLogBreakService {
     private WorkLogBreak convertToEntity(WorkLogBreakDTO workLogBreakDTO) {
         WorkLog workLog = workLogService.getWorkLogById(workLogBreakDTO.getWorkLogId());
 
-        return new WorkLogBreak(
+         WorkLogBreak workLogBreak = new WorkLogBreak(
                 workLog,
                 workLogBreakDTO.getStartTime(),
                 workLogBreakDTO.getEndTime()
         );
+        validateWorkLogBreak(workLogBreak);
+        return workLogBreak;
     }
 
     private WorkLogBreakDTO convertToDTO(WorkLogBreak workLogBreak)

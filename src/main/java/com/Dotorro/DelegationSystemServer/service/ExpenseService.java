@@ -23,16 +23,14 @@ public class ExpenseService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
-    public void expenseValidation(ExpenseDTO expenseDTO){
-        Delegation delegation = delegationService.getDelegationById(expenseDTO.getDelegationId());
-        if (delegation == null){
-            throw new RuntimeException("Delegation not found with id: "+expenseDTO.getDelegationId());
+    public void validateExpense(Expense expense){
+        if (expense.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
         }
-        User user = userService.getUserById(expenseDTO.getUserId());
-        if (user == null){
-            throw new RuntimeException("User not found with id: "+expenseDTO.getUserId());
+        if (expense.getUser() == null){
+            throw new RuntimeException("User not found");
         }
-        if(expenseDTO.getAmount() < 0){
+        if(expense.getAmount() < 0){
             throw new IllegalArgumentException("The amount can not be less than zero.");
         }
     }
@@ -46,14 +44,13 @@ public class ExpenseService {
     }
 
     public Expense createExpense(ExpenseDTO expenseDTO) {
-        expenseValidation(expenseDTO);
         return expenseRepository.save(convertToEntity(expenseDTO));
     }
 
     public Expense updateExpense(Long id, ExpenseDTO expenseDTO)
     {
         Optional<Expense> optionalExpense = expenseRepository.findById(id);
-        expenseValidation(expenseDTO);
+
         Expense updatedExpense = convertToEntity(expenseDTO);
 
         if (optionalExpense.isPresent()) {
@@ -80,13 +77,15 @@ public class ExpenseService {
 
         User user = userService.getUserById(expenseDTO.getUserId());
 
-        return new Expense(
+        Expense expense = new Expense(
                 delegation,
                 user,
                 expenseDTO.getDescription(),
                 expenseDTO.getAmount(),
                 expenseDTO.getCreateAt()
         );
+        validateExpense(expense);
+        return expense;
     }
 
     private ExpenseDTO convertToDTO(Expense expense) {

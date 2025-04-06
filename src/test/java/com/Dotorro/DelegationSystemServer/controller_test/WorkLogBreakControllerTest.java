@@ -5,6 +5,7 @@ import com.Dotorro.DelegationSystemServer.controller.WorkLogController;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.WorkLogBreakService;
 import com.Dotorro.DelegationSystemServer.service.WorkLogService;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
@@ -40,6 +41,9 @@ public class WorkLogBreakControllerTest
 
     @MockitoBean
     private WorkLogBreakService workLogBreakService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getWorkLogsTest() throws Exception

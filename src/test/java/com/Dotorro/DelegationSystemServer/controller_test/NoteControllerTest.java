@@ -6,6 +6,7 @@ import com.Dotorro.DelegationSystemServer.dto.ExpenseDTO;
 import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.service.ExpenseService;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.NoteService;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
@@ -40,6 +41,9 @@ public class NoteControllerTest
 
     @MockitoBean
     private NoteService noteService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getNotesTest() throws Exception

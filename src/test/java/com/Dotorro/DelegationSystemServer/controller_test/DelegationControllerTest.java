@@ -4,10 +4,12 @@ import com.Dotorro.DelegationSystemServer.controller.DelegationController;
 import com.Dotorro.DelegationSystemServer.controller.UserController;
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+import com.Dotorro.DelegationSystemServer.filter.BearerTokenFilter;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DelegationService;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
@@ -43,6 +45,9 @@ public class DelegationControllerTest
 
     @MockitoBean
     private DelegationService delegationService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getDelegationsTest() throws Exception

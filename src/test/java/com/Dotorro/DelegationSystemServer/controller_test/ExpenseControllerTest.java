@@ -9,6 +9,7 @@ import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.Expense;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.ExpenseService;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
@@ -42,6 +43,9 @@ public class ExpenseControllerTest
 
     @MockitoBean
     private ExpenseService expenseService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getExpensesTest() throws Exception

@@ -7,6 +7,7 @@ import com.Dotorro.DelegationSystemServer.model.DelegationDepartment;
 import com.Dotorro.DelegationSystemServer.model.DelegationDepartmentKey;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ public class DelegationDepartmentControllerTest
 
     @MockitoBean
     private DelegationDepartmentService delegationDepartmentService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getDelegationDepartmentsTest() throws Exception

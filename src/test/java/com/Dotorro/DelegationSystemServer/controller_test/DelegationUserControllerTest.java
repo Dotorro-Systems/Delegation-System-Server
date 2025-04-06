@@ -7,6 +7,7 @@ import com.Dotorro.DelegationSystemServer.dto.DelegationUserDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
 import com.Dotorro.DelegationSystemServer.service.DelegationUserService;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +40,9 @@ public class DelegationUserControllerTest
 
     @MockitoBean
     private DelegationUserService delegationUserService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getDelegationUsersTest() throws Exception
@@ -120,7 +124,7 @@ public class DelegationUserControllerTest
                         .content(testDelegationUserDTOJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id.delegationId").value(1L))
-                .andExpect(jsonPath("id.UserId").value(1L))
+                .andExpect(jsonPath("id.userId").value(1L))
                 .andExpect(jsonPath("delegation.id").value(1L))
                 .andExpect(jsonPath("user.id").value(1L));
     }
@@ -161,7 +165,7 @@ public class DelegationUserControllerTest
                         .content(testDelegationUserDTOJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id.delegationId").value(1L))
-                .andExpect(jsonPath("id.UserId").value(1L))
+                .andExpect(jsonPath("id.userId").value(1L))
                 .andExpect(jsonPath("delegation.id").value(1L))
                 .andExpect(jsonPath("delegation.title").value("testTitle"))
                 .andExpect(jsonPath("delegation.origin").value("testOrigin"))
@@ -175,7 +179,7 @@ public class DelegationUserControllerTest
                 .andExpect(jsonPath("user.password").value("testPassword"))
                 .andExpect(jsonPath("user.phone").value("testPhone"))
                 .andExpect(jsonPath("user.email").value("testEmail"))
-                .andExpect(jsonPath("user.role").value("Employee"))
+                .andExpect(jsonPath("user.role").value("EMPLOYEE"))
                 .andExpect(jsonPath("user.department.id").value(1L))
                 .andExpect(jsonPath("user.department.name").value("testDepartment"));
     }

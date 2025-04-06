@@ -7,6 +7,7 @@ import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DepartmentService;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,9 @@ public class DepartmentControllerTest
 
     @MockitoBean
     private DepartmentService departmentService;
+
+    @MockitoBean
+    private JWTService jwtService;
 
     @Test
     public void getDepartmentsTest() throws Exception

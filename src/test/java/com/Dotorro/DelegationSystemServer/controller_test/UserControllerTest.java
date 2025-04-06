@@ -4,6 +4,7 @@ import com.Dotorro.DelegationSystemServer.controller.UserController;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
+import com.Dotorro.DelegationSystemServer.service.JWTService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +36,9 @@ public class UserControllerTest
     @MockitoBean
     private UserService userService;
 
+    @MockitoBean
+    private JWTService jwtService;
+
     @Test
     public void registerUserTest() throws Exception
     {
@@ -58,7 +62,7 @@ public class UserControllerTest
                 .andExpect(jsonPath("$.password").value("testPassword"))
                 .andExpect(jsonPath("$.phone").value("testPhone"))
                 .andExpect(jsonPath("$.email").value("testEmail"))
-                .andExpect(jsonPath("$.role").value("Employee"))
+                .andExpect(jsonPath("$.role").value("EMPLOYEE"))
                 .andExpect(jsonPath("$.department.id").value(1L))
                 .andExpect(jsonPath("$.department.name").value("testDepartment"));
     }
@@ -83,7 +87,7 @@ public class UserControllerTest
                 .andExpect(jsonPath("[0].password").value("testPassword1"))
                 .andExpect(jsonPath("[0].phone").value("testPhone1"))
                 .andExpect(jsonPath("[0].email").value("testEmail1"))
-                .andExpect(jsonPath("[0].role").value("Employee"))
+                .andExpect(jsonPath("[0].role").value("EMPLOYEE"))
                 .andExpect(jsonPath("[0].department.id").value(1L))
                 .andExpect(jsonPath("[0].department.name").value("testDepartment"))
                 .andExpect(jsonPath("[1].id").value(2L))
@@ -92,7 +96,7 @@ public class UserControllerTest
                 .andExpect(jsonPath("[1].password").value("testPassword2"))
                 .andExpect(jsonPath("[1].phone").value("testPhone2"))
                 .andExpect(jsonPath("[1].email").value("testEmail2"))
-                .andExpect(jsonPath("[1].role").value("Employee"))
+                .andExpect(jsonPath("[1].role").value("EMPLOYEE"))
                 .andExpect(jsonPath("[1].department.id").value(1L))
                 .andExpect(jsonPath("[1].department.name").value("testDepartment"));
     }
@@ -114,7 +118,7 @@ public class UserControllerTest
                 .andExpect(jsonPath("$.password").value("testPassword"))
                 .andExpect(jsonPath("$.phone").value("testPhone"))
                 .andExpect(jsonPath("$.email").value("testEmail"))
-                .andExpect(jsonPath("$.role").value("Employee"))
+                .andExpect(jsonPath("$.role").value("EMPLOYEE"))
                 .andExpect(jsonPath("$.department.id").value(1L))
                 .andExpect(jsonPath("$.department.name").value("testDepartment"));
     }

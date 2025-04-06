@@ -25,18 +25,21 @@ public class UserService {
         this.authenticationService = authenticationService;
     }
 
-    public void validateUser(UserDTO userDTO){
-        if(!userDTO.getFirstName().matches("[A-Z][a-zA-Z]*")) {
+    public void validateUser(User user){
+        if(!user.getFirstName().matches("[A-Z][a-zA-Z]*")) {
             throw new IllegalArgumentException("First name must start with a capital letter and only contains letters");
         }
-        if(!userDTO.getLastName().matches("[A-Z][a-zA-Z]*")) {
+
+        if(!user.getLastName().matches("[A-Z][a-zA-Z]*")) {
             throw new IllegalArgumentException("Last name must start with a capital letter and only contains letters");
         }
-        if(!userDTO.getPhone().matches("\\d{9}")){
+
+        if(!user.getPhone().matches("\\d{9}")) {
             throw new IllegalArgumentException("Phone number must only contain numbers.");
         }
-        if (departmentService.getDepartmentById(userDTO.getDepartmentId()) == null){
-            throw new RuntimeException("Department not found with id: "+userDTO.getDepartmentId());
+
+        if (user.getDepartment() == null) {
+            throw new RuntimeException("Department not found");
         }
     }
 
@@ -124,10 +127,9 @@ public class UserService {
     }
 
     public User convertToEntity(UserDTO userDTO) {
-        validateUser(userDTO);
         Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 
-        return new User(
+        User user = new User(
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
                 userDTO.getPassword(),
@@ -136,6 +138,10 @@ public class UserService {
                 UserRole.valueOf(userDTO.getRole()),
                 department
         );
+
+        validateUser(user);
+
+        return user;
     }
 
     public UserDTO convertToDTO(User user)

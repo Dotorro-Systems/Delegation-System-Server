@@ -82,7 +82,19 @@ public class UserService {
         return userRepository.findByDepartmentId(departmentId);
     }
 
-    public User registerUser(UserDTO userDto) {
+    public User registerUser(UserDTO userDto) throws NoSuchElementException {
+        boolean foundUser = false;
+        try {
+            getUserByEmail(userDto.getEmail());
+            foundUser = true;
+        } catch (NoSuchElementException e) {
+
+        }
+
+        if (foundUser) {
+            throw new NoSuchElementException("This email is already in use.");
+        }
+
         User user = convertToEntity(userDto);
 
         authenticationService.validateEmail(user.getEmail());

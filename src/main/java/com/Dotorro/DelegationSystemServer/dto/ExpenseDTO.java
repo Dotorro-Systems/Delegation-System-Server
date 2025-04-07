@@ -11,12 +11,12 @@ public class ExpenseDTO {
     private Double amount;
     private LocalDateTime createdAt;
 
-    public ExpenseDTO(Long delegationId, Long userId, String description, Double amount, LocalDateTime createAt) {
+    public ExpenseDTO(Long delegationId, Long userId, String description, Double amount, LocalDateTime createdAt) {
         this.delegationId = delegationId;
         this.userId = userId;
         this.description = description;
         this.amount = amount;
-        this.createdAt = createAt;
+        this.createdAt = createdAt;
     }
 
     public Long getDelegationId() {

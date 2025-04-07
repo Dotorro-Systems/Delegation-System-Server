@@ -2,7 +2,6 @@ package com.Dotorro.DelegationSystemServer.model;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -32,9 +31,20 @@ public class Delegation {
     @JsonIgnoreProperties("delegation")
     private List<DelegationUser> delegationUsers = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("delegation")
+    private List<DelegationDepartment> delegationDepartments = new ArrayList<>();
+
     public List<User> getUsers() {
         return delegationUsers.stream()
                 .map(DelegationUser::getUser)
+                .collect(Collectors.toList());
+    }
+
+    public List<Department> getDepartments() {
+        return delegationDepartments.stream()
+                .map(DelegationDepartment::getDepartment)
                 .collect(Collectors.toList());
     }
 
@@ -130,6 +140,14 @@ public class Delegation {
 
     public void setDelegationUsers(List<DelegationUser> delegationUsers) {
         this.delegationUsers = delegationUsers;
+    }
+
+    public List<DelegationDepartment> getDelegationDepartments() {
+        return delegationDepartments;
+    }
+
+    public void setDelegationDepartments(List<DelegationDepartment> delegationDepartments) {
+        this.delegationDepartments = delegationDepartments;
     }
 
     public List<Expense> getExpenses() {

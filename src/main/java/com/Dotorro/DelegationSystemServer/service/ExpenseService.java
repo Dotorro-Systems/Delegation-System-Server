@@ -57,7 +57,7 @@ public class ExpenseService {
             expense.setUser(updatedExpense.getUser());
             expense.setDescription(updatedExpense.getDescription());
             expense.setAmount(updatedExpense.getAmount());
-            expense.setCreateAt(updatedExpense.getCreateAt());
+            expense.setCreatedAt(updatedExpense.getCreatedAt());
 
             return expenseRepository.save(expense);
         } else {
@@ -92,7 +92,7 @@ public class ExpenseService {
                 expense.getUser().getId(),
                 expense.getDescription(),
                 expense.getAmount(),
-                expense.getCreateAt()
+                expense.getCreatedAt()
         );
     }
 }

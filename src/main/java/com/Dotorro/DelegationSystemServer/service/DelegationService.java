@@ -27,10 +27,10 @@ public class DelegationService {
         if(delegation.getEndDate().isBefore(delegation.getStartDate())){
             throw new IllegalArgumentException("The end date cannot be earlier than the start date");
         }
-        if(!delegation.getOrigin().matches("[A-Z][a-zA-Z]*")) {
+        if(!delegation.getOrigin().matches("[a-zA-Z]*")) {
             throw new IllegalArgumentException("The origin must only contain letters.");
         }
-        if(!delegation.getDestination().matches("[A-Z][a-zA-Z]*")) {
+        if(!delegation.getDestination().matches("[a-zA-Z]*")) {
             throw new IllegalArgumentException("The destination must only contain letters.");
         }
         if(delegation.getTitle().matches(".*[^a-zA-Z ].*")) {

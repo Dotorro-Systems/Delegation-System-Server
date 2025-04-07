@@ -1,12 +1,9 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogBreakRepository;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.FindException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +15,22 @@ public class WorkLogBreakService {
     public WorkLogBreakService(WorkLogBreakRepository workLogBreakRepository, WorkLogService workLogService) {
         this.workLogBreakRepository = workLogBreakRepository;
         this.workLogService = workLogService;
+    }
+
+    public void validateWorkLogBreak(WorkLogBreak workLogBreak){
+
+        if (workLogBreak.getWorkLog() == null){
+            throw new RuntimeException("WorkLog not found");
+        }
+        if(workLogBreak.getEndTime().isAfter(workLogBreak.getWorkLog().getEndTime())) {
+            workLogBreak.setEndTime(workLogBreak.getWorkLog().getEndTime());
+        }
+        if(workLogBreak.getStartTime().isBefore(workLogBreak.getWorkLog().getStartTime())) {
+            workLogBreak.setStartTime(workLogBreak.getWorkLog().getStartTime());
+        }
+        if(workLogBreak.getEndTime().isBefore(workLogBreak.getStartTime())){
+            throw new IllegalArgumentException("The end time cannot be earlier than the start time");
+        }
     }
 
     public List<WorkLogBreak> getAllWorkLogBreaks() {
@@ -51,7 +64,7 @@ public class WorkLogBreakService {
         }
     }
 
-    public void deleteWorkLogBrak(Long id)
+    public void deleteWorkLogBreak(Long id)
     {
         workLogBreakRepository.deleteById(id);
     }
@@ -60,11 +73,13 @@ public class WorkLogBreakService {
     private WorkLogBreak convertToEntity(WorkLogBreakDTO workLogBreakDTO) {
         WorkLog workLog = workLogService.getWorkLogById(workLogBreakDTO.getWorkLogId());
 
-        return new WorkLogBreak(
+         WorkLogBreak workLogBreak = new WorkLogBreak(
                 workLog,
                 workLogBreakDTO.getStartTime(),
                 workLogBreakDTO.getEndTime()
         );
+        validateWorkLogBreak(workLogBreak);
+        return workLogBreak;
     }
 
     private WorkLogBreakDTO convertToDTO(WorkLogBreak workLogBreak)

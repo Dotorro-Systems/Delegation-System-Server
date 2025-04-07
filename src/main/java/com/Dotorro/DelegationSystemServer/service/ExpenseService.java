@@ -23,6 +23,17 @@ public class ExpenseService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
+    public void validateExpense(Expense expense){
+        if (expense.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
+        }
+        if (expense.getUser() == null){
+            throw new RuntimeException("User not found");
+        }
+        if(expense.getAmount() < 0){
+            throw new IllegalArgumentException("The amount can not be less than zero.");
+        }
+    }
 
     public List<Expense> getAllExpenses() {
         return expenseRepository.findAll();
@@ -66,13 +77,15 @@ public class ExpenseService {
 
         User user = userService.getUserById(expenseDTO.getUserId());
 
-        return new Expense(
+        Expense expense = new Expense(
                 delegation,
                 user,
                 expenseDTO.getDescription(),
                 expenseDTO.getAmount(),
                 expenseDTO.getCreateAt()
         );
+        validateExpense(expense);
+        return expense;
     }
 
     private ExpenseDTO convertToDTO(Expense expense) {

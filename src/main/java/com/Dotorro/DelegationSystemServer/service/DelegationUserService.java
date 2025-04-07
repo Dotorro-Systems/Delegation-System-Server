@@ -24,6 +24,14 @@ public class DelegationUserService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
+    public void validateDelegationUser(DelegationUser delegationUser){
+        if (delegationUser.getUser() == null){
+            throw new RuntimeException("User not found");
+        }
+        if (delegationUser.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
+        }
+    }
 
     public List<DelegationUser> getAllDelegationUsers() {
         return delegationUserRepository.findAll();
@@ -70,10 +78,12 @@ public class DelegationUserService {
         Delegation delegation = delegationService.getDelegationById(delegationUserDTO.getDelegationId());
         User user = userService.getUserById(delegationUserDTO.getUserId());
 
-        return new DelegationUser(
+        DelegationUser delegationUser = new DelegationUser(
                 delegation,
                 user
         );
+        validateDelegationUser(delegationUser);
+        return delegationUser;
     }
 
     private DelegationUserDTO convertToDTO(DelegationUser delegationUser) {

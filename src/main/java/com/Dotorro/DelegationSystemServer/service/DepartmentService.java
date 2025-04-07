@@ -1,11 +1,7 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.dto.DepartmentDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
-import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Department;
-import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +11,12 @@ import java.util.Optional;
 @Service
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
+
+    public void validateDepartment(Department department){
+        if(department.getName().matches(".*[^a-zA-Z ].*")){
+            throw new IllegalArgumentException("Department must only contain letters");
+        }
+    }
 
     public DepartmentService(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
@@ -56,9 +58,11 @@ public class DepartmentService {
     }
 
     private Department convertToEntity(DepartmentDTO departmentDTO) {
-        return new Department(
+        Department department = new Department(
             departmentDTO.getName()
         );
+        validateDepartment(department);
+        return department;
     }
 
     private DepartmentDTO convertToDTO(Department department)

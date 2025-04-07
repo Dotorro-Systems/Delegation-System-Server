@@ -1,13 +1,11 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.repository.NoteRepository;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.FindException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +19,18 @@ public class NoteService {
         this.noteRepository = noteRepository;
         this.delegationService = delegationService;
         this.userService = userService;
+    }
+
+    public void validateNote(Note note){
+        if (note.getUser() == null){
+            throw new RuntimeException("User not found ");
+        }
+        if (note.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
+        }
+        if(note.getCreatedAt().isAfter(LocalDateTime.now())){
+            throw new IllegalArgumentException("The date can not be from the future");
+        }
     }
 
     public List<Note> getAllNotes() {
@@ -65,12 +75,14 @@ public class NoteService {
 
         User user = userService.getUserById(noteDTO.getUserId());
 
-        return new Note(
+        Note note = new Note(
                 delegation,
                 user,
                 noteDTO.getContent(),
                 noteDTO.getCreatedAt()
         );
+        validateNote(note);
+        return note;
     }
 
     private NoteDTO convertToDTO(Note note)

@@ -51,6 +51,7 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
+
     public User getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
 

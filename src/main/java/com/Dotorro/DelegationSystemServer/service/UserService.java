@@ -88,8 +88,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, UserDTO userDTO)
-    {
+    public User updateUser(Long id, UserDTO userDTO) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         User updatedUser = convertToEntity(userDTO);
@@ -110,8 +109,7 @@ public class UserService {
         }
     }
 
-    public User updatePassword(Long id, String newPassword)
-    {
+    public User updatePassword(Long id, String newPassword) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
@@ -126,13 +124,11 @@ public class UserService {
         }
     }
 
-    private String hashPassword(String password)
-    {
+    private String hashPassword(String password) {
         return encoder.encode(password);
     }
 
-    public void deleteUser(Long id)
-    {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 

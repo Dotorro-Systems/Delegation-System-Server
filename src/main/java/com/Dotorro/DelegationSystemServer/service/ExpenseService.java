@@ -1,14 +1,12 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.ExpenseDTO;
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Expense;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.FindException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,14 +21,17 @@ public class ExpenseService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
+
     public void validateExpense(Expense expense){
-        if (expense.getDelegation() == null){
+        if (expense.getDelegation() == null) {
             throw new RuntimeException("Delegation not found");
         }
-        if (expense.getUser() == null){
+
+        if (expense.getUser() == null) {
             throw new RuntimeException("User not found");
         }
-        if(expense.getAmount() < 0){
+
+        if (expense.getAmount() < 0){
             throw new IllegalArgumentException("The amount can not be less than zero.");
         }
     }
@@ -59,7 +60,7 @@ public class ExpenseService {
             expense.setUser(updatedExpense.getUser());
             expense.setDescription(updatedExpense.getDescription());
             expense.setAmount(updatedExpense.getAmount());
-            expense.setCreateAt(updatedExpense.getCreateAt());
+            expense.setCreatedAt(updatedExpense.getCreatedAt());
 
             return expenseRepository.save(expense);
         } else {
@@ -82,7 +83,7 @@ public class ExpenseService {
                 user,
                 expenseDTO.getDescription(),
                 expenseDTO.getAmount(),
-                expenseDTO.getCreateAt()
+                expenseDTO.getCreatedAt()
         );
         validateExpense(expense);
         return expense;
@@ -94,7 +95,7 @@ public class ExpenseService {
                 expense.getUser().getId(),
                 expense.getDescription(),
                 expense.getAmount(),
-                expense.getCreateAt()
+                expense.getCreatedAt()
         );
     }
 }

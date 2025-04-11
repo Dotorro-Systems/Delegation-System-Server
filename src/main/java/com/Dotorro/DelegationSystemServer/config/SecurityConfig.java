@@ -48,6 +48,7 @@ public class SecurityConfig {
                                 "users/register",
                                 "users/login",
                                 "users/logout",
+                                "users/", // Only in dev
                                 "departments/",
                                 "authenticated",
                                 "swagger-ui/**").permitAll()

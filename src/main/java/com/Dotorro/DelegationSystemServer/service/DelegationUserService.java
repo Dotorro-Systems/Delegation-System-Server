@@ -24,11 +24,13 @@ public class DelegationUserService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
+
     public void validateDelegationUser(DelegationUser delegationUser){
-        if (delegationUser.getUser() == null){
+        if (delegationUser.getUser() == null) {
             throw new RuntimeException("User not found");
         }
-        if (delegationUser.getDelegation() == null){
+
+        if (delegationUser.getDelegation() == null) {
             throw new RuntimeException("Delegation not found");
         }
     }
@@ -37,8 +39,7 @@ public class DelegationUserService {
         return delegationUserRepository.findAll();
     }
 
-    public DelegationUser getDelegationUserByDelegationIdUserId(Long delegationId, Long userId)
-    {
+    public DelegationUser getDelegationUserByDelegationIdUserId(Long delegationId, Long userId) {
         DelegationUserKey id = new DelegationUserKey(delegationId,userId);
 
         return delegationUserRepository.findById(id).orElse(null);
@@ -64,7 +65,7 @@ public class DelegationUserService {
 
             return delegationUserRepository.save(delegationUser);
         } else {
-            throw new RuntimeException("DelegationUser not found with DelegationId: " + delegationId + " and UserId: " + userId);
+            throw new RuntimeException("Delegation User not found with delegation id: " + delegationId + " and user id: " + userId);
         }
     }
 
@@ -82,7 +83,9 @@ public class DelegationUserService {
                 delegation,
                 user
         );
+
         validateDelegationUser(delegationUser);
+
         return delegationUser;
     }
 

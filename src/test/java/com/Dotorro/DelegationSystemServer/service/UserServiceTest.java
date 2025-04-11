@@ -3,10 +3,8 @@ package com.Dotorro.DelegationSystemServer.service;
 import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
-import com.Dotorro.DelegationSystemServer.repository.DepartmentRepository;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +56,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testRegisterUser() {
+    void shouldRegisterUser() {
         when(departmentService.getDepartmentById(1L)).thenReturn(department);
         doNothing().when(authenticationService).validateEmail(userDTO.getEmail());
         doNothing().when(authenticationService).validatePassword(userDTO.getPassword());
@@ -73,7 +70,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserById_Found() {
+    void shouldReturnUserWhenUserFoundById() {
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user));
 
         User result = userService.getUserById(1L);
@@ -81,15 +78,16 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserById_NotFound() {
+    void shouldThrowExceptionWhenUserNotFoundById() {
         when(userRepository.findById(2L)).thenReturn(null);
 
-        User result = userService.getUserById(2L);
-        assertNull(result);
+        assertThrows(RuntimeException.class, () -> {
+            userService.getUserById(2L);
+        });
     }
 
     @Test
-    void testUpdateUser_Success() {
+    void shouldUpdateUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(departmentService.getDepartmentById(1L)).thenReturn(department);
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -101,7 +99,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdatePassword_Success() {
+    void shouldUpdateUserPassword() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         doNothing().when(authenticationService).validatePassword("newpass");
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -113,8 +111,8 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserByEmail_Found() {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(user);
+    void shouldReturnUserWhenUserFoundByEmail() {
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.ofNullable(user));
 
         User result = userService.getUserByEmail("john@example.com");
 
@@ -122,10 +120,10 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserByEmail_NotFound() {
+    void shouldThrowExceptionWhenUserNotFoundByEmail() {
         when(userRepository.findByEmail("notfound@example.com")).thenReturn(null);
 
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             userService.getUserByEmail("notfound@example.com");
         });
     }

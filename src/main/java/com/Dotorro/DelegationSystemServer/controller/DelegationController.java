@@ -3,14 +3,20 @@ package com.Dotorro.DelegationSystemServer.controller;
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
+import com.Dotorro.DelegationSystemServer.model.DelegationDepartment;
+import com.Dotorro.DelegationSystemServer.model.DelegationUser;
 import com.Dotorro.DelegationSystemServer.model.User;
+import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
 import com.Dotorro.DelegationSystemServer.service.DelegationService;
+import com.Dotorro.DelegationSystemServer.service.DelegationUserService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
+import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/delegations")
@@ -18,10 +24,16 @@ import java.util.List;
 public class DelegationController {
     private final DelegationService delegationService;
     private final UserService userService;
+    private final DelegationUserService delegationUserService;
+    private final DelegationDepartmentService delegationDepartmentService;
 
-    public DelegationController(DelegationService delegationService, UserService userService) {
+    public DelegationController(DelegationService delegationService, UserService userService,
+                                DelegationUserService delegationUserService,
+                                DelegationDepartmentService delegationDepartmentService) {
         this.delegationService = delegationService;
         this.userService = userService;
+        this.delegationUserService = delegationUserService;
+        this.delegationDepartmentService = delegationDepartmentService;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -40,9 +52,46 @@ public class DelegationController {
         return delegation;
     }
 
-    @GetMapping(value = "/department/{id}")
-    public List<Delegation> getDelegationByDepartmentId(@PathVariable Long id) {
-        return delegationService.getDelegationsByDepartmentId(id);
+    @GetMapping(value = "/in-my-department")
+    public List<Delegation> getDelegationByDepartmentId(HttpServletRequest request) throws ApiException {
+        User user = userService.getUserByRequest(request);
+        List<Delegation> allDelegations = getDelegations();
+        List<DelegationUser> delegationUsers = delegationUserService.findByUserId(user.getId());
+        List<DelegationDepartment> delegationDepartments = delegationDepartmentService.findByDepartmentId(user.getDepartment().getId());
+        if (user.getRole() == UserRole.EMPLOYEE) {
+            allDelegations = delegationUsers.stream()
+                    .map(DelegationUser::getDelegation)
+                    .collect(Collectors.toList());
+            return allDelegations;
+        }else{
+            allDelegations = delegationDepartments.stream()
+                    .map(DelegationDepartment::getDelegation)
+                    .collect(Collectors.toList());
+            return allDelegations;
+        }
+    }
+
+    @GetMapping(value = "/in-my-delegations")
+    public List<Delegation> getDelegationByMyUserId(HttpServletRequest request) throws ApiException {
+        User user = userService.getUserByRequest(request);
+        List<Delegation> allDelegations = getDelegations();
+        List<DelegationUser> delegationUsers = delegationUserService.findByUserId(user.getId());
+        allDelegations = delegationUsers.stream()
+                .map(DelegationUser::getDelegation)
+                .collect(Collectors.toList());
+        return allDelegations;
+    }
+
+    @PreAuthorize("!hasAuthority('EMPLOYEE')")
+    @PutMapping(value = "/get-by-user-id/{id}")
+    public List<Delegation> getDelegationByUserId(HttpServletRequest request, Long id) throws ApiException {
+        User user = userService.getUserByRequest(request);
+        List<Delegation> allDelegations = getDelegations();
+        List<DelegationUser> delegationUsers = delegationUserService.findByUserId(id);
+        allDelegations = delegationUsers.stream()
+                .map(DelegationUser::getDelegation)
+                .collect(Collectors.toList());
+        return allDelegations;
     }
 
     @PutMapping(value = "/{id}")

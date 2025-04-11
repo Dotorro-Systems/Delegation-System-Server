@@ -45,10 +45,6 @@ public class DelegationService {
         return delegationRepository.findById(delegationId).orElse(null);
     }
 
-    public List<Delegation> getDelegationsByDepartmentId(Long departmentId) {
-        return (List<Delegation>) getAllDelegations().stream().filter(delegation -> delegation.getDepartments().contains(departmentId));
-    }
-
     public Delegation createDelegation(DelegationDTO delegationDTO){
         return delegationRepository.save(convertToEntity(delegationDTO));}
 

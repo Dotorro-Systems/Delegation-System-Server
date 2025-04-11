@@ -41,6 +41,24 @@ public class UserService {
         this.authenticationService = authenticationService;
     }
 
+    public void validateUser(User user){
+        if(!user.getFirstName().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("First name must start with a capital letter and only contains letters");
+        }
+
+        if(!user.getLastName().matches("[A-Z][a-zA-Z]*")) {
+            throw new IllegalArgumentException("Last name must start with a capital letter and only contains letters");
+        }
+
+        if(!user.getPhone().matches("\\d{9}")) {
+            throw new IllegalArgumentException("Phone number must only contain numbers.");
+        }
+
+        if (user.getDepartment() == null) {
+            throw new RuntimeException("Department not found");
+        }
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -121,7 +139,7 @@ public class UserService {
     public User convertToEntity(UserDTO userDTO) {
         Department department = departmentService.getDepartmentById(userDTO.getDepartmentId());
 
-        return new User(
+        User user = new User(
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
                 userDTO.getPassword(),
@@ -130,6 +148,10 @@ public class UserService {
                 UserRole.valueOf(userDTO.getRole()),
                 department
         );
+
+        validateUser(user);
+
+        return user;
     }
 
     public UserDTO convertToDTO(User user)

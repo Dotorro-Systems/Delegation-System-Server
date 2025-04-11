@@ -1,8 +1,7 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
 import com.Dotorro.DelegationSystemServer.dto.WorkLogBreakDTO;
-import com.Dotorro.DelegationSystemServer.model.User;
+import com.Dotorro.DelegationSystemServer.model.WorkLog;
 import com.Dotorro.DelegationSystemServer.model.WorkLogBreak;
 import com.Dotorro.DelegationSystemServer.service.WorkLogBreakService;
 import org.springframework.http.ResponseEntity;
@@ -33,18 +32,27 @@ public class WorkLogBreakController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateWorkLogBreak(@PathVariable Long id, @RequestBody WorkLogBreakDTO workLogBreakDTO)
     {
-        WorkLogBreak savedWorkLogBreak = workLogBreakService.updateWorkLogBreak(id,workLogBreakDTO);
-        return ResponseEntity.ok(savedWorkLogBreak);
+        try {
+            WorkLogBreak savedWorkLogBreak = workLogBreakService.updateWorkLogBreak(id,workLogBreakDTO);
+            return ResponseEntity.ok(savedWorkLogBreak);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}")
     public void deleteWorkLogBreakById(@PathVariable Long id)
     {
-        workLogBreakService.deleteWorkLogBrak(id);
+        workLogBreakService.deleteWorkLogBreak(id);
     }
 
     @PostMapping(value = "/create")
-    public WorkLogBreak createWorkLogBreak(@RequestBody WorkLogBreakDTO workLogBreakDTO) {
-        return workLogBreakService.createWorkLogBreak(workLogBreakDTO);
+    public ResponseEntity<?> createWorkLogBreak(@RequestBody WorkLogBreakDTO workLogBreakDTO) {
+        try {
+            WorkLogBreak savedWorkLogBreak = workLogBreakService.createWorkLogBreak(workLogBreakDTO);
+            return ResponseEntity.ok(savedWorkLogBreak);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

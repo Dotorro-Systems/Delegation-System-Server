@@ -33,8 +33,12 @@ public class ExpenseController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestBody ExpenseDTO expenseDTO)
     {
-        Expense savedExpense = expenseService.updateExpense(id, expenseDTO);
-        return ResponseEntity.ok(savedExpense);
+        try {
+            Expense savedExpense = expenseService.updateExpense(id, expenseDTO);
+            return ResponseEntity.ok(savedExpense);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}")
@@ -44,7 +48,12 @@ public class ExpenseController {
     }
 
     @PostMapping(value = "/create")
-    public Expense createExpense(@RequestBody ExpenseDTO expenseDTO) {
-        return expenseService.createExpense(expenseDTO);
+    public ResponseEntity<?> createExpense(@RequestBody ExpenseDTO expenseDTO) {
+        try {
+            Expense savedExpense = expenseService.createExpense(expenseDTO);
+            return ResponseEntity.ok(savedExpense);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

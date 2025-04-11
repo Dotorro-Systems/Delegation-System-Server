@@ -21,6 +21,14 @@ public class DelegationDepartmentService {
         this.delegationService = delegationService;
         this.departmentService = departmentService;
     }
+    public void validateDelegationDepartment(DelegationDepartment delegationDepartment){
+        if (delegationDepartment.getDepartment() == null){
+            throw new RuntimeException("Department not found");
+        }
+        if (delegationDepartment.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
+        }
+    }
 
     public List<DelegationDepartment> getAllDelegationDepartments() {
         return delegationDepartmentRepository.findAll();
@@ -66,7 +74,7 @@ public class DelegationDepartmentService {
         Delegation delegation = delegationService.getDelegationById(delegationDepartmentDTO.getDelegationId());
         Department department = departmentService.getDepartmentById(delegationDepartmentDTO.getDepartmentId());
 
-        return new DelegationDepartment(
+        DelegationDepartment delegationDepartment = new DelegationDepartment(
                 new DelegationDepartmentKey(
                         delegationDepartmentDTO.getDelegationId(),
                         delegationDepartmentDTO.getDepartmentId()
@@ -74,6 +82,8 @@ public class DelegationDepartmentService {
                 delegation,
                 department
         );
+        validateDelegationDepartment(delegationDepartment);
+        return delegationDepartment;
     }
 
     private DelegationDepartmentDTO convertToDTO(DelegationDepartment delegationDepartment)

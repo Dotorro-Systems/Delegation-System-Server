@@ -33,9 +33,12 @@ public class DelegationUserController {
 
     @PutMapping(value = "/{delegationId}/{userId}")
     public ResponseEntity<?> updateDelegationUser(@PathVariable Long delegationId, @PathVariable Long userId, @RequestBody DelegationUserDTO delegationUserDTO)
-    {
-        DelegationUser savedDelegationUser = delegationUserService.updateDelegationUser(delegationId, userId, delegationUserDTO);
-        return ResponseEntity.ok(savedDelegationUser);
+    {   try {
+            DelegationUser savedDelegationUser = delegationUserService.updateDelegationUser(delegationId, userId, delegationUserDTO);
+            return ResponseEntity.ok(savedDelegationUser);
+        } catch (Exception e) {
+             return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{delegationId}/{userId}")
@@ -45,9 +48,12 @@ public class DelegationUserController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> createDelegationEmployee(@RequestBody DelegationUserDTO delegationUserDTO) {
-        DelegationUser delegationUser = delegationUserService.createDelegationUser(delegationUserDTO);
-
-        return ResponseEntity.ok(delegationUser);
+    public ResponseEntity<?> createDelegationUser(@RequestBody DelegationUserDTO delegationUserDTO) {
+        try {
+            DelegationUser savedDelegationUser = delegationUserService.createDelegationUser(delegationUserDTO);
+            return ResponseEntity.ok(savedDelegationUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

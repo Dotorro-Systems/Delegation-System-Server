@@ -1,17 +1,14 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.UserDTO;
+
 import com.Dotorro.DelegationSystemServer.dto.WorkLogDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.Department;
+
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.model.WorkLog;
-import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.repository.WorkLogRepository;
-import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.FindException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +24,24 @@ public class WorkLogService {
         this.delegationService = delegationService;
     }
 
+    public void validateWorkLog(WorkLog workLog){
+        if(workLog.getStartTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("time can't be from the past!");
+        }
+        if(workLog.getEndTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("time can't be from the past!");
+        }
+        if(workLog.getEndTime().isBefore(workLog.getStartTime())){
+            throw new IllegalArgumentException("The endTime cannot be earlier than the startTime");
+        }
+        if (workLog.getUser() == null){
+            throw new RuntimeException("User not found ");
+        }
+        if (workLog.getDelegation() == null){
+            throw new RuntimeException("Delegation not found");
+        }
+    }
+
     public List<WorkLog> getAllWorkLogs() {
         return workLogRepository.findAll();
     }
@@ -37,6 +52,7 @@ public class WorkLogService {
     }
 
     public WorkLog createWorkLog(WorkLogDTO workLogDTO) {
+
         return workLogRepository.save(convertToEntity(workLogDTO));
     }
 
@@ -69,12 +85,14 @@ public class WorkLogService {
 
         Delegation delegation = delegationService.getDelegationById(workLogDTO.getDelegationId());
 
-        return new WorkLog(
+        WorkLog workLog = new WorkLog(
                 delegation,
                 user,
                 workLogDTO.getStartTime(),
                 workLogDTO.getEndTime()
         );
+        validateWorkLog(workLog);
+        return workLog;
     }
 
     private WorkLogDTO convertToDTO(WorkLog workLog)

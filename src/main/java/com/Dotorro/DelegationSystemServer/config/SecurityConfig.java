@@ -44,7 +44,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("users/register", "users/login", "users/logout", "departments/", "authenticated").permitAll()
+                        .requestMatchers(
+                                "users/register",
+                                "users/login",
+                                "users/logout",
+                                "departments/",
+                                "authenticated",
+                                "swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session

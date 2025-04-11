@@ -6,6 +6,7 @@ import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
 import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +17,40 @@ public class DelegationService {
     public DelegationService(DelegationRepository delegationRepository) {
         this.delegationRepository = delegationRepository;}
 
+    public void validateDelegation(Delegation delegation){
+        if(delegation.getStartDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("The start date can't be from the past!");
+        }
+        if(delegation.getEndDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("The end date can't be from the past!");
+        }
+        if(delegation.getEndDate().isBefore(delegation.getStartDate())){
+            throw new IllegalArgumentException("The end date cannot be earlier than the start date");
+        }
+        if(!delegation.getOrigin().matches("[a-zA-Z]*")) {
+            throw new IllegalArgumentException("The origin must only contain letters.");
+        }
+        if(!delegation.getDestination().matches("[a-zA-Z]*")) {
+            throw new IllegalArgumentException("The destination must only contain letters.");
+        }
+        if(delegation.getTitle().matches(".*[^a-zA-Z ].*")) {
+            throw new IllegalArgumentException("The title must only contain letters.");
+        }
+
+    }
+
     public List<Delegation> getAllDelegations(){ return delegationRepository.findAll();}
 
     public Delegation getDelegationById(Long delegationId) {
         return delegationRepository.findById(delegationId).orElse(null);
     }
 
-    public Delegation createDelegation(DelegationDTO delegationDTO){return delegationRepository.save(convertToEntity(delegationDTO));}
+    public List<Delegation> getDelegationsByDepartmentId(Long departmentId) {
+        return (List<Delegation>) getAllDelegations().stream().filter(delegation -> delegation.getDepartments().contains(departmentId));
+    }
+
+    public Delegation createDelegation(DelegationDTO delegationDTO){
+        return delegationRepository.save(convertToEntity(delegationDTO));}
 
     public Delegation updateDelegation(Long id, DelegationDTO delegationDTO)
     {
@@ -32,12 +60,12 @@ public class DelegationService {
 
         if (optionalDelegation.isPresent()) {
             Delegation delegation = optionalDelegation.get();
-            delegation.setTitle(optionalDelegation.get().getTitle());
-            delegation.setOrigin(optionalDelegation.get().getOrigin());
-            delegation.setDestination(optionalDelegation.get().getDestination());
-            delegation.setStatus(optionalDelegation.get().getStatus());
-            delegation.setStartDate(optionalDelegation.get().getStartDate());
-            delegation.setEndDate(optionalDelegation.get().getEndDate());
+            delegation.setTitle(updatedDelegation.getTitle());
+            delegation.setOrigin(updatedDelegation.getOrigin());
+            delegation.setDestination(updatedDelegation.getDestination());
+            delegation.setStatus(updatedDelegation.getStatus());
+            delegation.setStartDate(updatedDelegation.getStartDate());
+            delegation.setEndDate(updatedDelegation.getEndDate());
 
             return delegationRepository.save(delegation);
         } else {
@@ -51,7 +79,7 @@ public class DelegationService {
     }
 
     private Delegation convertToEntity(DelegationDTO delegationDTO) {
-        return new Delegation(
+        Delegation delegation = new Delegation(
                 delegationDTO.getTitle(),
                 delegationDTO.getOrigin(),
                 delegationDTO.getDestination(),
@@ -59,6 +87,8 @@ public class DelegationService {
                 delegationDTO.getStartDate(),
                 delegationDTO.getEndDate()
         );
+        validateDelegation(delegation);
+        return delegation;
     }
 
     private DelegationDTO convertToDTO(Delegation delegation)

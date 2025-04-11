@@ -1,6 +1,5 @@
 package com.Dotorro.DelegationSystemServer.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -19,25 +18,25 @@ public class Expense {
     private User user;
     private String description;
     private Double amount;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     public Expense() { }
 
-    public Expense(Delegation delegation, User user, String description, Double amount, LocalDateTime createAt) {
+    public Expense(Delegation delegation, User user, String description, Double amount, LocalDateTime createdAt) {
         this.delegation = delegation;
         this.user = user;
         this.description = description;
         this.amount = amount;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
     }
 
-    public Expense(Long id, Delegation delegation, User user, String description, Double amount, LocalDateTime createAt) {
+    public Expense(Long id, Delegation delegation, User user, String description, Double amount, LocalDateTime createdAt) {
         this.id = id;
         this.delegation = delegation;
         this.user = user;
         this.description = description;
         this.amount = amount;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -80,11 +79,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

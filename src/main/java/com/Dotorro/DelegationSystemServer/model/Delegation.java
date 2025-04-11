@@ -56,7 +56,6 @@ public class Delegation {
     @JsonIgnoreProperties("delegation")
     private List<WorkLog> workLogs = new ArrayList<>();
 
-
     public Delegation() { }
 
     public Delegation(String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {

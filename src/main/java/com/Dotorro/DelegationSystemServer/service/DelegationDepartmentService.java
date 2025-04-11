@@ -93,4 +93,9 @@ public class DelegationDepartmentService {
                 delegationDepartment.getId().getDepartmentId()
         );
     }
+
+    public List<DelegationDepartment> findByDepartmentId(Long departmentId) {
+        return delegationDepartmentRepository.findByDepartmentId(departmentId);
+    }
+
 }

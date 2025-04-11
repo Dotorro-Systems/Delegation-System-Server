@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/expense")
+@RequestMapping("/expenses")
 @CrossOrigin(origins = "*")
 public class ExpenseController {
     private final ExpenseService expenseService;

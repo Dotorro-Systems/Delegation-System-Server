@@ -27,13 +27,13 @@ public class DelegationService {
         if(delegation.getEndDate().isBefore(delegation.getStartDate())){
             throw new IllegalArgumentException("The end date cannot be earlier than the start date");
         }
-        if(!delegation.getOrigin().matches("[a-zA-Z]*")) {
+        if(!delegation.getOrigin().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*")) {
             throw new IllegalArgumentException("The origin must only contain letters.");
         }
-        if(!delegation.getDestination().matches("[a-zA-Z]*")) {
+        if(!delegation.getDestination().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*")) {
             throw new IllegalArgumentException("The destination must only contain letters.");
         }
-        if(delegation.getTitle().matches(".*[^a-zA-Z ].*")) {
+        if(delegation.getTitle().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ].*")) {
             throw new IllegalArgumentException("The title must only contain letters.");
         }
 
@@ -43,10 +43,6 @@ public class DelegationService {
 
     public Delegation getDelegationById(Long delegationId) {
         return delegationRepository.findById(delegationId).orElse(null);
-    }
-
-    public List<Delegation> getDelegationsByDepartmentId(Long departmentId) {
-        return (List<Delegation>) getAllDelegations().stream().filter(delegation -> delegation.getDepartments().contains(departmentId));
     }
 
     public Delegation createDelegation(DelegationDTO delegationDTO){

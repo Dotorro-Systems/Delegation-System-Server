@@ -92,4 +92,8 @@ public class DelegationUserService {
                 delegationUser.getUser().getId()
         );
     }
+
+    public List<DelegationUser> findByUserId(Long userId) {
+        return delegationUserRepository.findByUserId(userId);
+    }
 }

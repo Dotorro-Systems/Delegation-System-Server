@@ -1,9 +1,6 @@
 package com.Dotorro.DelegationSystemServer.dto;
 
-import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.User;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
 
 import java.time.LocalDateTime;
 
@@ -12,14 +9,14 @@ public class ExpenseDTO {
     private Long userId;
     private String description;
     private Double amount;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
-    public ExpenseDTO(Long delegationId, Long userId, String description, Double amount, LocalDateTime createAt) {
+    public ExpenseDTO(Long delegationId, Long userId, String description, Double amount, LocalDateTime createdAt) {
         this.delegationId = delegationId;
         this.userId = userId;
         this.description = description;
         this.amount = amount;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
     }
 
     public Long getDelegationId() {
@@ -54,11 +51,11 @@ public class ExpenseDTO {
         this.amount = amount;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

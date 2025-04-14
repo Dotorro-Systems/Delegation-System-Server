@@ -42,11 +42,11 @@ public class UserService {
     }
 
     public void validateUser(User user){
-        if(!user.getFirstName().matches("[A-Z][a-zA-Z]*")) {
+        if(!user.getFirstName().matches("[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
             throw new IllegalArgumentException("First name must start with a capital letter and only contains letters");
         }
 
-        if(!user.getLastName().matches("[A-Z][a-zA-Z]*")) {
+        if(!user.getLastName().matches("[A-ZąćęłĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
             throw new IllegalArgumentException("Last name must start with a capital letter and only contains letters");
         }
 
@@ -77,7 +77,19 @@ public class UserService {
         return userRepository.findByDepartmentId(departmentId);
     }
 
-    public User registerUser(UserDTO userDto) {
+    public User registerUser(UserDTO userDto) throws NoSuchElementException {
+        boolean foundUser = false;
+        try {
+            getUserByEmail(userDto.getEmail());
+            foundUser = true;
+        } catch (NoSuchElementException e) {
+
+        }
+
+        if (foundUser) {
+            throw new NoSuchElementException("This email is already in use.");
+        }
+
         User user = convertToEntity(userDto);
 
         authenticationService.validateEmail(user.getEmail());

@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -29,7 +30,6 @@ public class UserController {
     private JWTService jwtService;
 
     @GetMapping(value = "/")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
@@ -91,11 +91,15 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response) throws ApiException {
         String token = userService.verify(loginRequestDTO);
 
+        long age_in_seconds = 60 * 60; // 1 hour
+        if (loginRequestDTO.getStaySignedIn())
+            age_in_seconds = 7 * 24 * 60 * 60; // 7 days
+
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(7 * 24 * 60 * 60)
+                .maxAge(age_in_seconds)
                 .sameSite(SameSiteCookies.STRICT.toString())
                 .build();
 

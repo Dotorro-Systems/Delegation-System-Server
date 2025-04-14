@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DelegationService {
@@ -18,31 +19,43 @@ public class DelegationService {
         this.delegationRepository = delegationRepository;}
 
     public void validateDelegation(Delegation delegation){
-        if(delegation.getStartDate().isBefore(LocalDateTime.now())){
+        if (delegation.getStartDate().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("The start date can't be from the past!");
         }
-        if(delegation.getEndDate().isBefore(LocalDateTime.now())){
+
+        if (delegation.getEndDate().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("The end date can't be from the past!");
         }
-        if(delegation.getEndDate().isBefore(delegation.getStartDate())){
+
+        if (delegation.getEndDate().isBefore(delegation.getStartDate())) {
             throw new IllegalArgumentException("The end date cannot be earlier than the start date");
         }
-        if(!delegation.getOrigin().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*")) {
+      
+        if (!delegation.getOrigin().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*")) {
             throw new IllegalArgumentException("The origin must only contain letters.");
         }
-        if(!delegation.getDestination().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*")) {
+      
+        if (!delegation.getDestination().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*")) {
             throw new IllegalArgumentException("The destination must only contain letters.");
         }
-        if(delegation.getTitle().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ].*")) {
+      
+        if (delegation.getTitle().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ].*")) {
             throw new IllegalArgumentException("The title must only contain letters.");
         }
-
     }
 
     public List<Delegation> getAllDelegations(){ return delegationRepository.findAll();}
 
     public Delegation getDelegationById(Long delegationId) {
         return delegationRepository.findById(delegationId).orElse(null);
+    }
+
+    public List<Delegation> getDelegationsByDepartmentId(Long departmentId) {
+        return getAllDelegations()
+                .stream()
+                .filter(delegation -> delegation.getDepartments().stream()
+                        .anyMatch(department -> department.getId().equals(departmentId)))
+                .collect(Collectors.toList());
     }
 
     public Delegation createDelegation(DelegationDTO delegationDTO){
@@ -83,6 +96,7 @@ public class DelegationService {
                 delegationDTO.getStartDate(),
                 delegationDTO.getEndDate()
         );
+
         validateDelegation(delegation);
         return delegation;
     }

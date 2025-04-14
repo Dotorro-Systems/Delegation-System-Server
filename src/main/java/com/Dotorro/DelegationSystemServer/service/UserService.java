@@ -7,7 +7,6 @@ import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
 import com.Dotorro.DelegationSystemServer.utils.UserRole;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.WebUtils;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -67,15 +64,13 @@ public class UserService {
     }
 
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
     }
+
     public User getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-
-        if (user == null)
-            throw new NoSuchElementException("No user with provided email found");
-
-        return user;
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email " + email));
     }
 
     public List<User> getUsersByDepartment(Long departmentId) {
@@ -105,8 +100,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, UserDTO userDTO)
-    {
+    public User updateUser(Long id, UserDTO userDTO) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         User updatedUser = convertToEntity(userDTO);
@@ -127,8 +121,7 @@ public class UserService {
         }
     }
 
-    public User updatePassword(Long id, String newPassword)
-    {
+    public User updatePassword(Long id, String newPassword) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
@@ -143,13 +136,11 @@ public class UserService {
         }
     }
 
-    private String hashPassword(String password)
-    {
+    private String hashPassword(String password) {
         return encoder.encode(password);
     }
 
-    public void deleteUser(Long id)
-    {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 

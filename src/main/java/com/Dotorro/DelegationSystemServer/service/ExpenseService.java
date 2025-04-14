@@ -21,14 +21,17 @@ public class ExpenseService {
         this.delegationService = delegationService;
         this.userService = userService;
     }
+
     public void validateExpense(Expense expense){
-        if (expense.getDelegation() == null){
+        if (expense.getDelegation() == null) {
             throw new RuntimeException("Delegation not found");
         }
-        if (expense.getUser() == null){
+
+        if (expense.getUser() == null) {
             throw new RuntimeException("User not found");
         }
-        if(expense.getAmount() < 0){
+
+        if (expense.getAmount() < 0){
             throw new IllegalArgumentException("The amount can not be less than zero.");
         }
     }

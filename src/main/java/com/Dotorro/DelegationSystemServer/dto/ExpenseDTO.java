@@ -1,7 +1,4 @@
 package com.Dotorro.DelegationSystemServer.dto;
-
-
-
 import java.time.LocalDateTime;
 
 public class ExpenseDTO {

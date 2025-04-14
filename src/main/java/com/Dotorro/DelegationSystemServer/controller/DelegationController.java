@@ -36,9 +36,10 @@ public class DelegationController {
         this.delegationDepartmentService = delegationDepartmentService;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/")
-    public List<Delegation> getDelegations(){return delegationService.getAllDelegations();}
+    public List<Delegation> getDelegations() {
+        return delegationService.getAllDelegations();
+    }
 
     @GetMapping(value = "/{id}")
     public Delegation getDelegationById(@PathVariable Long id, HttpServletRequest request) throws ApiException {
@@ -46,29 +47,30 @@ public class DelegationController {
 
         Delegation delegation = delegationService.getDelegationById(id);
 
-        if (!delegation.getUsers().contains(user))
+        boolean hasElevatedRights = user.getRole() != UserRole.EMPLOYEE;
+        boolean participatesInDelegation = delegation.getUsers().stream().anyMatch(u -> u.getId().equals(user.getId()));
+        boolean isInMyDepartment = delegation.getDepartments().stream().anyMatch(d -> d.getId().equals(user.getDepartment().getId()));
+
+        if ((hasElevatedRights && !isInMyDepartment) || (!hasElevatedRights && !participatesInDelegation))
             throw new RuntimeException("You don't have permission to view this delegation");
 
         return delegation;
     }
 
     @GetMapping(value = "/in-my-department")
-    public List<Delegation> getDelegationByDepartmentId(HttpServletRequest request) throws ApiException {
+    public List<Delegation> getDelegationsInMyDepartment(HttpServletRequest request) throws ApiException {
         User user = userService.getUserByRequest(request);
-        List<Delegation> allDelegations = getDelegations();
-        List<DelegationUser> delegationUsers = delegationUserService.findByUserId(user.getId());
-        List<DelegationDepartment> delegationDepartments = delegationDepartmentService.findByDepartmentId(user.getDepartment().getId());
-        if (user.getRole() == UserRole.EMPLOYEE) {
-            allDelegations = delegationUsers.stream()
-                    .map(DelegationUser::getDelegation)
+
+        List<Delegation> allDelegationsInDepartment = delegationService.getDelegationsByDepartmentId(user.getDepartment().getId());
+
+        if (user.getRole() == UserRole.EMPLOYEE)
+            return allDelegationsInDepartment
+                    .stream()
+                    .filter(delegation -> delegation.getUsers().stream()
+                            .anyMatch(u -> u.getId().equals(user.getId())))
                     .collect(Collectors.toList());
-            return allDelegations;
-        }else{
-            allDelegations = delegationDepartments.stream()
-                    .map(DelegationDepartment::getDelegation)
-                    .collect(Collectors.toList());
-            return allDelegations;
-        }
+
+        return allDelegationsInDepartment;
     }
 
     @GetMapping(value = "/in-my-delegations")

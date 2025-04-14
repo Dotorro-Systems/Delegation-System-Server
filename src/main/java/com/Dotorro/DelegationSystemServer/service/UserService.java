@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -82,12 +83,12 @@ public class UserService {
         try {
             getUserByEmail(userDto.getEmail());
             foundUser = true;
-        } catch (NoSuchElementException e) {
+        } catch (RuntimeException e) {
 
         }
 
         if (foundUser) {
-            throw new NoSuchElementException("This email is already in use.");
+            throw new RuntimeException("This email is already in use.");
         }
 
         User user = convertToEntity(userDto);

@@ -52,7 +52,7 @@ public class ExpenseController {
         try {
             Expense savedExpense = expenseService.createExpense(expenseDTO);
             return ResponseEntity.ok(savedExpense);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

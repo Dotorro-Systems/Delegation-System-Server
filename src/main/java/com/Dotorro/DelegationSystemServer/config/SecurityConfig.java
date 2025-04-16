@@ -50,6 +50,7 @@ public class SecurityConfig {
                                 "users/logout",
                                 "users/", // Only in dev
                                 "departments/",
+                                "departments/create", // Only in dev
                                 "authenticated",
                                 "swagger-ui/**").permitAll()
                         .anyRequest().authenticated())

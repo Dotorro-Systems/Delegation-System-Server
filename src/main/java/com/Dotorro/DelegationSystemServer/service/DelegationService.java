@@ -39,7 +39,7 @@ public class DelegationService {
             throw new IllegalArgumentException("The destination must only contain letters.");
         }
       
-        if (delegation.getTitle().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ].*")) {
+        if (delegation.getTitle().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁ&ŃÓŚŹŻ ].*")) {
             throw new IllegalArgumentException("The title must only contain letters.");
         }
     }

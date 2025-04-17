@@ -13,7 +13,7 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
     public void validateDepartment(Department department){
-        if(department.getName().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ].*")){
+        if(department.getName().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ& ].*")){
             throw new IllegalArgumentException("Department must only contain letters");
         }
     }

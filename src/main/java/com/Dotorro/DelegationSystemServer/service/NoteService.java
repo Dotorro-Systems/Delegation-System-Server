@@ -23,7 +23,7 @@ public class NoteService {
 
     public void validateNote(Note note){
         if (note.getUser() == null){
-            throw new RuntimeException("User not found ");
+            throw new RuntimeException("User not found");
         }
         if (note.getDelegation() == null){
             throw new RuntimeException("Delegation not found");

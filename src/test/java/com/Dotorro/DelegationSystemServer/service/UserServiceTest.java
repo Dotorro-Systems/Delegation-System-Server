@@ -70,6 +70,227 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldValidateUserWithValidPhone() {
+        User user = new User("Jan", "Kowalski", "password", "111222569",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldThrowExceptionForNotEnoughNumbersPhone() {
+        User user = new User("Jan", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+        assertEquals("Phone number must only contain 9 numbers.", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForLettersInPhone() {
+        User user = new User("Jan", "Kowalski", "password", "123pop555",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Phone number must only contain 9 numbers.", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForNullInPhone() {
+        User user = new User("Jan", "Kowalski", "password", "",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Phone number must only contain 9 numbers.", exception.getMessage());
+    }
+
+    @Test
+    void shouldValidateUserWithValidFirstName(){
+        User user = new User("Jan", "Kwiatowska", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldValidateUserWithPolishLetterInFirstName(){
+        User user = new User("Małgorzata", "Kwiatowska", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldValidateUserWithCapitalPolishLetterInFirstName(){
+        User user = new User("Łucja", "Kwiatowska", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldThrowExceptionForNonCapitalLetterInFirstName() {
+        User user = new User("adam", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("First name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForNumbersInFirstName() {
+        User user = new User("Ad4m", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("First name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForSpecialCharactersInFirstName() {
+        User user = new User("Ad@m", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("First name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForNullFirstName() {
+        User user = new User("", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("First name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForSpaceInFirstName() {
+        User user = new User("A dam", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("First name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldValidateUserWithValidLastName(){
+        User user = new User("Jan", "Kwiatowska", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldValidateUserWithPolishLetterInLastName(){
+        User user = new User("Jan", "Bąk", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldValidateUserWithCapitalPolishLetterInLastName(){
+        User user = new User("Jan", "Łąkowa", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldThrowExceptionForNonCapitalLetterInLastName() {
+        User user = new User("Kan", "kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Last name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForNumbersInLastName() {
+        User user = new User("Jan", "Kowalskj888i", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Last name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForSpecialCharactersInLastName() {
+        User user = new User("Jan", "Kowalskj&i", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Last name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForSpaceInLastName() {
+        User user = new User("Jan", "Kow alski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Last name must start with a capital letter and only contains letters",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForNullDepartment() {
+        User user = new User("Jan", "Kowalski", "password", "123999880",
+                "jan@example.com", UserRole.EMPLOYEE, null);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("Department not found",
+                exception.getMessage());
+    }
+
+    @Test
     void shouldReturnUserWhenUserFoundById() {
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user));
 

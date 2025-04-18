@@ -52,7 +52,7 @@ public class UserService {
         }
 
         if(!user.getPhone().matches("\\d{9}")) {
-            throw new IllegalArgumentException("Phone number must only contain numbers.");
+            throw new IllegalArgumentException("Phone number must only contain 9 numbers.");
         }
 
         if (user.getDepartment() == null) {

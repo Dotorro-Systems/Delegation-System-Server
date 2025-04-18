@@ -279,7 +279,7 @@ class UserServiceTest {
 
     @Test
     void shouldThrowExceptionForNullDepartment() {
-        User user = new User("Jan", "Kowalski", "password", "123999880",
+        User user = new User("Jan", "Kowalski", "password", "1232222222",
                 "jan@example.com", UserRole.EMPLOYEE, null);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {

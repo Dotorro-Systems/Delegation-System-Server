@@ -72,7 +72,4 @@ public class DepartmentServiceTest {
 
         assertEquals("Department must only contain letters", exception.getMessage());
     }
-
-
-
 }

@@ -19,16 +19,8 @@ public class DelegationService {
         this.delegationRepository = delegationRepository;}
 
     public void validateDelegation(Delegation delegation){
-        if (delegation.getStartDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("The start date can't be from the past!");
-        }
-
-        if (delegation.getEndDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("The end date can't be from the past!");
-        }
-
         if (delegation.getEndDate().isBefore(delegation.getStartDate())) {
-            throw new IllegalArgumentException("The end date cannot be earlier than the start date");
+            throw new IllegalArgumentException("The end date cannot be earlier than the start date.");
         }
       
         if (!delegation.getOrigin().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*")) {
@@ -72,7 +64,6 @@ public class DelegationService {
             delegation.setTitle(updatedDelegation.getTitle());
             delegation.setOrigin(updatedDelegation.getOrigin());
             delegation.setDestination(updatedDelegation.getDestination());
-            delegation.setStatus(updatedDelegation.getStatus());
             delegation.setStartDate(updatedDelegation.getStartDate());
             delegation.setEndDate(updatedDelegation.getEndDate());
 
@@ -92,7 +83,6 @@ public class DelegationService {
                 delegationDTO.getTitle(),
                 delegationDTO.getOrigin(),
                 delegationDTO.getDestination(),
-                DelegationStatus.valueOf(delegationDTO.getStatus()),
                 delegationDTO.getStartDate(),
                 delegationDTO.getEndDate()
         );
@@ -107,7 +97,6 @@ public class DelegationService {
                 delegation.getTitle(),
                 delegation.getOrigin(),
                 delegation.getDestination(),
-                delegation.getStatus().toString(),
                 delegation.getStartDate(),
                 delegation.getEndDate()
         );

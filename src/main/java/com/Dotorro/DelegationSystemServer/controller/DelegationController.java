@@ -1,9 +1,11 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
+import com.Dotorro.DelegationSystemServer.dto.DelegationDepartmentDTO;
 import com.Dotorro.DelegationSystemServer.dto.DelegationUserDTO;
 import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
+import com.Dotorro.DelegationSystemServer.model.DelegationDepartment;
 import com.Dotorro.DelegationSystemServer.model.DelegationUser;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
@@ -146,5 +148,21 @@ public class DelegationController {
         delegationUserService.deleteDelegationUser(delegationId, userId);
 
         return ResponseEntity.ok("Success");
+    }
+
+    @DeleteMapping(value = "/{delegationId}/remove-department/{departmentId}")
+    public void removeDepartmentFromDelegation(@PathVariable Long delegationId, @PathVariable Long departmentId)
+    {
+        delegationDepartmentService.deleteDelegationDepartment(delegationId, departmentId);
+    }
+
+    @PostMapping(value = "/add-department")
+    public ResponseEntity<?> addDepartmentToDelegation(@RequestBody DelegationDepartmentDTO delegationDepartmentDTO) {
+        try {
+            DelegationDepartment savedDelegationDepartment = delegationDepartmentService.createDelegationDepartment(delegationDepartmentDTO);
+            return ResponseEntity.ok(savedDelegationDepartment);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

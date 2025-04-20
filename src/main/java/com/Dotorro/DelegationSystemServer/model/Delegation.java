@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,21 +59,19 @@ public class Delegation {
 
     public Delegation() { }
 
-    public Delegation(String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {
+    public Delegation(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Delegation(Long id, String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {
+    public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -117,14 +116,6 @@ public class Delegation {
         this.endDate = endDate;
     }
 
-    public DelegationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(DelegationStatus status) {
-        this.status = status;
-    }
-
     public List<Note> getNotes() {
         return notes;
     }
@@ -163,5 +154,19 @@ public class Delegation {
 
     public void setWorkLogs(List<WorkLog> workLogs) {
         this.workLogs = workLogs;
+    }
+
+    public DelegationStatus getStatus() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (endDate.isBefore(now))
+        {
+            if (startDate.isAfter(now))
+                return DelegationStatus.Active;
+
+            return DelegationStatus.Finished;
+        }
+
+        return DelegationStatus.Planned;
     }
 }

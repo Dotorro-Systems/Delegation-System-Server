@@ -12,7 +12,7 @@ import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
 import com.Dotorro.DelegationSystemServer.service.DelegationService;
 import com.Dotorro.DelegationSystemServer.service.DelegationUserService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
-import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import com.Dotorro.DelegationSystemServer.enums.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -6,7 +6,7 @@ import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
-import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import com.Dotorro.DelegationSystemServer.enums.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,16 +42,16 @@ public class UserService {
         this.authenticationService = authenticationService;
     }
 
-    public void validateUser(User user){
-        if(!user.getFirstName().matches("[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
+    public void validateUser(User user) {
+        if (!user.getFirstName().matches("[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
             throw new IllegalArgumentException("First name must start with a capital letter and only contains letters");
         }
 
-        if(!user.getLastName().matches("[A-ZąćęłĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
+        if (!user.getLastName().matches("[A-ZąćęłĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
             throw new IllegalArgumentException("Last name must start with a capital letter and only contains letters");
         }
 
-        if(!user.getPhone().matches("\\d{9}")) {
+        if (!user.getPhone().matches("\\d{9}")) {
             throw new IllegalArgumentException("Phone number must only contain numbers.");
         }
 

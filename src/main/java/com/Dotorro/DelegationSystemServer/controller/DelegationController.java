@@ -106,8 +106,7 @@ public class DelegationController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateDelegation(@PathVariable Long id, @RequestBody DelegationDTO delegationDTO)
-    {
+    public ResponseEntity<?> updateDelegation(@PathVariable Long id, @RequestBody DelegationDTO delegationDTO) {
         try {
             Delegation savedDelegation = delegationService.updateDelegation(id, delegationDTO);
             return ResponseEntity.ok(savedDelegation);
@@ -117,13 +116,12 @@ public class DelegationController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteDelegationById(@PathVariable Long id)
-    {
+    public void deleteDelegationById(@PathVariable Long id) {
         delegationService.deleteDelegation(id);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> createDelegation(@RequestBody DelegationDTO delegationDTO){
+    public ResponseEntity<?> createDelegation(@RequestBody DelegationDTO delegationDTO) {
         try {
             Delegation savedDelegation = delegationService.createDelegation(delegationDTO);
             return ResponseEntity.ok(savedDelegation);
@@ -143,16 +141,14 @@ public class DelegationController {
     }
 
     @DeleteMapping(value = "/{delegationId}/delete-user/{userId}")
-    public ResponseEntity<?> removeUserFromDelegation(@PathVariable Long delegationId, @PathVariable Long userId)
-    {
+    public ResponseEntity<?> removeUserFromDelegation(@PathVariable Long delegationId, @PathVariable Long userId) {
         delegationUserService.deleteDelegationUser(delegationId, userId);
 
         return ResponseEntity.ok("Success");
     }
 
     @DeleteMapping(value = "/{delegationId}/remove-department/{departmentId}")
-    public void removeDepartmentFromDelegation(@PathVariable Long delegationId, @PathVariable Long departmentId)
-    {
+    public void removeDepartmentFromDelegation(@PathVariable Long delegationId, @PathVariable Long departmentId) {
         delegationDepartmentService.deleteDelegationDepartment(delegationId, departmentId);
     }
 
@@ -161,7 +157,7 @@ public class DelegationController {
         try {
             DelegationDepartment savedDelegationDepartment = delegationDepartmentService.createDelegationDepartment(delegationDepartmentDTO);
             return ResponseEntity.ok(savedDelegationDepartment);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

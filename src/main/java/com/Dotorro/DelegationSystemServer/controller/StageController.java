@@ -39,12 +39,12 @@ public class StageController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteNoteById(@PathVariable Long id) {
+    public void deleteStageById(@PathVariable Long id) {
         stageService.deleteStage(id);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> createNote(@RequestBody StageDTO stageDTO) {
+    public ResponseEntity<?> createStage(@RequestBody StageDTO stageDTO) {
         try {
             Stage savedStage = stageService.createStage(stageDTO);
             return ResponseEntity.ok(savedStage);

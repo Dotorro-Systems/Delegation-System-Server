@@ -26,6 +26,10 @@ public class Delegation {
     @JsonIgnoreProperties("delegation")
     private List<Note> notes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("delegation")
+    private List<Stage> stages = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("delegation")
@@ -35,18 +39,6 @@ public class Delegation {
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("delegation")
     private List<DelegationDepartment> delegationDepartments = new ArrayList<>();
-
-    public List<User> getUsers() {
-        return delegationUsers.stream()
-                .map(DelegationUser::getUser)
-                .collect(Collectors.toList());
-    }
-
-    public List<Department> getDepartments() {
-        return delegationDepartments.stream()
-                .map(DelegationDepartment::getDepartment)
-                .collect(Collectors.toList());
-    }
 
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("delegation")
@@ -167,5 +159,21 @@ public class Delegation {
         }
 
         return DelegationStatus.Planned;
+    }
+
+    public List<User> getUsers() {
+        return delegationUsers.stream()
+                .map(DelegationUser::getUser)
+                .collect(Collectors.toList());
+    }
+
+    public List<Department> getDepartments() {
+        return delegationDepartments.stream()
+                .map(DelegationDepartment::getDepartment)
+                .collect(Collectors.toList());
+    }
+
+    public List<Stage> getStages() {
+        return stages;
     }
 }

@@ -5,9 +5,11 @@ import com.Dotorro.DelegationSystemServer.enums.StageType;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Stage;
 import com.Dotorro.DelegationSystemServer.repository.StageRepository;
+import jakarta.transaction.SystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -57,9 +59,17 @@ public class StageService {
     public Stage convertToEntity(StageDTO stageDTO) {
         Delegation delegation = delegationService.getDelegationById(stageDTO.getDelegationId());
 
+        StageType type;
+        try {
+            type = StageType.valueOf(stageDTO.getType());
+        }
+        catch (Exception e) {
+            throw new InvalidParameterException("No stage type with provided " + stageDTO.getType());
+        }
+
         Stage stage = new Stage(
                 delegation,
-                StageType.valueOf(stageDTO.getType()),
+                type,
                 stageDTO.getPlace(),
                 stageDTO.getDescription(),
                 stageDTO.getWhen()

@@ -7,6 +7,8 @@ import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,19 +23,31 @@ public class DelegationService {
     public void validateDelegation(Delegation delegation){
 
         if (delegation.getEndDate().isBefore(delegation.getStartDate())) {
-            throw new IllegalArgumentException("The end date cannot be earlier than the start date");
+            throw new IllegalArgumentException("The end date cannot be earlier than the start date.");
         }
-      
-        if (!delegation.getOrigin().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*")) {
+
+        if (!delegation.getOrigin().matches("^[\\p{L}- ]+$")) {
             throw new IllegalArgumentException("The origin must only contain letters.");
         }
-      
-        if (!delegation.getDestination().matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]*")) {
-            throw new IllegalArgumentException("The destination must only contain letters.");
+
+        if(!Character.isUpperCase(delegation.getOrigin().charAt(0))){
+            throw new IllegalArgumentException("The origin must start with Capital letter.");
         }
       
-        if (delegation.getTitle().matches(".*[^a-zA-ZąćęłńóśźżĄĆĘŁ&ŃÓŚŹŻ ].*")) {
+        if (!delegation.getDestination().matches("^[\\p{L}- ]+$")) {
+            throw new IllegalArgumentException("The destination must only contain letters.");
+        }
+
+        if(!Character.isUpperCase(delegation.getDestination().charAt(0))){
+            throw new IllegalArgumentException("The destination must start with Capital letter.");
+        }
+      
+        if (!delegation.getTitle().matches("^[\\p{L}- ]+$")) {
             throw new IllegalArgumentException("The title must only contain letters.");
+        }
+
+        if(!Character.isUpperCase(delegation.getTitle().charAt(0))){
+            throw new IllegalArgumentException("The title must start with Capital letter.");
         }
     }
 

@@ -36,6 +36,9 @@ public class Delegation {
     @JsonIgnoreProperties("delegation")
     private List<DelegationDepartment> delegationDepartments = new ArrayList<>();
 
+    public Delegation(String wyjazdDoChin, String chiny, String hongKong, String planned, LocalDateTime of, LocalDateTime of1) {
+    }
+
     public List<User> getUsers() {
         return delegationUsers.stream()
                 .map(DelegationUser::getUser)

@@ -19,13 +19,6 @@ public class DelegationService {
         this.delegationRepository = delegationRepository;}
 
     public void validateDelegation(Delegation delegation){
-        if (delegation.getStartDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("The start date can't be from the past!");
-        }
-
-        if (delegation.getEndDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("The end date can't be from the past!");
-        }
 
         if (delegation.getEndDate().isBefore(delegation.getStartDate())) {
             throw new IllegalArgumentException("The end date cannot be earlier than the start date");

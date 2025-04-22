@@ -43,12 +43,20 @@ public class UserService {
     }
 
     public void validateUser(User user){
-        if(!user.getFirstName().matches("[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
-            throw new IllegalArgumentException("First name must start with a capital letter and only contains letters");
+        if(!user.getFirstName().matches("^[\\p{L}]+$")) {
+            throw new IllegalArgumentException("First name must only contains letters.");
         }
 
-        if(!user.getLastName().matches("[A-ZąćęłĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*")) {
-            throw new IllegalArgumentException("Last name must start with a capital letter and only contains letters");
+        if(!Character.isUpperCase(user.getFirstName().charAt(0))){
+            throw new IllegalArgumentException("First name must start with Capital letter.");
+        }
+
+        if(!user.getLastName().matches("^[\\p{L}-]+$")) {
+            throw new IllegalArgumentException("Last name must only contains letters.");
+        }
+
+        if(!Character.isUpperCase(user.getLastName().charAt(0))){
+            throw new IllegalArgumentException("Last name must start with Capital letter.");
         }
 
         if(!user.getPhone().matches("\\d{9}")) {

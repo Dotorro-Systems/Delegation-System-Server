@@ -21,9 +21,6 @@ public class WorkLog {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "workLog", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("workLog")
-    private List<WorkLogBreak> workLogBreaks = new ArrayList<>();
 
     public WorkLog() { }
 
@@ -80,13 +77,5 @@ public class WorkLog {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public List<WorkLogBreak> getWorkLogBreaks() {
-        return workLogBreaks;
-    }
-
-    public void setWorkLogBreaks(List<WorkLogBreak> workLogBreaks) {
-        this.workLogBreaks = workLogBreaks;
     }
 }

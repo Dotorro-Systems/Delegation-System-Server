@@ -48,7 +48,7 @@ public class UserService {
         }
 
         if(!Character.isUpperCase(user.getFirstName().charAt(0))){
-            throw new IllegalArgumentException("First name must start with Capital letter.");
+            throw new IllegalArgumentException("First name must start with capital letter.");
         }
 
         if(!user.getLastName().matches("^[\\p{L}-]+$")) {
@@ -56,7 +56,7 @@ public class UserService {
         }
 
         if(!Character.isUpperCase(user.getLastName().charAt(0))){
-            throw new IllegalArgumentException("Last name must start with Capital letter.");
+            throw new IllegalArgumentException("Last name must start with capital letter.");
         }
 
         if(!user.getPhone().matches("\\d{9}")) {

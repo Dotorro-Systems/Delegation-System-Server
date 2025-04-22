@@ -133,7 +133,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The destination must start with Capital letter.", exception.getMessage());
+        assertEquals("The destination must start with capital letter.", exception.getMessage());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The title must start with Capital letter.", exception.getMessage());
+        assertEquals("The title must start with capital letter.", exception.getMessage());
     }
 
     @Test
@@ -172,6 +172,6 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The origin must start with Capital letter.", exception.getMessage());
+        assertEquals("The origin must start with capital letter.", exception.getMessage());
     }
 }

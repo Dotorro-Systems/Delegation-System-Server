@@ -31,7 +31,7 @@ public class DelegationService {
         }
 
         if(!Character.isUpperCase(delegation.getOrigin().charAt(0))){
-            throw new IllegalArgumentException("The origin must start with Capital letter.");
+            throw new IllegalArgumentException("The origin must start with capital letter.");
         }
       
         if (!delegation.getDestination().matches("^[\\p{L}- ]+$")) {
@@ -39,7 +39,7 @@ public class DelegationService {
         }
 
         if(!Character.isUpperCase(delegation.getDestination().charAt(0))){
-            throw new IllegalArgumentException("The destination must start with Capital letter.");
+            throw new IllegalArgumentException("The destination must start with capital letter.");
         }
       
         if (!delegation.getTitle().matches("^[\\p{L}- ]+$")) {
@@ -47,7 +47,7 @@ public class DelegationService {
         }
 
         if(!Character.isUpperCase(delegation.getTitle().charAt(0))){
-            throw new IllegalArgumentException("The title must start with Capital letter.");
+            throw new IllegalArgumentException("The title must start with capital letter.");
         }
     }
 

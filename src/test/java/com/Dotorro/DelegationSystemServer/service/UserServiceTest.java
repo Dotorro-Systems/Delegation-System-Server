@@ -145,7 +145,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must start with a capital letter and only contains letters",
+        assertEquals("First name must start with capital letter.",
                 exception.getMessage());
     }
 
@@ -158,7 +158,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must start with a capital letter and only contains letters",
+        assertEquals("First name must only contains letters.",
                 exception.getMessage());
     }
 
@@ -171,7 +171,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must start with a capital letter and only contains letters",
+        assertEquals("First name must only contains letters.",
                 exception.getMessage());
     }
 
@@ -184,7 +184,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must start with a capital letter and only contains letters",
+        assertEquals("First name must only contains letters.",
                 exception.getMessage());
     }
 
@@ -197,7 +197,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must start with a capital letter and only contains letters",
+        assertEquals("First name must only contains letters.",
                 exception.getMessage());
     }
 
@@ -212,6 +212,14 @@ class UserServiceTest {
     @Test
     void shouldValidateUserWithPolishLetterInLastName(){
         User user = new User("Jan", "Bąk", "password", "123333444",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        assertDoesNotThrow(() -> userService.validateUser(user));
+    }
+
+    @Test
+    void shouldValidateUserWithDashInLastName(){
+        User user = new User("Janina", "Kwiatek-Korowicz", "password", "123333444",
                 "jan@example.com", UserRole.EMPLOYEE, new Department());
 
         assertDoesNotThrow(() -> userService.validateUser(user));
@@ -234,7 +242,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must start with a capital letter and only contains letters",
+        assertEquals("Last name must start with capital letter.",
                 exception.getMessage());
     }
 
@@ -247,7 +255,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must start with a capital letter and only contains letters",
+        assertEquals("Last name must only contains letters.",
                 exception.getMessage());
     }
 
@@ -260,7 +268,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must start with a capital letter and only contains letters",
+        assertEquals("Last name must only contains letters.",
                 exception.getMessage());
     }
 
@@ -273,13 +281,26 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must start with a capital letter and only contains letters",
+        assertEquals("Last name must only contains letters.",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForDashInFirstName() {
+        User user = new User("Jan-Maria", "Kowalski", "password", "123",
+                "jan@example.com", UserRole.EMPLOYEE, new Department());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.validateUser(user);
+        });
+
+        assertEquals("First name must only contains letters.",
                 exception.getMessage());
     }
 
     @Test
     void shouldThrowExceptionForNullDepartment() {
-        User user = new User("Jan", "Kowalski", "password", "1232222222",
+        User user = new User("Jan", "Kowalski", "password", "123456789",
                 "jan@example.com", UserRole.EMPLOYEE, null);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {

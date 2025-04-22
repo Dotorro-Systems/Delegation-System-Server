@@ -7,6 +7,7 @@ import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,10 @@ public class ExpenseService {
 
         if (expense.getAmount() < 0){
             throw new IllegalArgumentException("The amount can not be less than zero.");
+        }
+
+        if (expense.getCreatedAt().isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Date can't be from the future.");
         }
     }
 

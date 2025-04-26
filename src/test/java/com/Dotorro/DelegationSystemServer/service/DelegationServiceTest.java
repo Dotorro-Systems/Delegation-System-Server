@@ -94,7 +94,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The origin must only contain letters.", exception.getMessage());
+        assertEquals("Origin must only contain letters", exception.getMessage());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The title must only contain letters.", exception.getMessage());
+        assertEquals("Title must only contain letters", exception.getMessage());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The destination must only contain letters.", exception.getMessage());
+        assertEquals("Destination must only contain letters", exception.getMessage());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The destination must start with capital letter.", exception.getMessage());
+        assertEquals("Destination must start with capital letter", exception.getMessage());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The title must start with capital letter.", exception.getMessage());
+        assertEquals("Title must start with capital letter", exception.getMessage());
     }
 
     @Test
@@ -159,7 +159,7 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The end date cannot be earlier than the start date.", exception.getMessage());
+        assertEquals("End date cannot be earlier than the start date", exception.getMessage());
     }
 
     @Test
@@ -172,6 +172,6 @@ public class DelegationServiceTest {
             delegationService.validateDelegation(delegation);
         });
 
-        assertEquals("The origin must start with capital letter.", exception.getMessage());
+        assertEquals("Origin must start with capital letter", exception.getMessage());
     }
 }

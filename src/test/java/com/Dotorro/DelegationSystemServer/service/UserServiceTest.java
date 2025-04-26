@@ -85,7 +85,7 @@ class UserServiceTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             userService.validateUser(user);
         });
-        assertEquals("Phone number must only contain 9 numbers.", exception.getMessage());
+        assertEquals("Phone number must only contain 9 numbers", exception.getMessage());
     }
 
     @Test
@@ -97,7 +97,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Phone number must only contain 9 numbers.", exception.getMessage());
+        assertEquals("Phone number must only contain 9 numbers", exception.getMessage());
     }
 
     @Test
@@ -109,7 +109,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Phone number must only contain 9 numbers.", exception.getMessage());
+        assertEquals("Phone number must only contain 9 numbers", exception.getMessage());
     }
 
     @Test
@@ -145,7 +145,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must start with capital letter.",
+        assertEquals("First name must start with capital letter",
                 exception.getMessage());
     }
 
@@ -158,7 +158,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must only contains letters.",
+        assertEquals("First name must only contains letters",
                 exception.getMessage());
     }
 
@@ -171,7 +171,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must only contains letters.",
+        assertEquals("First name must only contains letters",
                 exception.getMessage());
     }
 
@@ -184,7 +184,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must only contains letters.",
+        assertEquals("First name must only contains letters",
                 exception.getMessage());
     }
 
@@ -197,7 +197,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must only contains letters.",
+        assertEquals("First name must only contains letters",
                 exception.getMessage());
     }
 
@@ -242,7 +242,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must start with capital letter.",
+        assertEquals("Last name must start with capital letter",
                 exception.getMessage());
     }
 
@@ -255,7 +255,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must only contains letters.",
+        assertEquals("Last name must only contains letters",
                 exception.getMessage());
     }
 
@@ -268,7 +268,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must only contains letters.",
+        assertEquals("Last name must only contains letters",
                 exception.getMessage());
     }
 
@@ -281,7 +281,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("Last name must only contains letters.",
+        assertEquals("Last name must only contains letters",
                 exception.getMessage());
     }
 
@@ -294,7 +294,7 @@ class UserServiceTest {
             userService.validateUser(user);
         });
 
-        assertEquals("First name must only contains letters.",
+        assertEquals("First name must only contains letters",
                 exception.getMessage());
     }
 

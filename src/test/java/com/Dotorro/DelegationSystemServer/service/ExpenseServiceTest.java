@@ -64,7 +64,7 @@ public class ExpenseServiceTest {
             expenseService.validateExpense(expense);
         });
 
-        assertEquals("The amount can not be less than zero.", exception.getMessage());
+        assertEquals("Amount can not be less than zero", exception.getMessage());
     }
 
     @Test
@@ -100,6 +100,6 @@ public class ExpenseServiceTest {
             expenseService.validateExpense(expense);
         });
 
-        assertEquals("Date can't be from the future.", exception.getMessage());
+        assertEquals("Date can't be from the future", exception.getMessage());
     }
 }

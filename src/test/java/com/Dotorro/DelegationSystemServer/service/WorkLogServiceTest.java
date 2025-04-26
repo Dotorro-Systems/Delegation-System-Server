@@ -80,7 +80,7 @@ public class WorkLogServiceTest {
             workLogService.validateWorkLog(workLog);
         });
 
-        assertEquals("The end time cannot be earlier than the start time.", exception.getMessage());
+        assertEquals("End time cannot be earlier than the start time", exception.getMessage());
     }
 
     @Test
@@ -93,6 +93,6 @@ public class WorkLogServiceTest {
             workLogService.validateWorkLog(workLog);
         });
 
-        assertEquals("Time can't be from the future.", exception.getMessage());
+        assertEquals("Time can't be from the future", exception.getMessage());
     }
 }

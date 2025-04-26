@@ -23,31 +23,31 @@ public class DelegationService {
     public void validateDelegation(Delegation delegation){
 
         if (delegation.getEndDate().isBefore(delegation.getStartDate())) {
-            throw new IllegalArgumentException("The end date cannot be earlier than the start date.");
+            throw new IllegalArgumentException("End date cannot be earlier than the start date");
         }
 
         if (!delegation.getOrigin().matches("^[\\p{L}- ]+$")) {
-            throw new IllegalArgumentException("The origin must only contain letters.");
+            throw new IllegalArgumentException("Origin must only contain letters");
         }
 
         if(!Character.isUpperCase(delegation.getOrigin().charAt(0))){
-            throw new IllegalArgumentException("The origin must start with capital letter.");
+            throw new IllegalArgumentException("Origin must start with capital letter");
         }
       
         if (!delegation.getDestination().matches("^[\\p{L}- ]+$")) {
-            throw new IllegalArgumentException("The destination must only contain letters.");
+            throw new IllegalArgumentException("Destination must only contain letters");
         }
 
         if(!Character.isUpperCase(delegation.getDestination().charAt(0))){
-            throw new IllegalArgumentException("The destination must start with capital letter.");
+            throw new IllegalArgumentException("Destination must start with capital letter");
         }
       
         if (!delegation.getTitle().matches("^[\\p{L}- ]+$")) {
-            throw new IllegalArgumentException("The title must only contain letters.");
+            throw new IllegalArgumentException("Title must only contain letters");
         }
 
         if(!Character.isUpperCase(delegation.getTitle().charAt(0))){
-            throw new IllegalArgumentException("The title must start with capital letter.");
+            throw new IllegalArgumentException("Title must start with capital letter");
         }
     }
 

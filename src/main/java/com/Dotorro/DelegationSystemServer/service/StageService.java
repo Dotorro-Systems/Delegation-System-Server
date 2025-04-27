@@ -5,7 +5,6 @@ import com.Dotorro.DelegationSystemServer.enums.StageType;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Stage;
 import com.Dotorro.DelegationSystemServer.repository.StageRepository;
-import jakarta.transaction.SystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +46,7 @@ public class StageService {
         stage.setType(updatedStage.getType());
         stage.setPlace(updatedStage.getPlace());
         stage.setDescription(updatedStage.getDescription());
-        stage.setWhen(updatedStage.getWhen());
+        stage.setTime(updatedStage.getTime());
 
         return stageRepository.save(stage);
     }
@@ -86,7 +85,7 @@ public class StageService {
                 stage.getType().toString(),
                 stage.getPlace(),
                 stage.getDescription(),
-                stage.getWhen()
+                stage.getTime()
         );
     }
 

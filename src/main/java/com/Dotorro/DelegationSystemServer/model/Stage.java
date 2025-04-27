@@ -17,25 +17,25 @@ public class Stage {
     private StageType type;
     private String place;
     private String description;
-    private LocalDateTime when;
+    private LocalDateTime time;
 
     public Stage() { }
 
-    public Stage(Delegation delegation, StageType type, String place, String description, LocalDateTime when) {
+    public Stage(Delegation delegation, StageType type, String place, String description, LocalDateTime time) {
         this.delegation = delegation;
         this.type = type;
         this.place = place;
         this.description = description;
-        this.when = when;
+        this.time = time;
     }
 
-    public Stage(Long id, Delegation delegation, StageType type, String place, String description, LocalDateTime when) {
+    public Stage(Long id, Delegation delegation, StageType type, String place, String description, LocalDateTime time) {
         this.id = id;
         this.delegation = delegation;
         this.type = type;
         this.place = place;
         this.description = description;
-        this.when = when;
+        this.time = time;
     }
 
     public Long getId() {
@@ -70,12 +70,12 @@ public class Stage {
         this.delegation = delegation;
     }
 
-    public LocalDateTime getWhen() {
-        return when;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setWhen(LocalDateTime when) {
-        this.when = when;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
     public String getPlace() {

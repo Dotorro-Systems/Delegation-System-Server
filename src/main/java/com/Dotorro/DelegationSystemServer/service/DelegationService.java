@@ -2,7 +2,9 @@ package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.DelegationDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
+import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,9 @@ import java.util.stream.Collectors;
 @Service
 public class DelegationService {
     private final DelegationRepository delegationRepository;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     public DelegationService(DelegationRepository delegationRepository) {
         this.delegationRepository = delegationRepository;}
@@ -43,8 +48,7 @@ public class DelegationService {
     public List<Delegation> getDelegationsByDepartmentId(Long departmentId) {
         return getAllDelegations()
                 .stream()
-                .filter(delegation -> delegation.getDepartments().stream()
-                        .anyMatch(department -> department.getId().equals(departmentId)))
+                .filter(delegation -> delegation.getDepartment().getId().equals(departmentId))
                 .collect(Collectors.toList());
     }
 
@@ -77,12 +81,15 @@ public class DelegationService {
     }
 
     private Delegation convertToEntity(DelegationDTO delegationDTO) {
+        Department department = departmentService.getDepartmentById(delegationDTO.getDepartmentId());
+
         Delegation delegation = new Delegation(
                 delegationDTO.getTitle(),
                 delegationDTO.getOrigin(),
                 delegationDTO.getDestination(),
                 delegationDTO.getStartDate(),
-                delegationDTO.getEndDate()
+                delegationDTO.getEndDate(),
+                department
         );
 
         validateDelegation(delegation);
@@ -96,7 +103,8 @@ public class DelegationService {
                 delegation.getOrigin(),
                 delegation.getDestination(),
                 delegation.getStartDate(),
-                delegation.getEndDate()
+                delegation.getEndDate(),
+                delegation.getDepartment().getId()
         );
     }
 }

@@ -8,13 +8,15 @@ public class DelegationDTO {
     private String destination;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private Long departmentId;
 
-    public DelegationDTO(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate) {
+    public DelegationDTO(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate, Long departmentId) {
         this.title = title;
         this.origin = origin;
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.departmentId = departmentId;
     }
 
     public String getTitle() {
@@ -55,5 +57,13 @@ public class DelegationDTO {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 }

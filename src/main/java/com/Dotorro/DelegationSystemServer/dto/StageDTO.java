@@ -9,8 +9,6 @@ public class StageDTO {
     private String description;
     private LocalDateTime when;
 
-    public StageDTO() { }
-
     public StageDTO(Long delegationId, String type, String place, String description, LocalDateTime when) {
         this.delegationId = delegationId;
         this.type = type;

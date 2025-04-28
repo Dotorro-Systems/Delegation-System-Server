@@ -37,12 +37,6 @@ public class Delegation {
     @JsonIgnoreProperties("delegation")
     private List<DelegationUser> delegationUsers = new ArrayList<>();
 
-    public List<User> getUsers() {
-        return delegationUsers.stream()
-                .map(DelegationUser::getUser)
-                .collect(Collectors.toList());
-    }
-
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("delegation")
     private List<Expense> expenses = new ArrayList<>();

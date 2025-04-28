@@ -1,8 +1,8 @@
 package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.model.Delegation;
+import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
-import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,16 +23,19 @@ public class DelegationServiceTest {
     @InjectMocks
     private DelegationService delegationService;
 
+    private Department department;
+
     @BeforeEach
     void setUp(){
-
+        department = new Department("Human & Resources");
+        department.setId(1L);
     }
 
     @Test
     void shouldValidateDelegation(){
-        Delegation delegation = new Delegation("Wyjazd do Chin", "Chiny", "Hong Kong",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+        Delegation delegation = new Delegation("Wyjazd do Chin", "Chiny", "Hong Kong", LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         assertDoesNotThrow(() -> delegationService.validateDelegation(delegation));
     }
@@ -40,8 +43,9 @@ public class DelegationServiceTest {
     @Test
     void shouldValidateDelegationWithPolishLetterInTitle(){
         Delegation delegation = new Delegation("Wyjazd do Fabryki koralików", "Chiny", "Hong Kong",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         assertDoesNotThrow(() -> delegationService.validateDelegation(delegation));
     }
@@ -49,8 +53,9 @@ public class DelegationServiceTest {
     @Test
     void shouldValidateDelegationWithPolishLetterInOrigin(){
         Delegation delegation = new Delegation("Wyjazd do Francji","Łotwa", "Hong Kong",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         assertDoesNotThrow(() -> delegationService.validateDelegation(delegation));
     }
@@ -58,8 +63,9 @@ public class DelegationServiceTest {
     @Test
     void shouldValidateDelegationWithPolishLetterInDestination(){
         Delegation delegation = new Delegation("Wyjazd do Francji", "Europa", "Łomża",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         assertDoesNotThrow(() -> delegationService.validateDelegation(delegation));
     }
@@ -68,8 +74,9 @@ public class DelegationServiceTest {
     void shouldValidateDelegationWithDash(){
         Delegation delegation = new Delegation("Wyjazd do wojewódstwa warmińsko-mazurskiego", "Europa-Afryka",
                 "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         assertDoesNotThrow(() -> delegationService.validateDelegation(delegation));
     }
@@ -78,8 +85,9 @@ public class DelegationServiceTest {
     void shouldValidateDelegationWithCorrectDates(){
         Delegation delegation = new Delegation("Wyjazd do wojewódstwa warmińsko-mazurskiego", "Europa-Afryka",
                 "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         assertDoesNotThrow(() -> delegationService.validateDelegation(delegation));
     }
@@ -87,8 +95,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForInvalidOrigin(){
         Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa2", "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);
@@ -100,8 +109,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForInvalidTitle(){
         Delegation delegation = new Delegation("Wyjazd na 2Mazury", "Europa", "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);
@@ -113,8 +123,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForInvalidDestination(){
         Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa", "Bielsko-Bi4ła",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);
@@ -126,8 +137,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForNonCapitalLetterInDestination(){
         Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa", "bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);
@@ -139,8 +151,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForNonCapitalLetterInTitle(){
         Delegation delegation = new Delegation("wyjazd na Mazury", "Europa", "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);
@@ -152,8 +165,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForInvalidEndDate(){
         Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa", "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 2,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 2,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);
@@ -165,8 +179,9 @@ public class DelegationServiceTest {
     @Test
     void shouldThrowExceptionForNonCapitalLetterInOrigin(){
         Delegation delegation = new Delegation("Wyjazd na Mazury", "europa", "Bielsko-Biała",
-                DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
-                LocalDateTime.of(2012,2, 20,2,22,2));
+                LocalDateTime.of(2012,2, 12,2,22,2),
+                LocalDateTime.of(2012,2, 20,2,22,2),
+                department);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             delegationService.validateDelegation(delegation);

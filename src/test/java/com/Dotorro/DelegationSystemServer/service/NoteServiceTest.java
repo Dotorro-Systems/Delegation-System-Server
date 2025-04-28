@@ -2,11 +2,9 @@ package com.Dotorro.DelegationSystemServer.service;
 
 import com.Dotorro.DelegationSystemServer.dto.NoteDTO;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
-import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.NoteRepository;
-import com.Dotorro.DelegationSystemServer.utils.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

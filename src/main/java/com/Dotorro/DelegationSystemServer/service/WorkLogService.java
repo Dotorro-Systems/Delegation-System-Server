@@ -24,18 +24,20 @@ public class WorkLogService {
         this.delegationService = delegationService;
     }
 
-    public void validateWorkLog(WorkLog workLog){
-        if(workLog.getEndTime().isAfter(LocalDateTime.now())){
-            throw new IllegalArgumentException("Time can't be from the future");
+    public void validateWorkLog(WorkLog workLog) {
+        if (workLog.getStartTime().isBefore(workLog.getDelegation().getStartDate())) {
+            throw new IllegalArgumentException("Start time cannot be earlier than the delegation start date");
         }
 
-        if(workLog.getEndTime().isBefore(workLog.getStartTime())){
+        if (workLog.getEndTime().isBefore(workLog.getStartTime())) {
             throw new IllegalArgumentException("End time cannot be earlier than the start time");
         }
-        if (workLog.getUser() == null){
+
+        if (workLog.getUser() == null) {
             throw new RuntimeException("User not found");
         }
-        if (workLog.getDelegation() == null){
+
+        if (workLog.getDelegation() == null) {
             throw new RuntimeException("Delegation not found");
         }
     }

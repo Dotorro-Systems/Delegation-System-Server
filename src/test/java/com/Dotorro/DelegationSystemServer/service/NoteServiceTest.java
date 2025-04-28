@@ -39,14 +39,14 @@ public class NoteServiceTest {
 
     @Test
     void shouldValidateNote(){
-        Note note = new Note(new Delegation(), new User(),"notatka", LocalDateTime.of(2012,2,
+        Note note = new Note(new Delegation(), new User(), "notatka", LocalDateTime.of(2012,2,
                 12,2,22,2));
         assertDoesNotThrow(() -> noteService.validateNote(note));
     }
 
     @Test
     void shouldThrowExceptionForNullDepartment() {
-        Note note = new Note(null, new User(),"notatka", LocalDateTime.of(2012,2,
+        Note note = new Note(null, new User(), "notatka", LocalDateTime.of(2012,2,
                 12,2,22,2));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -56,7 +56,7 @@ public class NoteServiceTest {
     }
     @Test
     void shouldThrowExceptionForNullUser() {
-        Note note = new Note(new Delegation(), null,"notatka", LocalDateTime.of(2012,2,
+        Note note = new Note(new Delegation(), null, "notatka", LocalDateTime.of(2012,2,
                 12,2,22,2));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -66,7 +66,7 @@ public class NoteServiceTest {
     }
     @Test
     void shouldThrowExceptionForFutureTime() {
-        Note note = new Note(new Delegation(), new User(),"notatka", LocalDateTime.of(2412,2,
+        Note note = new Note(new Delegation(), new User(), "notatka", LocalDateTime.of(2412,2,
                 12,2,22,2));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {

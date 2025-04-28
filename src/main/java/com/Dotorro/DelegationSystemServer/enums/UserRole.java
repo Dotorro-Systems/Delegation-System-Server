@@ -1,4 +1,4 @@
-package com.Dotorro.DelegationSystemServer.utils;
+package com.Dotorro.DelegationSystemServer.enums;
 
 public enum UserRole {
     EMPLOYEE,

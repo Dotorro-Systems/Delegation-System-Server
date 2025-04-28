@@ -15,7 +15,7 @@ import java.util.List;
 public class NoteController {
     public final NoteService noteService;
 
-    public  NoteController(NoteService noteService){this.noteService = noteService;}
+    public NoteController(NoteService noteService){this.noteService = noteService;}
 
     @GetMapping(value = "/")
     public List<Note> getNotes() {

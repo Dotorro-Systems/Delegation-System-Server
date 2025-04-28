@@ -25,10 +25,12 @@ public class NoteService {
         if (note.getUser() == null){
             throw new RuntimeException("User not found");
         }
-        if (note.getDelegation() == null){
+
+        if (note.getDelegation() == null) {
             throw new RuntimeException("Delegation not found");
         }
-        if(note.getCreatedAt().isAfter(LocalDateTime.now())){
+
+        if(note.getCreatedAt().isAfter(LocalDateTime.now())) {
             throw new IllegalArgumentException("The date can not be from the future");
         }
     }

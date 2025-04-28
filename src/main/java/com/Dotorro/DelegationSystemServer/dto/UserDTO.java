@@ -1,7 +1,5 @@
 package com.Dotorro.DelegationSystemServer.dto;
 
-import com.Dotorro.DelegationSystemServer.utils.UserRole;
-
 public class UserDTO {
     private String firstName;
     private String lastName;

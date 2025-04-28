@@ -6,7 +6,7 @@ import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Department;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.UserRepository;
-import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import com.Dotorro.DelegationSystemServer.enums.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

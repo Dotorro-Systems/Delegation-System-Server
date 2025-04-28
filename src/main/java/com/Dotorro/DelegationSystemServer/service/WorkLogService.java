@@ -62,12 +62,13 @@ public class WorkLogService {
 
         if (optionalWorkLog.isPresent()) {
             WorkLog workLog = optionalWorkLog.get();
+
             workLog.setDelegation(updatedWorkLog.getDelegation());
             workLog.setUser(updatedWorkLog.getUser());
             workLog.setStartTime(updatedWorkLog.getStartTime());
             workLog.setEndTime(updatedWorkLog.getEndTime());
 
-            return workLogRepository.save(updatedWorkLog);
+            return workLogRepository.save(workLog);
         } else {
             throw new RuntimeException("WorkLog not found with id: " + id);
         }

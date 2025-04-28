@@ -6,11 +6,10 @@ import com.Dotorro.DelegationSystemServer.exceptions.ApiException;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.DelegationUser;
 import com.Dotorro.DelegationSystemServer.model.User;
-import com.Dotorro.DelegationSystemServer.service.DelegationDepartmentService;
 import com.Dotorro.DelegationSystemServer.service.DelegationService;
 import com.Dotorro.DelegationSystemServer.service.DelegationUserService;
 import com.Dotorro.DelegationSystemServer.service.UserService;
-import com.Dotorro.DelegationSystemServer.utils.UserRole;
+import com.Dotorro.DelegationSystemServer.enums.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +25,12 @@ public class DelegationController {
     private final DelegationService delegationService;
     private final UserService userService;
     private final DelegationUserService delegationUserService;
-    private final DelegationDepartmentService delegationDepartmentService;
 
     public DelegationController(DelegationService delegationService, UserService userService,
-                                DelegationUserService delegationUserService,
-                                DelegationDepartmentService delegationDepartmentService) {
+                                DelegationUserService delegationUserService) {
         this.delegationService = delegationService;
         this.userService = userService;
         this.delegationUserService = delegationUserService;
-        this.delegationDepartmentService = delegationDepartmentService;
     }
 
     @GetMapping(value = "/")
@@ -50,7 +46,7 @@ public class DelegationController {
 
         boolean hasElevatedRights = user.getRole() != UserRole.EMPLOYEE;
         boolean participatesInDelegation = delegation.getUsers().stream().anyMatch(u -> u.getId().equals(user.getId()));
-        boolean isInMyDepartment = delegation.getDepartments().stream().anyMatch(d -> d.getId().equals(user.getDepartment().getId()));
+        boolean isInMyDepartment = delegation.getDepartment().getId().equals(user.getDepartment().getId());
 
         if ((hasElevatedRights && !isInMyDepartment) || (!hasElevatedRights && !participatesInDelegation))
             throw new RuntimeException("You don't have permission to view this delegation");
@@ -104,8 +100,7 @@ public class DelegationController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateDelegation(@PathVariable Long id, @RequestBody DelegationDTO delegationDTO)
-    {
+    public ResponseEntity<?> updateDelegation(@PathVariable Long id, @RequestBody DelegationDTO delegationDTO) {
         try {
             Delegation savedDelegation = delegationService.updateDelegation(id, delegationDTO);
             return ResponseEntity.ok(savedDelegation);
@@ -115,13 +110,12 @@ public class DelegationController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteDelegationById(@PathVariable Long id)
-    {
+    public void deleteDelegationById(@PathVariable Long id) {
         delegationService.deleteDelegation(id);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> createDelegation(@RequestBody DelegationDTO delegationDTO){
+    public ResponseEntity<?> createDelegation(@RequestBody DelegationDTO delegationDTO) {
         try {
             Delegation savedDelegation = delegationService.createDelegation(delegationDTO);
             return ResponseEntity.ok(savedDelegation);
@@ -141,8 +135,7 @@ public class DelegationController {
     }
 
     @DeleteMapping(value = "/{delegationId}/delete-user/{userId}")
-    public ResponseEntity<?> removeUserFromDelegation(@PathVariable Long delegationId, @PathVariable Long userId)
-    {
+    public ResponseEntity<?> removeUserFromDelegation(@PathVariable Long delegationId, @PathVariable Long userId) {
         delegationUserService.deleteDelegationUser(delegationId, userId);
 
         return ResponseEntity.ok("Success");

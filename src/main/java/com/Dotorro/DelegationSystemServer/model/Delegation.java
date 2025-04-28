@@ -1,5 +1,5 @@
 package com.Dotorro.DelegationSystemServer.model;
-import com.Dotorro.DelegationSystemServer.utils.DelegationStatus;
+import com.Dotorro.DelegationSystemServer.enums.DelegationStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -18,36 +18,28 @@ public class Delegation {
     private String title;
     private String origin;
     private String destination;
-    private DelegationStatus status;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @ManyToOne
+    @JoinColumn(name = "departmentId")
+    private Department department;
 
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("delegation")
     private List<Note> notes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("delegation")
+    private List<Stage> stages = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("delegation")
     private List<DelegationUser> delegationUsers = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "delegation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("delegation")
-    private List<DelegationDepartment> delegationDepartments = new ArrayList<>();
-
-    public Delegation(String wyjazdDoChin, String chiny, String hongKong, String planned, LocalDateTime of, LocalDateTime of1) {
-    }
-
     public List<User> getUsers() {
         return delegationUsers.stream()
                 .map(DelegationUser::getUser)
-                .collect(Collectors.toList());
-    }
-
-    public List<Department> getDepartments() {
-        return delegationDepartments.stream()
-                .map(DelegationDepartment::getDepartment)
                 .collect(Collectors.toList());
     }
 
@@ -61,23 +53,23 @@ public class Delegation {
 
     public Delegation() { }
 
-    public Delegation(String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {
+    public Delegation(String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate, Department department) {
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.department = department;
     }
 
-    public Delegation(Long id, String title, String origin, String destination, DelegationStatus status, LocalDateTime startDate, LocalDateTime endDate) {
+    public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate, Department department) {
         this.id = id;
         this.title = title;
         this.origin = origin;
         this.destination = destination;
-        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.department = department;
     }
 
     public Long getId() {return id;}
@@ -120,14 +112,6 @@ public class Delegation {
         this.endDate = endDate;
     }
 
-    public DelegationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(DelegationStatus status) {
-        this.status = status;
-    }
-
     public List<Note> getNotes() {
         return notes;
     }
@@ -144,14 +128,6 @@ public class Delegation {
         this.delegationUsers = delegationUsers;
     }
 
-    public List<DelegationDepartment> getDelegationDepartments() {
-        return delegationDepartments;
-    }
-
-    public void setDelegationDepartments(List<DelegationDepartment> delegationDepartments) {
-        this.delegationDepartments = delegationDepartments;
-    }
-
     public List<Expense> getExpenses() {
         return expenses;
     }
@@ -166,5 +142,41 @@ public class Delegation {
 
     public void setWorkLogs(List<WorkLog> workLogs) {
         this.workLogs = workLogs;
+    }
+
+    public DelegationStatus getStatus() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (endDate.isBefore(now))
+        {
+            if (startDate.isAfter(now))
+                return DelegationStatus.Active;
+
+            return DelegationStatus.Finished;
+        }
+
+        return DelegationStatus.Planned;
+    }
+
+    public List<User> getUsers() {
+        return delegationUsers.stream()
+                .map(DelegationUser::getUser)
+                .collect(Collectors.toList());
+    }
+
+    public List<Stage> getStages() {
+        return stages;
+    }
+
+    public void setStages(List<Stage> stages) {
+        this.stages = stages;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

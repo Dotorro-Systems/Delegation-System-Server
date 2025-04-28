@@ -25,17 +25,17 @@ public class WorkLogService {
     }
 
     public void validateWorkLog(WorkLog workLog){
-        if(workLog.getEndTime().isAfter(LocalDateTime.now())){
+        if (workLog.getEndTime().isAfter(LocalDateTime.now())) {
             throw new IllegalArgumentException("Time can't be from the future.");
         }
 
-        if(workLog.getEndTime().isBefore(workLog.getStartTime())){
+        if (workLog.getEndTime().isBefore(workLog.getStartTime())) {
             throw new IllegalArgumentException("The end time cannot be earlier than the start time.");
         }
-        if (workLog.getUser() == null){
+        if (workLog.getUser() == null) {
             throw new RuntimeException("User not found");
         }
-        if (workLog.getDelegation() == null){
+        if (workLog.getDelegation() == null) {
             throw new RuntimeException("Delegation not found");
         }
     }

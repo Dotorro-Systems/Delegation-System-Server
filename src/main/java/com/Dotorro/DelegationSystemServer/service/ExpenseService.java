@@ -32,7 +32,7 @@ public class ExpenseService {
             throw new RuntimeException("User not found");
         }
 
-        if (expense.getAmount() < 0){
+        if (expense.getAmount() < 0) {
             throw new IllegalArgumentException("The amount can not be less than zero.");
         }
 

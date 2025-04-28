@@ -13,7 +13,7 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
     public void validateDepartment(Department department){
-        if(!department.getName().matches("^[\\p{L}-& ]+$")){
+        if (!department.getName().matches("^[\\p{L}-& ]+$")) {
             throw new IllegalArgumentException("Department must only contain letters");
         }
     }

@@ -43,23 +43,23 @@ public class UserService {
     }
 
     public void validateUser(User user){
-        if(!user.getFirstName().matches("^[\\p{L}]+$")) {
+        if (!user.getFirstName().matches("^[\\p{L}]+$")) {
             throw new IllegalArgumentException("First name must only contains letters.");
         }
 
-        if(!Character.isUpperCase(user.getFirstName().charAt(0))){
+        if (!Character.isUpperCase(user.getFirstName().charAt(0))) {
             throw new IllegalArgumentException("First name must start with capital letter.");
         }
 
-        if(!user.getLastName().matches("^[\\p{L}-]+$")) {
+        if (!user.getLastName().matches("^[\\p{L}-]+$")) {
             throw new IllegalArgumentException("Last name must only contains letters.");
         }
 
-        if(!Character.isUpperCase(user.getLastName().charAt(0))){
+        if (!Character.isUpperCase(user.getLastName().charAt(0))) {
             throw new IllegalArgumentException("Last name must start with capital letter.");
         }
 
-        if(!user.getPhone().matches("\\d{9}")) {
+        if (!user.getPhone().matches("\\d{9}")) {
             throw new IllegalArgumentException("Phone number must only contain 9 numbers.");
         }
 

@@ -30,7 +30,7 @@ public class DelegationService {
             throw new IllegalArgumentException("The origin must only contain letters.");
         }
 
-        if(!Character.isUpperCase(delegation.getOrigin().charAt(0))){
+        if (!Character.isUpperCase(delegation.getOrigin().charAt(0))) {
             throw new IllegalArgumentException("The origin must start with capital letter.");
         }
       
@@ -38,7 +38,7 @@ public class DelegationService {
             throw new IllegalArgumentException("The destination must only contain letters.");
         }
 
-        if(!Character.isUpperCase(delegation.getDestination().charAt(0))){
+        if (!Character.isUpperCase(delegation.getDestination().charAt(0))) {
             throw new IllegalArgumentException("The destination must start with capital letter.");
         }
       
@@ -46,7 +46,7 @@ public class DelegationService {
             throw new IllegalArgumentException("The title must only contain letters.");
         }
 
-        if(!Character.isUpperCase(delegation.getTitle().charAt(0))){
+        if (!Character.isUpperCase(delegation.getTitle().charAt(0))) {
             throw new IllegalArgumentException("The title must start with capital letter.");
         }
     }

@@ -30,7 +30,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldValidateDelegation(){
-        Delegation delegation = new Delegation("Wyjazd do Chin","Chiny","Hong Kong",
+        Delegation delegation = new Delegation("Wyjazd do Chin", "Chiny", "Hong Kong",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -39,7 +39,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldValidateDelegationWithPolishLetterInTitle(){
-        Delegation delegation = new Delegation("Wyjazd do Fabryki koralików","Chiny","Hong Kong",
+        Delegation delegation = new Delegation("Wyjazd do Fabryki koralików", "Chiny", "Hong Kong",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -48,7 +48,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldValidateDelegationWithPolishLetterInOrigin(){
-        Delegation delegation = new Delegation("Wyjazd do Francji","Łotwa","Hong Kong",
+        Delegation delegation = new Delegation("Wyjazd do Francji","Łotwa", "Hong Kong",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -57,7 +57,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldValidateDelegationWithPolishLetterInDestination(){
-        Delegation delegation = new Delegation("Wyjazd do Francji","Europa","Łomża",
+        Delegation delegation = new Delegation("Wyjazd do Francji", "Europa", "Łomża",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -66,7 +66,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldValidateDelegationWithDash(){
-        Delegation delegation = new Delegation("Wyjazd do wojewódstwa warmińsko-mazurskiego","Europa-Afryka",
+        Delegation delegation = new Delegation("Wyjazd do wojewódstwa warmińsko-mazurskiego", "Europa-Afryka",
                 "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
@@ -76,7 +76,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldValidateDelegationWithCorrectDates(){
-        Delegation delegation = new Delegation("Wyjazd do wojewódstwa warmińsko-mazurskiego","Europa-Afryka",
+        Delegation delegation = new Delegation("Wyjazd do wojewódstwa warmińsko-mazurskiego", "Europa-Afryka",
                 "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
@@ -86,7 +86,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForInvalidOrigin(){
-        Delegation delegation = new Delegation("Wyjazd na Mazury","Europa2", "Bielsko-Biała",
+        Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa2", "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -99,7 +99,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForInvalidTitle(){
-        Delegation delegation = new Delegation("Wyjazd na 2Mazury","Europa", "Bielsko-Biała",
+        Delegation delegation = new Delegation("Wyjazd na 2Mazury", "Europa", "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -112,7 +112,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForInvalidDestination(){
-        Delegation delegation = new Delegation("Wyjazd na Mazury","Europa", "Bielsko-Bi4ła",
+        Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa", "Bielsko-Bi4ła",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -125,7 +125,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForNonCapitalLetterInDestination(){
-        Delegation delegation = new Delegation("Wyjazd na Mazury","Europa", "bielsko-Biała",
+        Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa", "bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -138,7 +138,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForNonCapitalLetterInTitle(){
-        Delegation delegation = new Delegation("wyjazd na Mazury","Europa", "Bielsko-Biała",
+        Delegation delegation = new Delegation("wyjazd na Mazury", "Europa", "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
@@ -151,7 +151,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForInvalidEndDate(){
-        Delegation delegation = new Delegation("Wyjazd na Mazury","Europa", "Bielsko-Biała",
+        Delegation delegation = new Delegation("Wyjazd na Mazury", "Europa", "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 2,2,22,2));
 
@@ -164,7 +164,7 @@ public class DelegationServiceTest {
 
     @Test
     void shouldThrowExceptionForNonCapitalLetterInOrigin(){
-        Delegation delegation = new Delegation("Wyjazd na Mazury","europa", "Bielsko-Biała",
+        Delegation delegation = new Delegation("Wyjazd na Mazury", "europa", "Bielsko-Biała",
                 DelegationStatus.Planned, LocalDateTime.of(2012,2, 12,2,22,2),
                 LocalDateTime.of(2012,2, 20,2,22,2));
 

@@ -41,7 +41,7 @@ public class ExpenseServiceTest {
 
     @Test
     void shouldValidateExpense(){
-        Expense expense = new Expense(new Delegation(),new User(),"obiad",12.33,
+        Expense expense = new Expense(new Delegation(), new User(), "obiad", 12.33,
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
         assertDoesNotThrow(() -> expenseService.validateExpense(expense));
@@ -49,7 +49,7 @@ public class ExpenseServiceTest {
 
     @Test
     void shouldValidateExpenseWithZeroAmount(){
-        Expense expense = new Expense(new Delegation(),new User(),"obiad",0.0,
+        Expense expense = new Expense(new Delegation(), new User(), "obiad", 0.0,
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
         assertDoesNotThrow(() -> expenseService.validateExpense(expense));
@@ -57,7 +57,7 @@ public class ExpenseServiceTest {
 
     @Test
     void shouldThrowExceptionForNegativeAmount(){
-        Expense expense = new Expense(new Delegation(),new User(),"obiad",-12.33,
+        Expense expense = new Expense(new Delegation(), new User(), "obiad", -12.33,
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -69,7 +69,7 @@ public class ExpenseServiceTest {
 
     @Test
     void shouldThrowExceptionForNullDelegation(){
-        Expense expense = new Expense(null,new User(),"obiad",12.33,
+        Expense expense = new Expense(null, new User(), "obiad", 12.33,
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -81,7 +81,7 @@ public class ExpenseServiceTest {
 
     @Test
     void shouldThrowExceptionForNullUser(){
-        Expense expense = new Expense(new Delegation(),null,"obiad",12.33,
+        Expense expense = new Expense(new Delegation(), null, "obiad", 12.33,
                 LocalDateTime.of(2012,2, 20,2,22,2));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -93,7 +93,7 @@ public class ExpenseServiceTest {
 
     @Test
     void shouldThrowExceptionForFutureDate(){
-        Expense expense = new Expense(new Delegation(),new User(),"obiad",12.33,
+        Expense expense = new Expense(new Delegation(), new User(), "obiad", 12.33,
                 LocalDateTime.of(2032,2, 20,2,22,2));
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

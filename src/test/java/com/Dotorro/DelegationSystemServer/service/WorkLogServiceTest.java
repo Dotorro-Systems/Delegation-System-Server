@@ -37,7 +37,7 @@ public class WorkLogServiceTest {
 
     @Test
     void shouldValidateWorkLog(){
-        WorkLog workLog = new WorkLog(new Delegation(),new User(),
+        WorkLog workLog = new WorkLog(new Delegation(), new User(),
                 LocalDateTime.of(2012,2, 20,2,22,2),
                 LocalDateTime.of(2012,3, 20,2,22,2));
 
@@ -46,7 +46,7 @@ public class WorkLogServiceTest {
 
     @Test
     void shouldThrowExceptionForNullUser(){
-        WorkLog workLog = new WorkLog(new Delegation(),null,
+        WorkLog workLog = new WorkLog(new Delegation(), null,
                 LocalDateTime.of(2012,2, 20,2,22,2),
                 LocalDateTime.of(2012,3, 20,2,22,2));
 
@@ -72,7 +72,7 @@ public class WorkLogServiceTest {
 
     @Test
     void shouldThrowExceptionForInvalidStartTime(){
-        WorkLog workLog = new WorkLog(new Delegation(),new User(),
+        WorkLog workLog = new WorkLog(new Delegation(), new User(),
                 LocalDateTime.of(2092,2, 20,2,22,2),
                 LocalDateTime.of(2012,3, 20,2,22,2));
 
@@ -85,7 +85,7 @@ public class WorkLogServiceTest {
 
     @Test
     void shouldThrowExceptionForInvalidEndTime(){
-        WorkLog workLog = new WorkLog(new Delegation(),new User(),
+        WorkLog workLog = new WorkLog(new Delegation(), new User(),
                 LocalDateTime.of(2012,2, 20,2,22,2),
                 LocalDateTime.of(2042,1, 20,2,22,2));
 

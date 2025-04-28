@@ -34,24 +34,24 @@ public class DelegationService {
             throw new IllegalArgumentException("Origin must only contain letters");
         }
 
-        if(!Character.isUpperCase(delegation.getOrigin().charAt(0))){
-            throw new IllegalArgumentException("Origin must start with capital letter");
+        if (!Character.isUpperCase(delegation.getOrigin().charAt(0))) {
+            throw new IllegalArgumentException("The origin must start with capital letter.");
         }
       
         if (!delegation.getDestination().matches("^[\\p{L}- ]+$")) {
             throw new IllegalArgumentException("Destination must only contain letters");
         }
 
-        if(!Character.isUpperCase(delegation.getDestination().charAt(0))){
-            throw new IllegalArgumentException("Destination must start with capital letter");
+        if (!Character.isUpperCase(delegation.getDestination().charAt(0))) {
+            throw new IllegalArgumentException("The destination must start with capital letter.");
         }
       
         if (!delegation.getTitle().matches("^[\\p{L}- ]+$")) {
             throw new IllegalArgumentException("Title must only contain letters");
         }
 
-        if(!Character.isUpperCase(delegation.getTitle().charAt(0))){
-            throw new IllegalArgumentException("Title must start with capital letter");
+        if (!Character.isUpperCase(delegation.getTitle().charAt(0))) {
+            throw new IllegalArgumentException("The title must start with capital letter.");
         }
     }
 

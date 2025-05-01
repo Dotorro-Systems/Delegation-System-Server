@@ -49,6 +49,10 @@ public class ExpenseService {
         return expenseRepository.findById(expenseId).orElse(null);
     }
 
+    public List<Expense> getExpensesByDelegationId(Long delegationId) {
+        return expenseRepository.findByDelegationId(delegationId);
+    }
+
     public Expense createExpense(ExpenseDTO expenseDTO) {
         return expenseRepository.save(convertToEntity(expenseDTO));
     }

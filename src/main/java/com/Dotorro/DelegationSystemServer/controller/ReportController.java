@@ -1,6 +1,7 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
 import com.Dotorro.DelegationSystemServer.service.ReportService;
+import com.Dotorro.DelegationSystemServer.dto.ReportDelegationDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +15,11 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    /* @GetMapping("/{delegationId}")
-    public ResponseEntity<ReportDTO> getReport(@PathVariable Long delegationId) {
-        ReportDTO report = reportService.generateReport(delegationId);
+    @GetMapping("/{delegationId}")
+    public ResponseEntity<ReportDelegationDTO> getDelegationReport(@PathVariable Long delegationId) {
+        ReportDelegationDTO report = reportService.generateReport(delegationId);
         return ResponseEntity.ok(report);
     }
-     */
+
 
 }

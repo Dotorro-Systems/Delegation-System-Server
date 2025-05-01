@@ -29,6 +29,12 @@ public class ReportService {
         double totalExpenses = allExpenses.stream()
                 .mapToDouble(Expense::getAmount)
                 .sum();
+
+        List<WorkLog> allWorkLogs = workLogService.getWorkLogsByDelegationId(delegationId);
+        Long allWorkedHours = allWorkLogs.stream()
+                .mapToLong(WorkLog::getWorkedHours)
+                .sum();
+
         //ReportDelegationDTO reportDelegationDTO = new ReportDelegationDTO();
 
     }

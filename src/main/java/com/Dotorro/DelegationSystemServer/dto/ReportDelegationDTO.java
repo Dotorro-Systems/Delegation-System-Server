@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class ReportDelegationDTO {
     private String title;
-    private Integer allWorkHours;
-    private Map<User,Integer> userAllWorkHours;
+    private Long allWorkHours;
+    private Map<User,Long> userAllWorkHours;
     private Double totalExpenses;
     private String destination;
     private List<Note> allNotes;
@@ -20,7 +20,7 @@ public class ReportDelegationDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public ReportDelegationDTO(Delegation delegation, Map<User,Integer> userAllWorkHours, Integer allWorkHours, Double totalExpenses, List<Note> allNotes, List<User> allUsers)
+    public ReportDelegationDTO(Delegation delegation, Map<User,Long> userAllWorkHours, Long allWorkHours, Double totalExpenses, List<Note> allNotes, List<User> allUsers)
     {
         this.title = delegation.getTitle();
         this.destination = delegation.getDestination();
@@ -42,11 +42,11 @@ public class ReportDelegationDTO {
         this.title = title;
     }
 
-    public Integer getAllWorkHours() {
+    public Long getAllWorkHours() {
         return allWorkHours;
     }
 
-    public void setAllWorkHours(Integer allWorkHours) {
+    public void setAllWorkHours(Long allWorkHours) {
         this.allWorkHours = allWorkHours;
     }
 
@@ -58,11 +58,11 @@ public class ReportDelegationDTO {
         this.totalExpenses = totalExpenses;
     }
 
-    public Map<User, Integer> getUserAllWorkHours() {
+    public Map<User, Long> getUserAllWorkHours() {
         return userAllWorkHours;
     }
 
-    public void setUserAllWorkHours(Map<User, Integer> userAllWorkHours) {
+    public void setUserAllWorkHours(Map<User, Long> userAllWorkHours) {
         this.userAllWorkHours = userAllWorkHours;
     }
 

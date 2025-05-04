@@ -16,27 +16,21 @@ public class ReportService {
 
     private final DelegationService delegationService;
     private final DepartmentService departmentService;
-    private final ExpenseService expenseService;
-    private final WorkLogService workLogService;
-    private final NoteService noteService;
 
     public ReportService(DelegationService delegationService, DepartmentService departmentService, ExpenseService expenseService,
                          WorkLogService workLogService, NoteService noteService) {
         this.delegationService = delegationService;
         this.departmentService = departmentService;
-        this.expenseService = expenseService;
-        this.workLogService = workLogService;
-        this.noteService = noteService;
     }
 
     public ReportDelegationDTO generateReport(Long delegationId){
         Delegation delegation = delegationService.getDelegationById(delegationId);
-        List<Expense> allExpenses = expenseService.getExpensesByDelegationId(delegationId);
+        List<Expense> allExpenses =delegation.getExpenses();
         double totalExpenses = allExpenses.stream()
                 .mapToDouble(Expense::getAmount)
                 .sum();
 
-        List<WorkLog> allWorkLogs = workLogService.getWorkLogsByDelegationId(delegationId);
+        List<WorkLog> allWorkLogs = delegation.getWorkLogs();
         Long allWorkedHours = allWorkLogs.stream()
                 .mapToLong(WorkLog::getWorkedHours)
                 .sum();
@@ -47,9 +41,9 @@ public class ReportService {
                         Collectors.summingLong(WorkLog::getWorkedHours)
                 ));
 
-        List<Note> allNotes = noteService.getNotesByDelegationId(delegationId);
+        List<Note> allNotes = delegation.getNotes();
 
-        List<User> users = new ArrayList<>(userAllWorkHours.keySet());
+        List<User> users = delegation.getUsers();
 
         return new ReportDelegationDTO(delegation, userAllWorkHours, allWorkedHours,
                 totalExpenses, allNotes, users);

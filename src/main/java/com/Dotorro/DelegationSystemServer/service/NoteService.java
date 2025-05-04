@@ -70,10 +70,6 @@ public class NoteService {
         noteRepository.deleteById(id);
     }
 
-    public List<Note> getNotesByDelegationId(Long delegationId) {
-        return noteRepository.findByDelegationId(delegationId);
-    }
-
     private Note convertToEntity(NoteDTO noteDTO) {
         Delegation delegation = delegationService.getDelegationById(noteDTO.getDelegationId());
 

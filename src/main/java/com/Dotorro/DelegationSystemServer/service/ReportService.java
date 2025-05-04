@@ -17,8 +17,7 @@ public class ReportService {
     private final DelegationService delegationService;
     private final DepartmentService departmentService;
 
-    public ReportService(DelegationService delegationService, DepartmentService departmentService, ExpenseService expenseService,
-                         WorkLogService workLogService, NoteService noteService) {
+    public ReportService(DelegationService delegationService, DepartmentService departmentService) {
         this.delegationService = delegationService;
         this.departmentService = departmentService;
     }

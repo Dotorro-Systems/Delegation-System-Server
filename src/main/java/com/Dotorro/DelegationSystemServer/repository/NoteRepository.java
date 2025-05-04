@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note,Long> {
-    public List<Note> findByDelegationId(Long delegationId);
 }

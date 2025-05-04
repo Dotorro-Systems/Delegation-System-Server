@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-    public List<Expense> findByDelegationId(Long delegationId);
 }

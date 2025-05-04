@@ -48,10 +48,6 @@ public class WorkLogService {
         return workLogRepository.findAll();
     }
 
-    public List<WorkLog> getWorkLogsByDelegationId(Long delegationId) {
-        return workLogRepository.findByDelegationId(delegationId);
-    }
-
     public WorkLog getWorkLogById(Long workLogId)
     {
         return workLogRepository.findById(workLogId).orElse(null);

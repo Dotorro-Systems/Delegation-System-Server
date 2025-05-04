@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface WorkLogRepository extends JpaRepository<WorkLog,Long> {
-    public List<WorkLog> findByDelegationId(Long delegationId);
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ReportMonthlyDTO {
     private String monthName;
-    private Long year;
+    private Integer year;
     private String departmentName;
     private Map<Delegation, Long> delegationAllWorkHours;
     private Map<Delegation, Double> delegationAllExpenses;
@@ -19,7 +19,7 @@ public class ReportMonthlyDTO {
     private Double totalExpenses;
     private Long allWorkHours;
 
-    public ReportMonthlyDTO(String monthName, Long year, Department department, Delegation delegation,
+    public ReportMonthlyDTO(String monthName, Integer year, Department department,
                             Map<Delegation, Long> delegationAllWorkHours, Map<Delegation, Double> delegationAllExpenses,
                             Map<Delegation, List<User>> delegationAllUsers,
                             Long allWorkHours, Double totalExpenses) {
@@ -42,11 +42,11 @@ public class ReportMonthlyDTO {
         this.monthName = monthName;
     }
 
-    public Long getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(Long year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

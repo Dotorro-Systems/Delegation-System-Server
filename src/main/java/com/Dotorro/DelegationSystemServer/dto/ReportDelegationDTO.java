@@ -11,8 +11,9 @@ import java.util.Map;
 public class ReportDelegationDTO {
     private String title;
     private Long allWorkHours;
-    private Map<User,Long> userAllWorkHours;
+    private Map<String, Long> userAllWorkHours;
     private Double totalExpenses;
+    private String origin;
     private String destination;
     private List<Note> allNotes;
     private String departmentName;
@@ -20,9 +21,10 @@ public class ReportDelegationDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public ReportDelegationDTO(Delegation delegation, Map<User,Long> userAllWorkHours, Long allWorkHours, Double totalExpenses, List<Note> allNotes, List<User> allUsers)
+    public ReportDelegationDTO(Delegation delegation, Map<String, Long> userAllWorkHours, Long allWorkHours, Double totalExpenses, List<Note> allNotes, List<User> allUsers)
     {
         this.title = delegation.getTitle();
+        this.origin = delegation.getOrigin();
         this.destination = delegation.getDestination();
         this.startDate = delegation.getStartDate();
         this.endDate = delegation.getEndDate();
@@ -58,11 +60,11 @@ public class ReportDelegationDTO {
         this.totalExpenses = totalExpenses;
     }
 
-    public Map<User, Long> getUserAllWorkHours() {
+    public Map<String, Long> getUserAllWorkHours() {
         return userAllWorkHours;
     }
 
-    public void setUserAllWorkHours(Map<User, Long> userAllWorkHours) {
+    public void setUserAllWorkHours(Map<String, Long> userAllWorkHours) {
         this.userAllWorkHours = userAllWorkHours;
     }
 
@@ -112,6 +114,14 @@ public class ReportDelegationDTO {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 }
 

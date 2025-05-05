@@ -34,9 +34,12 @@ public class ReportService {
                 .mapToLong(WorkLog::getWorkedHours)
                 .sum();
 
-        Map<User,Long> userAllWorkHours = allWorkLogs.stream()
+        Map<String, Long> userAllWorkHours = allWorkLogs.stream()
                 .collect(Collectors.groupingBy(
-                        WorkLog::getUser,
+                        workLog -> {
+                            User user = workLog.getUser();
+                            return user.getFirstName() + " " + user.getLastName();
+                        },
                         Collectors.summingLong(WorkLog::getWorkedHours)
                 ));
 

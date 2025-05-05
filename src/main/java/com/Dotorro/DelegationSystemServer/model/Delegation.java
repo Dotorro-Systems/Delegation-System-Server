@@ -141,15 +141,15 @@ public class Delegation {
     public DelegationStatus getStatus() {
         LocalDateTime now = LocalDateTime.now();
 
-        if (endDate.isBefore(now))
+        if (now.isBefore(endDate))
         {
-            if (startDate.isAfter(now))
+            if (now.isAfter(startDate))
                 return DelegationStatus.Active;
 
-            return DelegationStatus.Finished;
+            return DelegationStatus.Planned;
         }
 
-        return DelegationStatus.Planned;
+        return DelegationStatus.Finished;
     }
 
     public List<User> getUsers() {

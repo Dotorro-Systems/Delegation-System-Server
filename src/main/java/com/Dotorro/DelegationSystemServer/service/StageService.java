@@ -71,7 +71,7 @@ public class StageService {
                 type,
                 stageDTO.getPlace(),
                 stageDTO.getDescription(),
-                stageDTO.getWhen()
+                stageDTO.getTime()
         );
 
         validateStage(stage);

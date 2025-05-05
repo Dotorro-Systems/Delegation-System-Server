@@ -7,14 +7,14 @@ public class StageDTO {
     private String type;
     private String place;
     private String description;
-    private LocalDateTime when;
+    private LocalDateTime time;
 
-    public StageDTO(Long delegationId, String type, String place, String description, LocalDateTime when) {
+    public StageDTO(Long delegationId, String type, String place, String description, LocalDateTime time) {
         this.delegationId = delegationId;
         this.type = type;
         this.place = place;
         this.description = description;
-        this.when = when;
+        this.time = time;
     }
 
     public Long getDelegationId() {
@@ -49,11 +49,11 @@ public class StageDTO {
         this.description = description;
     }
 
-    public LocalDateTime getWhen() {
-        return when;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setWhen(LocalDateTime when) {
-        this.when = when;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 }

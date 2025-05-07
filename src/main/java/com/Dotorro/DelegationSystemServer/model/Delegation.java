@@ -56,7 +56,8 @@ public class Delegation {
         this.department = department;
     }
 
-    public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate, Department department) {
+    public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate,
+                      LocalDateTime endDate, Department department) {
         this.id = id;
         this.title = title;
         this.origin = origin;

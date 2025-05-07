@@ -51,7 +51,6 @@ public class ReportService {
                 ));
 
         List<Note> allNotes = delegation.getNotes();
-
         List<User> users = delegation.getUsers();
 
         return new ReportDelegationDTO(delegation, userAllWorkHours, allWorkedHours,

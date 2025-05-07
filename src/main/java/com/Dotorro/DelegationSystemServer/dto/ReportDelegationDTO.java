@@ -20,10 +20,12 @@ public class ReportDelegationDTO {
     private List<User> allUsers;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private Long delegationId;
 
     public ReportDelegationDTO(Delegation delegation, Map<String, Long> userAllWorkHours, Long allWorkHours,
                                Double totalExpenses, List<Note> allNotes, List<User> allUsers)
     {
+        this.delegationId = delegation.getId();
         this.title = delegation.getTitle();
         this.origin = delegation.getOrigin();
         this.destination = delegation.getDestination();
@@ -43,6 +45,14 @@ public class ReportDelegationDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Long getDelegationId() {
+        return delegationId;
+    }
+
+    public void setDelegationId(Long delegationId) {
+        this.delegationId = delegationId;
     }
 
     public Long getAllWorkHours() {

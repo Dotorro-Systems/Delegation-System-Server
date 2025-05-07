@@ -114,6 +114,7 @@ public class ReportService {
             document.open();
 
             document.add(new Paragraph("Report Delegation"));
+            document.add(new Paragraph("Delegation number: "+ reportDelegationDTO.getDelegationId()));
             document.add(new Paragraph("Title: "+reportDelegationDTO.getTitle()));
             document.add(new Paragraph("Origin: "+reportDelegationDTO.getOrigin()));
             document.add(new Paragraph("Destination: "+reportDelegationDTO.getDestination()));

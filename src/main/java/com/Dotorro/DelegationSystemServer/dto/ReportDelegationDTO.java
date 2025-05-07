@@ -21,7 +21,8 @@ public class ReportDelegationDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public ReportDelegationDTO(Delegation delegation, Map<String, Long> userAllWorkHours, Long allWorkHours, Double totalExpenses, List<Note> allNotes, List<User> allUsers)
+    public ReportDelegationDTO(Delegation delegation, Map<String, Long> userAllWorkHours, Long allWorkHours,
+                               Double totalExpenses, List<Note> allNotes, List<User> allUsers)
     {
         this.title = delegation.getTitle();
         this.origin = delegation.getOrigin();

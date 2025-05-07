@@ -3,9 +3,16 @@ package com.Dotorro.DelegationSystemServer.service;
 import com.Dotorro.DelegationSystemServer.dto.ReportMonthlyDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.dto.ReportDelegationDTO;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+import org.springframework.stereotype.Service;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Document;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +104,40 @@ public class ReportService {
         String monthName = monthlyDelegations.get(0).getStartDate().getMonth().toString();
 
         return new ReportMonthlyDTO(monthName,targetYear, department, delegationAllWorkHours, delegationAllExpenses, delegationAllUsers, allWorkedHours,totalExpenses);
+    }
+
+    public byte[] getReportToPdf(ReportDelegationDTO reportDelegationDTO){
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try{
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            document.add(new Paragraph("Report Delegation"));
+            document.add(new Paragraph("Title: "+reportDelegationDTO.getTitle()));
+            document.add(new Paragraph("Origin: "+reportDelegationDTO.getOrigin()));
+            document.add(new Paragraph("Destination: "+reportDelegationDTO.getDestination()));
+            document.add(new Paragraph("Start date: "+reportDelegationDTO.getStartDate()));
+            document.add(new Paragraph("End date: "+reportDelegationDTO.getEndDate()));
+            document.add(new Paragraph("Total expenses: "+reportDelegationDTO.getTotalExpenses()));
+            document.add(new Paragraph("All worked hours: "+reportDelegationDTO.getAllWorkHours()));
+
+            reportDelegationDTO.getUserAllWorkHours().forEach((key, value) ->{
+                document.add(new Paragraph("Name: "+key + ": worked hours: "+value));
+            });
+
+            reportDelegationDTO.getAllNotes().forEach(note ->
+                    document.add(new Paragraph("Note: "+note)));
+
+            reportDelegationDTO.getAllUsers().forEach(user ->
+                    document.add(new Paragraph("Employee: "+user)));
+
+            document.add(new Paragraph("Report generated on: "+ LocalDateTime.now()));
+            document.close();
+        }catch (DocumentException e){
+            throw new RuntimeException("Error during pdf generating", e);
+        }
+        return  out.toByteArray();
     }
 
 }

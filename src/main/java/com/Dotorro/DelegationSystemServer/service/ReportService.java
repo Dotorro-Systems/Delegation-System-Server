@@ -3,6 +3,8 @@ package com.Dotorro.DelegationSystemServer.service;
 import com.Dotorro.DelegationSystemServer.dto.ReportMonthlyDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.dto.ReportDelegationDTO;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 
@@ -185,13 +187,20 @@ public class ReportService {
     }
 
     public byte[] testPdf(ReportDelegationDTO reportDelegationDTO){
-        Document document = new Document();
+        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try{
             PdfWriter.getInstance(document, out);
             document.open();
 
-            document.add(new Paragraph("Delegation Report"));
+            Paragraph date = new Paragraph(LocalDateTime.now().toString());
+            date.setAlignment(Element.ALIGN_RIGHT);
+            document.add(date);
+
+            Paragraph header = new Paragraph("Delegation Report");
+            header.setFont(new Font(Font.HELVETICA, 16, Font.BOLD));
+            document.add(header);
+
             document.add(new Paragraph("Delegation number: " + reportDelegationDTO.getDelegationId()));
             document.add(new Paragraph("Title: " + reportDelegationDTO.getTitle()));
             document.add(new Paragraph("Duration of the delegation: " + reportDelegationDTO.getStartDate() + " - " + reportDelegationDTO.getEndDate()));
@@ -200,25 +209,46 @@ public class ReportService {
             document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
             document.add(new Paragraph("All worked hours: " + reportDelegationDTO.getAllWorkHours()));
 
-            document.add(new Paragraph("\n"+
-                    "Number of working hours performed by individual employees"));
+            PdfPTable employeesTable = new PdfPTable(2);
+            employeesTable.setWidthPercentage(100);
+
+            Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD);
+            PdfPCell eh1 = new PdfPCell(new Phrase("Name", headerFont));
+            PdfPCell eh2 = new PdfPCell(new Phrase("Worked Hours", headerFont));
+
+            employeesTable.addCell(eh1);
+            employeesTable.addCell(eh2);
+
+            employeesTable.setHeaderRows(1);
+
             reportDelegationDTO.getUserAllWorkHours().forEach((key, value) ->{
-                document.add(new Paragraph("Name: " + key + ": worked hours: " + value));
+                employeesTable.addCell(key);
+                employeesTable.addCell(value.toString());
             });
+
+            document.add(employeesTable);
 
             document.add(new Paragraph("\n"+
                     "Notes taken during delegation"));
-            reportDelegationDTO.getAllNotes().forEach(note ->
-                    document.add(new Paragraph("Note: " + note)));
 
-            document.add(new Paragraph("\n"+
-                    "List of employees participating in the delegation"));
-            reportDelegationDTO.getAllUsers().forEach(user ->
-                    document.add(new Paragraph("Employee: " + user.getFirstName() + " " + user.getLastName())));
+            PdfPTable notesTable = new PdfPTable(2);
+            notesTable.setWidthPercentage(100);
 
+            PdfPCell nh1 = new PdfPCell(new Phrase("Name", headerFont));
+            PdfPCell nh2 = new PdfPCell(new Phrase("Worked Hours", headerFont));
+
+            notesTable.addCell(nh1);
+            notesTable.addCell(nh2);
+
+            notesTable.setHeaderRows(1);
+
+            reportDelegationDTO.getAllNotes().forEach(note -> {
+                notesTable.addCell(note.getCreatedAt().toString());
+                notesTable.addCell(note.getContent());
+            });
+            document.add(notesTable);
             document.add(new Paragraph("\n"));
 
-            document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
             document.close();
         }catch (DocumentException e){
             throw new RuntimeException("Error during report pdf generating", e);

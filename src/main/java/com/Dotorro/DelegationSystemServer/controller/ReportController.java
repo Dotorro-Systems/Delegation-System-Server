@@ -57,4 +57,17 @@ public class ReportController {
 
         return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/pdf/test/{delegationId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> testPdf(@PathVariable Long delegationId) {
+        ReportDelegationDTO report = reportService.generateReport(delegationId);
+        byte[] pdf = reportService.getReportToPdf(report);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.attachment()
+                .filename("report.pdf").build());
+
+        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+    }
 }

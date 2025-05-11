@@ -184,4 +184,46 @@ public class ReportService {
         return  out.toByteArray();
     }
 
+    public byte[] testPdf(ReportDelegationDTO reportDelegationDTO){
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try{
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            document.add(new Paragraph("Delegation Report"));
+            document.add(new Paragraph("Delegation number: " + reportDelegationDTO.getDelegationId()));
+            document.add(new Paragraph("Title: " + reportDelegationDTO.getTitle()));
+            document.add(new Paragraph("Duration of the delegation: " + reportDelegationDTO.getStartDate() + " - " + reportDelegationDTO.getEndDate()));
+            document.add(new Paragraph("Origin: " + reportDelegationDTO.getOrigin()));
+            document.add(new Paragraph("Destination: " + reportDelegationDTO.getDestination()));
+            document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
+            document.add(new Paragraph("All worked hours: " + reportDelegationDTO.getAllWorkHours()));
+
+            document.add(new Paragraph("\n"+
+                    "Number of working hours performed by individual employees"));
+            reportDelegationDTO.getUserAllWorkHours().forEach((key, value) ->{
+                document.add(new Paragraph("Name: " + key + ": worked hours: " + value));
+            });
+
+            document.add(new Paragraph("\n"+
+                    "Notes taken during delegation"));
+            reportDelegationDTO.getAllNotes().forEach(note ->
+                    document.add(new Paragraph("Note: " + note)));
+
+            document.add(new Paragraph("\n"+
+                    "List of employees participating in the delegation"));
+            reportDelegationDTO.getAllUsers().forEach(user ->
+                    document.add(new Paragraph("Employee: " + user.getFirstName() + " " + user.getLastName())));
+
+            document.add(new Paragraph("\n"));
+
+            document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
+            document.close();
+        }catch (DocumentException e){
+            throw new RuntimeException("Error during report pdf generating", e);
+        }
+        return  out.toByteArray();
+    }
+
 }

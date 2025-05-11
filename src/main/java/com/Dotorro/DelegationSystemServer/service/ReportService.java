@@ -113,26 +113,26 @@ public class ReportService {
             document.open();
 
             document.add(new Paragraph("Report Delegation"));
-            document.add(new Paragraph("Delegation number: "+ reportDelegationDTO.getDelegationId()));
-            document.add(new Paragraph("Title: "+reportDelegationDTO.getTitle()));
-            document.add(new Paragraph("Origin: "+reportDelegationDTO.getOrigin()));
-            document.add(new Paragraph("Destination: "+reportDelegationDTO.getDestination()));
-            document.add(new Paragraph("Start date: "+reportDelegationDTO.getStartDate()));
-            document.add(new Paragraph("End date: "+reportDelegationDTO.getEndDate()));
-            document.add(new Paragraph("Total expenses: "+reportDelegationDTO.getTotalExpenses()));
-            document.add(new Paragraph("All worked hours: "+reportDelegationDTO.getAllWorkHours()));
+            document.add(new Paragraph("Delegation number: " + reportDelegationDTO.getDelegationId()));
+            document.add(new Paragraph("Title: " + reportDelegationDTO.getTitle()));
+            document.add(new Paragraph("Origin: " + reportDelegationDTO.getOrigin()));
+            document.add(new Paragraph("Destination: " + reportDelegationDTO.getDestination()));
+            document.add(new Paragraph("Start date: " + reportDelegationDTO.getStartDate()));
+            document.add(new Paragraph("End date: " + reportDelegationDTO.getEndDate()));
+            document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
+            document.add(new Paragraph("All worked hours: " + reportDelegationDTO.getAllWorkHours()));
 
             reportDelegationDTO.getUserAllWorkHours().forEach((key, value) ->{
-                document.add(new Paragraph("Name: "+key + ": worked hours: "+value));
+                document.add(new Paragraph("Name: " + key + ": worked hours: " + value));
             });
 
             reportDelegationDTO.getAllNotes().forEach(note ->
-                    document.add(new Paragraph("Note: "+note)));
+                    document.add(new Paragraph("Note: " + note)));
 
             reportDelegationDTO.getAllUsers().forEach(user ->
-                    document.add(new Paragraph("Employee: "+user)));
+                    document.add(new Paragraph("Employee: " + user.getFirstName() + " " + user.getLastName())));
 
-            document.add(new Paragraph("Report generated on: "+ LocalDateTime.now()));
+            document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
             document.close();
         }catch (DocumentException e){
             throw new RuntimeException("Error during pdf generating", e);

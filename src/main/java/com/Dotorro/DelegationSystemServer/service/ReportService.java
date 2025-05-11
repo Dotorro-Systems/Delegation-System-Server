@@ -135,7 +135,51 @@ public class ReportService {
             document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
             document.close();
         }catch (DocumentException e){
-            throw new RuntimeException("Error during pdf generating", e);
+            throw new RuntimeException("Error during report pdf generating", e);
+        }
+        return  out.toByteArray();
+    }
+
+    public byte[] getMonthlyReportToPdf(ReportMonthlyDTO reportMonthlyDTO){
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try{
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            document.add(new Paragraph("Monthly Report"));
+            document.add(new Paragraph("Report time frame: " + reportMonthlyDTO.getMonthName() + " " + reportMonthlyDTO.getYear()));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph("Department: " +  reportMonthlyDTO.getDepartmentName()));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph("Total expenses: " + reportMonthlyDTO.getTotalExpenses()));
+            document.add(new Paragraph("All worked hours: " + reportMonthlyDTO.getAllWorkHours()));
+
+            document.add(new Paragraph("Working hours performed during individual delegations:"));
+            reportMonthlyDTO.getDelegationAllWorkHours().forEach((key, value) ->{
+                document.add(new Paragraph("Delegation: " + key.getTitle() + " - worked hours: " + value));
+            });
+
+            document.add(new Paragraph("\n" +
+                    "Total expenses incurred during individual delegations:"));
+            reportMonthlyDTO.getDelegationAllExpenses().forEach((key, value) ->{
+                document.add(new Paragraph("Delegation: " + key.getTitle() + " - incurred expenses: " + value));
+            });
+
+            document.add(new Paragraph("\n" +
+                    " List of employees taking part in individual delegations:"));
+            reportMonthlyDTO.getDelegationAllUsers().forEach((key, value) ->{
+                document.add(new Paragraph("Delegation: " + key));
+                value.forEach(user ->
+                        document.add(new Paragraph(user.getFirstName() + " " + user.getLastName())));
+                document.add(new Paragraph("\n"));
+            });
+
+            document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
+            document.close();
+        }catch (DocumentException e){
+            throw new RuntimeException("Error during monthly report pdf generating", e);
         }
         return  out.toByteArray();
     }

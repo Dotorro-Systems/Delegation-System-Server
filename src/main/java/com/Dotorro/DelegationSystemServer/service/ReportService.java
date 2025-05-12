@@ -228,28 +228,48 @@ public class ReportService {
             document.add(new Paragraph("Duration of the delegation: " + reportDelegationDTO.getStartDate() + " - " + reportDelegationDTO.getEndDate()));
             document.add(new Paragraph("Origin: " + reportDelegationDTO.getOrigin()));
             document.add(new Paragraph("Destination: " + reportDelegationDTO.getDestination()));
-            document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
-            document.add(new Paragraph("All worked hours: " + reportDelegationDTO.getAllWorkHours() + "\n"));
 
+            document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
             document.add(Chunk.NEWLINE);
-            PdfPTable employeesTable = new PdfPTable(2);
-            employeesTable.setWidthPercentage(100);
+            PdfPTable expensesTable = new PdfPTable(2);
+            expensesTable.setWidthPercentage(100);
 
             Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD);
             PdfPCell eh1 = new PdfPCell(new Phrase("Name", headerFont));
-            PdfPCell eh2 = new PdfPCell(new Phrase("Worked Hours", headerFont));
+            PdfPCell eh2 = new PdfPCell(new Phrase("TotalExpenses", headerFont));
 
-            employeesTable.addCell(eh1);
-            employeesTable.addCell(eh2);
+            expensesTable.addCell(eh1);
+            expensesTable.addCell(eh2);
 
-            employeesTable.setHeaderRows(1);
+            expensesTable.setHeaderRows(1);
 
-            reportDelegationDTO.getUserAllWorkHours().forEach((key, value) -> {
-                employeesTable.addCell(key);
-                employeesTable.addCell(value.toString());
+            reportDelegationDTO.getUserTotalExpenses().forEach((key, value) -> {
+                expensesTable.addCell(key);
+                expensesTable.addCell(value.toString());
             });
 
-            document.add(employeesTable);
+            document.add(expensesTable);
+
+            document.add(new Paragraph("\n" +
+                    "All worked hours: " + reportDelegationDTO.getAllWorkHours()));
+            document.add(Chunk.NEWLINE);
+            PdfPTable workHoursTable = new PdfPTable(2);
+            workHoursTable.setWidthPercentage(100);
+
+            PdfPCell wh1 = new PdfPCell(new Phrase("Name", headerFont));
+            PdfPCell wh2 = new PdfPCell(new Phrase("Worked Hours", headerFont));
+
+            workHoursTable.addCell(wh1);
+            workHoursTable.addCell(wh2);
+
+            workHoursTable.setHeaderRows(1);
+
+            reportDelegationDTO.getUserAllWorkHours().forEach((key, value) -> {
+                workHoursTable.addCell(key);
+                workHoursTable.addCell(value.toString());
+            });
+
+            document.add(workHoursTable);
 
             document.add(new Paragraph("\n" +
                     "Notes taken during delegation"));

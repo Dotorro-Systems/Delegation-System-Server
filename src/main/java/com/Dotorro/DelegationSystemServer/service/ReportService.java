@@ -152,42 +152,120 @@ public class ReportService {
     }
 
     public byte[] getMonthlyReportToPdf(ReportMonthlyDTO reportMonthlyDTO) {
-        Document document = new Document();
+        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             PdfWriter.getInstance(document, out);
-            document.open();
 
-            document.add(new Paragraph("Monthly Report"));
+            document.open();
+            PdfPTable titleTable = new PdfPTable(2);
+            titleTable.setWidthPercentage(100);
+            titleTable.setWidths(new float[]{50f, 50f});
+
+            PdfPCell leftCell = new PdfPCell(new Phrase("Monthly Report", new Font(Font.HELVETICA, 16, Font.BOLD)));
+            leftCell.setBorder(Rectangle.NO_BORDER);
+            leftCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+            PdfPCell rightCell = new PdfPCell(new Phrase(LocalDateTime.now().toString()));
+            rightCell.setBorder(Rectangle.NO_BORDER);
+            rightCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+            titleTable.addCell(leftCell);
+            titleTable.addCell(rightCell);
+
+            document.add(titleTable);
             document.add(new Paragraph("Report time frame: " + reportMonthlyDTO.getMonthName() + " " + reportMonthlyDTO.getYear()));
-            document.add(new Paragraph(""));
+            document.add(Chunk.NEWLINE);
+
             document.add(new Paragraph("Department: " + reportMonthlyDTO.getDepartmentName()));
             document.add(new Paragraph(""));
             document.add(new Paragraph(""));
             document.add(new Paragraph("Total expenses: " + reportMonthlyDTO.getTotalExpenses()));
+
+            PdfPTable expensesTable = new PdfPTable(3);
+            expensesTable.setWidthPercentage(100);
+
+            Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD);
+            PdfPCell eh1 = new PdfPCell(new Phrase("Delegation Title", headerFont));
+            PdfPCell eh2 = new PdfPCell(new Phrase("Date", headerFont));
+            PdfPCell eh3 = new PdfPCell(new Phrase("Total Expenses", headerFont));
+
+            expensesTable.addCell(eh1);
+            expensesTable.addCell(eh2);
+            expensesTable.addCell(eh3);
+
+            expensesTable.setHeaderRows(1);
+
+            reportMonthlyDTO.getDelegationAllExpenses().forEach((key, value) -> {
+                expensesTable.addCell(key.getTitle());
+                expensesTable.addCell(key.getStartDate().toString());
+                expensesTable.addCell(value.toString());
+            });
+
+            document.add(expensesTable);
+
             document.add(new Paragraph("All worked hours: " + reportMonthlyDTO.getAllWorkHours()));
 
             document.add(new Paragraph("Working hours performed during individual delegations:"));
+            PdfPTable workHoursTable = new PdfPTable(3);
+            workHoursTable.setWidthPercentage(100);
+
+            PdfPCell wh1 = new PdfPCell(new Phrase("Delegation Title", headerFont));
+            PdfPCell wh2= new PdfPCell(new Phrase("Date", headerFont));
+            PdfPCell wh3 = new PdfPCell(new Phrase("Worked Hours", headerFont));
+
+            workHoursTable.addCell(wh1);
+            workHoursTable.addCell(wh2);
+            workHoursTable.addCell(wh3);
+
+            workHoursTable.setHeaderRows(1);
+
             reportMonthlyDTO.getDelegationAllWorkHours().forEach((key, value) -> {
-                document.add(new Paragraph("Delegation: " + key.getTitle() + " - worked hours: " + value));
+                workHoursTable.addCell(key.getTitle());
+                workHoursTable.addCell(key.getStartDate().toString());
+                workHoursTable.addCell(value.toString());
             });
 
-            document.add(new Paragraph("\n" +
-                    "Total expenses incurred during individual delegations:"));
-            reportMonthlyDTO.getDelegationAllExpenses().forEach((key, value) -> {
-                document.add(new Paragraph("Delegation: " + key.getTitle() + " - incurred expenses: " + value));
-            });
+            document.add(workHoursTable);
 
             document.add(new Paragraph("\n" +
                     " List of employees taking part in individual delegations:"));
-            reportMonthlyDTO.getDelegationAllUsers().forEach((key, value) -> {
-                document.add(new Paragraph("Delegation: " + key));
-                value.forEach(user ->
-                        document.add(new Paragraph(user.getFirstName() + " " + user.getLastName())));
-                document.add(new Paragraph("\n"));
-            });
+            for (Map.Entry<Delegation, List<User>> entry : reportMonthlyDTO.getDelegationAllUsers().entrySet()) {
+                Delegation delegation = entry.getKey();
+                List<User> users = entry.getValue();
 
-            document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
+                Font deptFont = new Font(Font.HELVETICA, 14, Font.BOLD);
+                Paragraph header = new Paragraph("Delegation: " + delegation.getTitle() + " - " + delegation.getStartDate().toString(), deptFont);
+                header.setSpacingBefore(15f);
+                header.setSpacingAfter(5f);
+                document.add(header);
+
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                table.setWidths(new float[]{1.5f, 1.5f, 3f});
+                table.setHeaderRows(1);
+
+                Font headFont = new Font(Font.HELVETICA, 12, Font.BOLD);
+
+                PdfPCell c1 = new PdfPCell(new Phrase("First Name", headFont));
+                table.addCell(c1);
+
+                PdfPCell c2 = new PdfPCell(new Phrase("Last Name", headFont));
+                table.addCell(c2);
+
+                PdfPCell c3 = new PdfPCell(new Phrase("Email", headFont));
+                table.addCell(c3);
+
+                for (User u : users) {
+                    table.addCell(u.getFirstName());
+                    table.addCell(u.getLastName());
+                    table.addCell(u.getEmail());
+                }
+
+                document.add(table);
+            }
+
+
             document.close();
         } catch (DocumentException e) {
             throw new RuntimeException("Error during monthly report pdf generating", e);

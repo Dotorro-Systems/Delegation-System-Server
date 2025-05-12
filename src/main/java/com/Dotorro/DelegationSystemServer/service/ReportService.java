@@ -52,11 +52,21 @@ public class ReportService {
                         Collectors.summingLong(WorkLog::getWorkedHours)
                 ));
 
+        Map<String, Double> userTotalExpenses = allExpenses.stream()
+                .collect(Collectors.groupingBy(
+                        expense -> {
+                            User user = expense.getUser();
+                            return user.getFirstName() + " " + user.getLastName();
+                        },
+                        Collectors.summingDouble(Expense::getAmount)
+                ));
+
+
         List<Note> allNotes = delegation.getNotes();
         List<User> users = delegation.getUsers();
 
         return new ReportDelegationDTO(delegation, userAllWorkHours, allWorkedHours,
-                totalExpenses, allNotes, users);
+                userTotalExpenses,totalExpenses, allNotes, users);
     }
 
     public ReportMonthlyDTO generateMonthlyReport(Long departmentId, Integer targetMonth, Integer targetYear) {

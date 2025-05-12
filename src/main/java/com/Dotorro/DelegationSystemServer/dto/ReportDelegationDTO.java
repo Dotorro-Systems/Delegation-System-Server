@@ -13,6 +13,7 @@ public class ReportDelegationDTO {
     private Long allWorkHours;
     private Map<String, Long> userAllWorkHours;
     private Double totalExpenses;
+    private Map<String, Double> userTotalExpenses;
     private String origin;
     private String destination;
     private List<Note> allNotes;
@@ -23,7 +24,7 @@ public class ReportDelegationDTO {
     private Long delegationId;
 
     public ReportDelegationDTO(Delegation delegation, Map<String, Long> userAllWorkHours, Long allWorkHours,
-                               Double totalExpenses, List<Note> allNotes, List<User> allUsers)
+                               Map<String, Double> userTotalExpenses,Double totalExpenses, List<Note> allNotes, List<User> allUsers)
     {
         this.delegationId = delegation.getId();
         this.title = delegation.getTitle();
@@ -34,9 +35,18 @@ public class ReportDelegationDTO {
         this.userAllWorkHours = userAllWorkHours;
         this.allWorkHours = allWorkHours;
         this.totalExpenses = totalExpenses;
+        this.userTotalExpenses = userTotalExpenses;
         this.allNotes = allNotes;
         this.allUsers = allUsers;
         this.departmentName = delegation.getDepartment().getName();
+    }
+
+    public Map<String, Double> getUserTotalExpenses() {
+        return userTotalExpenses;
+    }
+
+    public void setUserTotalExpenses(Map<String, Double> userTotalExpenses) {
+        this.userTotalExpenses = userTotalExpenses;
     }
 
     public String getTitle() {

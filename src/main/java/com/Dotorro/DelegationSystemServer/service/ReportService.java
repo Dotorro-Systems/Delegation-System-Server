@@ -116,41 +116,6 @@ public class ReportService {
         return new ReportMonthlyDTO(monthName, targetYear, department, delegationAllWorkHours, delegationAllExpenses, delegationAllUsers, allWorkedHours, totalExpenses);
     }
 
-    public byte[] getReportToPdf(ReportDelegationDTO reportDelegationDTO) {
-        Document document = new Document();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            PdfWriter.getInstance(document, out);
-            document.open();
-
-            document.add(new Paragraph("Report Delegation"));
-            document.add(new Paragraph("Delegation number: " + reportDelegationDTO.getDelegationId()));
-            document.add(new Paragraph("Title: " + reportDelegationDTO.getTitle()));
-            document.add(new Paragraph("Origin: " + reportDelegationDTO.getOrigin()));
-            document.add(new Paragraph("Destination: " + reportDelegationDTO.getDestination()));
-            document.add(new Paragraph("Start date: " + reportDelegationDTO.getStartDate()));
-            document.add(new Paragraph("End date: " + reportDelegationDTO.getEndDate()));
-            document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
-            document.add(new Paragraph("All worked hours: " + reportDelegationDTO.getAllWorkHours()));
-
-            reportDelegationDTO.getUserAllWorkHours().forEach((key, value) -> {
-                document.add(new Paragraph("Name: " + key + ": worked hours: " + value));
-            });
-
-            reportDelegationDTO.getAllNotes().forEach(note ->
-                    document.add(new Paragraph("Note: " + note)));
-
-            reportDelegationDTO.getAllUsers().forEach(user ->
-                    document.add(new Paragraph("Employee: " + user.getFirstName() + " " + user.getLastName())));
-
-            document.add(new Paragraph("Report generated on: " + LocalDateTime.now()));
-            document.close();
-        } catch (DocumentException e) {
-            throw new RuntimeException("Error during report pdf generating", e);
-        }
-        return out.toByteArray();
-    }
-
     public byte[] getMonthlyReportToPdf(ReportMonthlyDTO reportMonthlyDTO) {
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -273,7 +238,7 @@ public class ReportService {
         return out.toByteArray();
     }
 
-    public byte[] testPdf(ReportDelegationDTO reportDelegationDTO) {
+    public byte[] getReportToPdf(ReportDelegationDTO reportDelegationDTO) {
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {

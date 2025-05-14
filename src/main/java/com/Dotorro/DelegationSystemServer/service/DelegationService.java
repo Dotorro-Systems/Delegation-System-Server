@@ -7,6 +7,7 @@ import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -123,5 +124,12 @@ public class DelegationService {
                 delegation.getEndDate(),
                 delegation.getDepartment().getId()
         );
+    }
+
+    public List<Delegation> getDelegationsByStartDate(LocalDate startDate) {
+        return getAllDelegations()
+                .stream()
+                .filter(delegation -> delegation.getStartDate().toLocalDate().isEqual(startDate))
+                .collect(Collectors.toList());
     }
 }

@@ -56,7 +56,8 @@ public class Delegation {
         this.department = department;
     }
 
-    public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate, LocalDateTime endDate, Department department) {
+    public Delegation(Long id, String title, String origin, String destination, LocalDateTime startDate,
+                      LocalDateTime endDate, Department department) {
         this.id = id;
         this.title = title;
         this.origin = origin;
@@ -141,15 +142,15 @@ public class Delegation {
     public DelegationStatus getStatus() {
         LocalDateTime now = LocalDateTime.now();
 
-        if (endDate.isBefore(now))
+        if (now.isBefore(endDate))
         {
-            if (startDate.isAfter(now))
+            if (now.isAfter(startDate))
                 return DelegationStatus.Active;
 
-            return DelegationStatus.Finished;
+            return DelegationStatus.Planned;
         }
 
-        return DelegationStatus.Planned;
+        return DelegationStatus.Finished;
     }
 
     public List<User> getUsers() {

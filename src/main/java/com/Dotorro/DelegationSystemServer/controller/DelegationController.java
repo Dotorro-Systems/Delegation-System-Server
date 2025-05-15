@@ -80,7 +80,6 @@ public class DelegationController {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("!hasAuthority('EMPLOYEE')")
     @GetMapping(value = "/user/{id}")
     public List<Delegation> getDelegationByUserId(@PathVariable Long id, HttpServletRequest request) throws ApiException {
         User user = userService.getUserByRequest(request);

@@ -10,5 +10,4 @@ import java.util.List;
 
 @Repository
 public interface DelegationUserRepository extends JpaRepository<DelegationUser, DelegationUserKey> {
-    public List<DelegationUser> findByUserId(Long userId);
 }

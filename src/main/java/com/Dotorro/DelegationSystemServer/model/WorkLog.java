@@ -2,6 +2,7 @@ package com.Dotorro.DelegationSystemServer.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,4 +79,10 @@ public class WorkLog {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
+    public Long getWorkedHours(){
+        Duration duration = Duration.between(this.getStartTime(), this.getEndTime());
+        return duration.toHours();
+    }
+
 }

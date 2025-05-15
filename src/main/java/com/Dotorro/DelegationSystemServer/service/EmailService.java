@@ -19,11 +19,13 @@ public class EmailService {
         message.setTo(user.getEmail());
         message.setSubject("Reminder of tomorrows delegation");
         message.setText("Dear " + user.getFirstName() + " "+ user.getLastName() + ", \n \n" +
-                "This is a friendly reminder about your upcoming delegation titled \"" + delegation.getTitle() + "\".\n" +
+                "This is a friendly reminder about your upcoming delegation titled \""
+                        + delegation.getTitle() + "\".\n" +
                         "From: " + delegation.getOrigin() + "\n" +
                         "To: " + delegation.getDestination() + "\n" +
                         "Start date: " + delegation.getStartDate().toLocalDate() + "\n" +
                         "End date: " + delegation.getEndDate().toLocalDate() + "\n\n" +
+                        "Here is link to your delegation: http://localhost:4200/delegations/" + delegation.getId() +
                         "Best regards,\n" +
                         "Dotorro.");
         mailSender.send(message);
@@ -47,7 +49,8 @@ public class EmailService {
                 "From: " + delegation.getOrigin() + "\n" +
                 "To: " + delegation.getDestination() + "\n" +
                 "Start date: " + delegation.getStartDate().toLocalDate() + "\n" +
-                "End date: " + delegation.getEndDate().toLocalDate());
+                "End date: " + delegation.getEndDate().toLocalDate() + "\n"+
+                "Here is link to your delegation: http://localhost:4200/delegations/" + delegation.getId());
         mailSender.send(message);
     }
 }

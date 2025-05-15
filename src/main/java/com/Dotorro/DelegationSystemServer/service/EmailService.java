@@ -37,4 +37,17 @@ public class EmailService {
                 "Thank you for choosing Dotorro.");
         mailSender.send(message);
     }
+
+    public void sendAddToDelegationMail(User user, Delegation delegation){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("You were added to delegation");
+        message.setText("Dear " + user.getFirstName() + " "+ user.getLastName() + ", \n \n" +
+                "Your manager added you to delegation:  \"" + delegation.getTitle() + "\".\n" +
+                "From: " + delegation.getOrigin() + "\n" +
+                "To: " + delegation.getDestination() + "\n" +
+                "Start date: " + delegation.getStartDate().toLocalDate() + "\n" +
+                "End date: " + delegation.getEndDate().toLocalDate());
+        mailSender.send(message);
+    }
 }

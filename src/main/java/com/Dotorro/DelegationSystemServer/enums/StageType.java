@@ -4,5 +4,6 @@ public enum StageType {
     Departure,
     Arrival,
     Meeting,
-    Hotel,
+    Check_In,
+    Check_Out,
 }

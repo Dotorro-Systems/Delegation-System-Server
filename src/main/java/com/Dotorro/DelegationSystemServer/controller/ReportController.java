@@ -20,13 +20,13 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping("/{delegationId}")
+    @GetMapping("/delegation/{delegationId}")
     public ResponseEntity<ReportDelegationDTO> getDelegationReport(@PathVariable Long delegationId) {
         ReportDelegationDTO report = reportService.generateReport(delegationId);
         return ResponseEntity.ok(report);
     }
 
-    @GetMapping("/{departmentId}/{year}/{month}")
+    @GetMapping("/{year}/{month}/department/{departmentId}")
     public ResponseEntity<ReportMonthlyDTO> getMonthlyReport(@PathVariable Long departmentId, @PathVariable Integer year, @PathVariable Integer month) {
         ReportMonthlyDTO report = reportService.generateMonthlyReport(departmentId, year, month);
         return ResponseEntity.ok(report);

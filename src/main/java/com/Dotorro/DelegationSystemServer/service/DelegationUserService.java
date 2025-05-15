@@ -16,13 +16,16 @@ public class DelegationUserService {
     private final DelegationUserRepository delegationUserRepository;
     private final DelegationService delegationService;
     private final UserService userService;
+    private final EmailService emailService;
 
     public DelegationUserService(DelegationUserRepository delegationUserRepository,
                                  DelegationService delegationService,
-                                 UserService userService) {
+                                 UserService userService,
+                                 EmailService emailService) {
         this.delegationUserRepository = delegationUserRepository;
         this.delegationService = delegationService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     public void validateDelegationUser(DelegationUser delegationUser){
@@ -46,6 +49,9 @@ public class DelegationUserService {
     }
 
     public DelegationUser createDelegationUser(DelegationUserDTO delegationUserDTO) {
+        User user = userService.getUserById(delegationUserDTO.getUserId());
+        Delegation delegation = delegationService.getDelegationById(delegationUserDTO.getDelegationId());
+        emailService.sendAddToDelegationMail(user, delegation);
         return delegationUserRepository.save(convertToEntity(delegationUserDTO));
     }
 

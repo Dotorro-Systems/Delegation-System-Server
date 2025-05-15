@@ -33,13 +33,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final DepartmentService departmentService;
     private final AuthenticationService authenticationService;
+    private final EmailService emailService;
 
     public UserService(UserRepository userRepository,
                        DepartmentService departmentService,
-                       AuthenticationService authenticationService) {
+                       AuthenticationService authenticationService,
+                       EmailService emailService) {
         this.userRepository = userRepository;
         this.departmentService = departmentService;
         this.authenticationService = authenticationService;
+        this.emailService = emailService;
     }
 
     public void validateUser(User user){
@@ -106,6 +109,7 @@ public class UserService {
 
         user.setPassword(hashPassword(user.getPassword()));
 
+        emailService.sendWelcomeMail(user);
         return userRepository.save(user);
     }
 

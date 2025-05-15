@@ -28,4 +28,13 @@ public class EmailService {
                         "Dotorro.");
         mailSender.send(message);
     }
+
+    public void sendWelcomeMail(User user){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Welcome to Dotorro");
+        message.setText("Hey " + user.getFirstName() + " "+ user.getLastName() + ", \n \n" +
+                "Thank you for choosing Dotorro.");
+        mailSender.send(message);
+    }
 }

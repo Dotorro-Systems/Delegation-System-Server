@@ -3,6 +3,7 @@ package com.Dotorro.DelegationSystemServer.service;
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.User;
 import com.Dotorro.DelegationSystemServer.repository.DelegationRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,8 @@ public class DelegationMailService {
         this.delegationService = delegationService;
     }
 
-    @Scheduled(cron = "0 45 14 * * *")
+    @Scheduled(cron = "0 00 08 * * *")
+    @Transactional
     public void sendEmails(){
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<Delegation> delegations = delegationService.getDelegationsByStartDate(tomorrow);
@@ -36,7 +38,7 @@ public class DelegationMailService {
 
     public void sendEmail(User user, List<Delegation> delegations){
         for(Delegation delegation : delegations){
-            emailService.sendReminderTomorrowDelegation(user.getEmail(), delegation);
+            emailService.sendReminderTomorrowDelegation(user, delegation);
         }
     }
 }

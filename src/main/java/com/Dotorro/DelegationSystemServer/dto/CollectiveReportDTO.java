@@ -2,16 +2,16 @@ package com.Dotorro.DelegationSystemServer.dto;
 
 import com.Dotorro.DelegationSystemServer.model.Delegation;
 import com.Dotorro.DelegationSystemServer.model.Department;
-import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.model.User;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class ReportMonthlyDTO {
-    private String monthName;
-    private Integer year;
+public class CollectiveReportDTO {
+    private String title;
+    private LocalDate startPeriod;
+    private LocalDate endPeriod;
     private String departmentName;
     private Map<Delegation, Long> delegationAllWorkHours;
     private Map<Delegation, Double> delegationAllExpenses;
@@ -19,13 +19,15 @@ public class ReportMonthlyDTO {
     private Double totalExpenses;
     private Long allWorkHours;
 
-    public ReportMonthlyDTO(String monthName, Integer year, Department department,
-                            Map<Delegation, Long> delegationAllWorkHours, Map<Delegation, Double> delegationAllExpenses,
-                            Map<Delegation, List<User>> delegationAllUsers,
-                            Long allWorkHours, Double totalExpenses) {
+    public CollectiveReportDTO(String title,
+                               LocalDate startPeriod, LocalDate endPeriod, Department department,
+                               Map<Delegation, Long> delegationAllWorkHours, Map<Delegation, Double> delegationAllExpenses,
+                               Map<Delegation, List<User>> delegationAllUsers,
+                               Long allWorkHours, Double totalExpenses) {
 
-        this.monthName = monthName;
-        this.year = year;
+        this.title = title;
+        this.startPeriod = startPeriod;
+        this.endPeriod = endPeriod;
         this.allWorkHours = allWorkHours;
         this.totalExpenses = totalExpenses;
         this.departmentName = department.getName();
@@ -34,20 +36,28 @@ public class ReportMonthlyDTO {
         this.delegationAllUsers = delegationAllUsers;
     }
 
-    public String getMonthName() {
-        return monthName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMonthName(String monthName) {
-        this.monthName = monthName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Integer getYear() {
-        return year;
+    public LocalDate getStartPeriod() {
+        return startPeriod;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setStartPeriod(LocalDate startPeriod) {
+        this.startPeriod = startPeriod;
+    }
+
+    public LocalDate getEndPeriod() {
+        return endPeriod;
+    }
+
+    public void setEndPeriod(LocalDate endPeriod) {
+        this.endPeriod = endPeriod;
     }
 
     public String getDepartmentName() {

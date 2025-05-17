@@ -48,7 +48,20 @@ public class ReportController {
     @GetMapping(value = "/pdf/{departmentId}/{year}/{month}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getMonthlyPdfReport(@PathVariable Long departmentId, @PathVariable Integer year, @PathVariable Integer month) {
         CollectiveReportDTO report = reportService.generateMonthlyReport(departmentId, month, year);
-        byte[] pdf = reportService.getMonthlyReportToPdf(report);
+        byte[] pdf = reportService.getCollectiveReportToPdf(report);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.attachment()
+                .filename("report.pdf").build());
+
+        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/pdf/{departmentId}/{year}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> getYearlyPdfReport(@PathVariable Long departmentId, @PathVariable Integer year) {
+        CollectiveReportDTO report = reportService.generateYearlyReport(departmentId, year);
+        byte[] pdf = reportService.getCollectiveReportToPdf(report);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

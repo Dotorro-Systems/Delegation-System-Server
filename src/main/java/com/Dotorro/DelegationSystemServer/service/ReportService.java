@@ -83,10 +83,29 @@ public class ReportService {
 
         LocalDate endOfMonth = yearMonth.atEndOfMonth();
 
-        return generateCollectiveReport(monthlyDelegations, startOfMonth, endOfMonth, department);
+        return generateCollectiveReport("Monthly Report", monthlyDelegations, startOfMonth, endOfMonth, department);
     }
 
-    public CollectiveReportDTO generateCollectiveReport(List<Delegation> delegations, LocalDate startDate, LocalDate endDate, Department department)
+    public CollectiveReportDTO generateYearlyReport(Long departmentId, Integer targetYear) {
+        List<Delegation> allDelegations = delegationService.getAllDelegations();
+        Department department = departmentService.getDepartmentById(departmentId);
+
+        List<Delegation> yearlyDelegations = allDelegations.stream()
+                .filter(delegation -> delegation.getStartDate().getYear() == targetYear)
+                .filter(delegation -> delegation.getDepartment().equals(department))
+                .toList();
+
+        YearMonth januaryMonth = YearMonth.of(targetYear, 1);
+        YearMonth decemberMonth = YearMonth.of(targetYear, 12);
+
+        LocalDate startOfMonth = januaryMonth.atDay(1);
+
+        LocalDate endOfMonth = decemberMonth.atEndOfMonth();
+
+        return generateCollectiveReport("Yearly Report", yearlyDelegations, startOfMonth, endOfMonth, department);
+    }
+
+    public CollectiveReportDTO generateCollectiveReport(String title, List<Delegation> delegations, LocalDate startDate, LocalDate endDate, Department department)
     {
         Long allWorkedHours = delegations.stream()
                 .flatMap(delegation -> delegation.getWorkLogs().stream())
@@ -120,10 +139,10 @@ public class ReportService {
                         Delegation::getUsers
                 ));
 
-        return new CollectiveReportDTO(startDate, endDate, department, delegationAllWorkHours, delegationAllExpenses, delegationAllUsers, allWorkedHours, totalExpenses);
+        return new CollectiveReportDTO(title, startDate, endDate, department, delegationAllWorkHours, delegationAllExpenses, delegationAllUsers, allWorkedHours, totalExpenses);
     }
 
-    public byte[] getMonthlyReportToPdf(CollectiveReportDTO collectiveReportDTO) {
+    public byte[] getCollectiveReportToPdf(CollectiveReportDTO collectiveReportDTO) {
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
@@ -134,7 +153,7 @@ public class ReportService {
             titleTable.setWidthPercentage(100);
             titleTable.setWidths(new float[]{50f, 50f});
 
-            PdfPCell leftCell = new PdfPCell(new Phrase("Monthly Report", new Font(Font.HELVETICA, 16, Font.BOLD)));
+            PdfPCell leftCell = new PdfPCell(new Phrase(collectiveReportDTO.getTitle(), new Font(Font.HELVETICA, 16, Font.BOLD)));
             leftCell.setBorder(Rectangle.NO_BORDER);
             leftCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CollectiveReportDTO {
+    private String title;
     private LocalDate startPeriod;
     private LocalDate endPeriod;
     private String departmentName;
@@ -18,11 +19,13 @@ public class CollectiveReportDTO {
     private Double totalExpenses;
     private Long allWorkHours;
 
-    public CollectiveReportDTO(LocalDate startPeriod, LocalDate endPeriod, Department department,
+    public CollectiveReportDTO(String title,
+                               LocalDate startPeriod, LocalDate endPeriod, Department department,
                                Map<Delegation, Long> delegationAllWorkHours, Map<Delegation, Double> delegationAllExpenses,
                                Map<Delegation, List<User>> delegationAllUsers,
                                Long allWorkHours, Double totalExpenses) {
 
+        this.title = title;
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
         this.allWorkHours = allWorkHours;
@@ -31,6 +34,14 @@ public class CollectiveReportDTO {
         this.delegationAllWorkHours = delegationAllWorkHours;
         this.delegationAllExpenses = delegationAllExpenses;
         this.delegationAllUsers = delegationAllUsers;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public LocalDate getStartPeriod() {

@@ -1,23 +1,21 @@
 package com.Dotorro.DelegationSystemServer.service;
 
-import com.Dotorro.DelegationSystemServer.dto.ReportMonthlyDTO;
+import com.Dotorro.DelegationSystemServer.dto.CollectiveReportDTO;
 import com.Dotorro.DelegationSystemServer.model.*;
 import com.Dotorro.DelegationSystemServer.dto.ReportDelegationDTO;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.Document;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +67,7 @@ public class ReportService {
                 userTotalExpenses,totalExpenses, allNotes, users);
     }
 
-    public ReportMonthlyDTO generateMonthlyReport(Long departmentId, Integer targetMonth, Integer targetYear) {
+    public CollectiveReportDTO generateMonthlyReport(Long departmentId, Integer targetMonth, Integer targetYear) {
         List<Delegation> allDelegations = delegationService.getAllDelegations();
         Department department = departmentService.getDepartmentById(departmentId);
 
@@ -79,17 +77,28 @@ public class ReportService {
                 .filter(delegation -> delegation.getDepartment().equals(department))
                 .toList();
 
-        Long allWorkedHours = monthlyDelegations.stream()
+        YearMonth yearMonth = YearMonth.of(targetYear, targetMonth);
+
+        LocalDate startOfMonth = yearMonth.atDay(1);
+
+        LocalDate endOfMonth = yearMonth.atEndOfMonth();
+
+        return generateCollectiveReport(monthlyDelegations, startOfMonth, endOfMonth, department);
+    }
+
+    public CollectiveReportDTO generateCollectiveReport(List<Delegation> delegations, LocalDate startDate, LocalDate endDate, Department department)
+    {
+        Long allWorkedHours = delegations.stream()
                 .flatMap(delegation -> delegation.getWorkLogs().stream())
                 .mapToLong(WorkLog::getWorkedHours)
                 .sum();
 
-        double totalExpenses = monthlyDelegations.stream()
+        double totalExpenses = delegations.stream()
                 .flatMap(delegation -> delegation.getExpenses().stream())
                 .mapToDouble(Expense::getAmount)
                 .sum();
 
-        Map<Delegation, Long> delegationAllWorkHours = monthlyDelegations.stream()
+        Map<Delegation, Long> delegationAllWorkHours = delegations.stream()
                 .collect(Collectors.toMap(
                         delegation -> delegation,
                         delegation -> delegation.getWorkLogs().stream()
@@ -97,7 +106,7 @@ public class ReportService {
                                 .sum()
                 ));
 
-        Map<Delegation, Double> delegationAllExpenses = monthlyDelegations.stream()
+        Map<Delegation, Double> delegationAllExpenses = delegations.stream()
                 .collect(Collectors.toMap(
                         delegation -> delegation,
                         delegation -> delegation.getExpenses().stream()
@@ -105,18 +114,16 @@ public class ReportService {
                                 .sum()
                 ));
 
-        Map<Delegation, List<User>> delegationAllUsers = monthlyDelegations.stream()
+        Map<Delegation, List<User>> delegationAllUsers = delegations.stream()
                 .collect(Collectors.toMap(
                         delegation -> delegation,
                         Delegation::getUsers
                 ));
 
-        String monthName = monthlyDelegations.get(0).getStartDate().getMonth().toString();
-
-        return new ReportMonthlyDTO(monthName, targetYear, department, delegationAllWorkHours, delegationAllExpenses, delegationAllUsers, allWorkedHours, totalExpenses);
+        return new CollectiveReportDTO(startDate, endDate, department, delegationAllWorkHours, delegationAllExpenses, delegationAllUsers, allWorkedHours, totalExpenses);
     }
 
-    public byte[] getMonthlyReportToPdf(ReportMonthlyDTO reportMonthlyDTO) {
+    public byte[] getMonthlyReportToPdf(CollectiveReportDTO collectiveReportDTO) {
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
@@ -139,13 +146,13 @@ public class ReportService {
             titleTable.addCell(rightCell);
 
             document.add(titleTable);
-            document.add(new Paragraph("Report time frame: " + reportMonthlyDTO.getMonthName() + " " + reportMonthlyDTO.getYear()));
+            document.add(new Paragraph("Report time frame: " + collectiveReportDTO.getStartPeriod() + " - " + collectiveReportDTO.getEndPeriod()));
             document.add(Chunk.NEWLINE);
 
-            document.add(new Paragraph("Department: " + reportMonthlyDTO.getDepartmentName()));
+            document.add(new Paragraph("Department: " + collectiveReportDTO.getDepartmentName()));
             document.add(new Paragraph(""));
             document.add(new Paragraph(""));
-            document.add(new Paragraph("Total expenses: " + reportMonthlyDTO.getTotalExpenses()));
+            document.add(new Paragraph("Total expenses: " + collectiveReportDTO.getTotalExpenses()));
 
             PdfPTable expensesTable = new PdfPTable(3);
             expensesTable.setWidthPercentage(100);
@@ -161,7 +168,7 @@ public class ReportService {
 
             expensesTable.setHeaderRows(1);
 
-            reportMonthlyDTO.getDelegationAllExpenses().forEach((key, value) -> {
+            collectiveReportDTO.getDelegationAllExpenses().forEach((key, value) -> {
                 expensesTable.addCell(key.getTitle());
                 expensesTable.addCell(key.getStartDate().toString());
                 expensesTable.addCell(value.toString());
@@ -169,7 +176,7 @@ public class ReportService {
 
             document.add(expensesTable);
 
-            document.add(new Paragraph("All worked hours: " + reportMonthlyDTO.getAllWorkHours()));
+            document.add(new Paragraph("All worked hours: " + collectiveReportDTO.getAllWorkHours()));
 
             document.add(new Paragraph("Working hours performed during individual delegations:"));
             PdfPTable workHoursTable = new PdfPTable(3);
@@ -185,7 +192,7 @@ public class ReportService {
 
             workHoursTable.setHeaderRows(1);
 
-            reportMonthlyDTO.getDelegationAllWorkHours().forEach((key, value) -> {
+            collectiveReportDTO.getDelegationAllWorkHours().forEach((key, value) -> {
                 workHoursTable.addCell(key.getTitle());
                 workHoursTable.addCell(key.getStartDate().toString());
                 workHoursTable.addCell(value.toString());
@@ -195,7 +202,7 @@ public class ReportService {
 
             document.add(new Paragraph("\n" +
                     " List of employees taking part in individual delegations:"));
-            for (Map.Entry<Delegation, List<User>> entry : reportMonthlyDTO.getDelegationAllUsers().entrySet()) {
+            for (Map.Entry<Delegation, List<User>> entry : collectiveReportDTO.getDelegationAllUsers().entrySet()) {
                 Delegation delegation = entry.getKey();
                 List<User> users = entry.getValue();
 

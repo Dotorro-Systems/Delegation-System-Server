@@ -1,6 +1,6 @@
 package com.Dotorro.DelegationSystemServer.controller;
 
-import com.Dotorro.DelegationSystemServer.dto.ReportMonthlyDTO;
+import com.Dotorro.DelegationSystemServer.dto.CollectiveReportDTO;
 import com.Dotorro.DelegationSystemServer.service.ReportService;
 import com.Dotorro.DelegationSystemServer.dto.ReportDelegationDTO;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +27,8 @@ public class ReportController {
     }
 
     @GetMapping("/{year}/{month}/department/{departmentId}")
-    public ResponseEntity<ReportMonthlyDTO> getMonthlyReport(@PathVariable Long departmentId, @PathVariable Integer year, @PathVariable Integer month) {
-        ReportMonthlyDTO report = reportService.generateMonthlyReport(departmentId, year, month);
+    public ResponseEntity<CollectiveReportDTO> getMonthlyReport(@PathVariable Long departmentId, @PathVariable Integer year, @PathVariable Integer month) {
+        CollectiveReportDTO report = reportService.generateMonthlyReport(departmentId, year, month);
         return ResponseEntity.ok(report);
     }
 
@@ -47,7 +47,7 @@ public class ReportController {
 
     @GetMapping(value = "/pdf/{departmentId}/{year}/{month}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getMonthlyPdfReport(@PathVariable Long departmentId, @PathVariable Integer year, @PathVariable Integer month) {
-        ReportMonthlyDTO report = reportService.generateMonthlyReport(departmentId,month,year);
+        CollectiveReportDTO report = reportService.generateMonthlyReport(departmentId, month, year);
         byte[] pdf = reportService.getMonthlyReportToPdf(report);
 
         HttpHeaders headers = new HttpHeaders();

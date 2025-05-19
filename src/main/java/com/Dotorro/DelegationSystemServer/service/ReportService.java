@@ -195,7 +195,14 @@ public class ReportService {
                 expensesTable.addCell(value.toString());
             });
 
-            document.add(expensesTable);
+            if(collectiveReportDTO.getDelegationAllExpenses().isEmpty())
+            {
+                document.add(new Paragraph("No expenses recorded"));
+            }
+            else
+            {
+                document.add(expensesTable);
+            }
 
             document.add(new Paragraph("All worked hours: " + collectiveReportDTO.getAllWorkHours()));
 
@@ -219,7 +226,14 @@ public class ReportService {
                 workHoursTable.addCell(value.toString());
             });
 
-            document.add(workHoursTable);
+            if(collectiveReportDTO.getDelegationAllWorkHours().isEmpty())
+            {
+                document.add(new Paragraph("No work hours recorded"));
+            }
+            else
+            {
+                document.add(workHoursTable);
+            }
 
             document.add(new Paragraph("\n" +
                     " List of employees taking part in individual delegations:"));
@@ -233,29 +247,36 @@ public class ReportService {
                 header.setSpacingAfter(5f);
                 document.add(header);
 
-                PdfPTable table = new PdfPTable(3);
-                table.setWidthPercentage(100);
-                table.setWidths(new float[]{1.5f, 1.5f, 3f});
-                table.setHeaderRows(1);
-
-                Font headFont = new Font(Font.HELVETICA, 12, Font.BOLD);
-
-                PdfPCell c1 = new PdfPCell(new Phrase("First Name", headFont));
-                table.addCell(c1);
-
-                PdfPCell c2 = new PdfPCell(new Phrase("Last Name", headFont));
-                table.addCell(c2);
-
-                PdfPCell c3 = new PdfPCell(new Phrase("Email", headFont));
-                table.addCell(c3);
-
-                for (User u : users) {
-                    table.addCell(u.getFirstName());
-                    table.addCell(u.getLastName());
-                    table.addCell(u.getEmail());
+                if(users.isEmpty())
+                {
+                    document.add(new Paragraph("No employees assigned to delegation"));
                 }
+                else
+                {
+                    PdfPTable table = new PdfPTable(3);
+                    table.setWidthPercentage(100);
+                    table.setWidths(new float[]{1.5f, 1.5f, 3f});
+                    table.setHeaderRows(1);
 
-                document.add(table);
+                    Font headFont = new Font(Font.HELVETICA, 12, Font.BOLD);
+
+                    PdfPCell c1 = new PdfPCell(new Phrase("First Name", headFont));
+                    table.addCell(c1);
+
+                    PdfPCell c2 = new PdfPCell(new Phrase("Last Name", headFont));
+                    table.addCell(c2);
+
+                    PdfPCell c3 = new PdfPCell(new Phrase("Email", headFont));
+                    table.addCell(c3);
+
+                    for (User u : users) {
+                        table.addCell(u.getFirstName());
+                        table.addCell(u.getLastName());
+                        table.addCell(u.getEmail());
+                    }
+                    
+                    document.add(table);
+                }
             }
 
 
@@ -321,7 +342,14 @@ public class ReportService {
                 expensesTable.addCell(value.toString());
             });
 
-            document.add(expensesTable);
+            if(reportDelegationDTO.getUserTotalExpenses().isEmpty())
+            {
+                document.add(new Paragraph("No expenses performed during delegation"));
+            }
+            else
+            {
+                document.add(expensesTable);
+            }
 
             document.add(new Paragraph("\n" +
                     "All worked hours: " + reportDelegationDTO.getAllWorkHours()));
@@ -342,7 +370,14 @@ public class ReportService {
                 workHoursTable.addCell(value.toString());
             });
 
-            document.add(workHoursTable);
+            if(reportDelegationDTO.getUserAllWorkHours().isEmpty())
+            {
+                document.add(new Paragraph("No work hours performed during delegation"));
+            }
+            else
+            {
+                document.add(workHoursTable);
+            }
 
             document.add(new Paragraph("\n" +
                     "Notes taken during delegation"));
@@ -365,7 +400,14 @@ public class ReportService {
                 notesTable.addCell(note.getUser().getFirstName() + note.getUser().getLastName());
                 notesTable.addCell(note.getContent());
             });
-            document.add(notesTable);
+            if(reportDelegationDTO.getAllNotes().isEmpty())
+            {
+                document.add(new Paragraph("No notes performed during delegation"));
+            }
+            else
+            {
+                document.add(notesTable);
+            }
             document.add(new Paragraph("\n"));
 
             document.close();

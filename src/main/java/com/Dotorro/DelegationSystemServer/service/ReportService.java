@@ -17,6 +17,7 @@ import com.lowagie.text.Document;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class ReportService {
@@ -152,12 +153,13 @@ public class ReportService {
             PdfPTable titleTable = new PdfPTable(2);
             titleTable.setWidthPercentage(100);
             titleTable.setWidths(new float[]{50f, 50f});
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
 
             PdfPCell leftCell = new PdfPCell(new Phrase(collectiveReportDTO.getTitle(), new Font(Font.HELVETICA, 16, Font.BOLD)));
             leftCell.setBorder(Rectangle.NO_BORDER);
             leftCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-            PdfPCell rightCell = new PdfPCell(new Phrase(LocalDateTime.now().toString()));
+            PdfPCell rightCell = new PdfPCell(new Phrase(LocalDateTime.now().format(formatter)));
             rightCell.setBorder(Rectangle.NO_BORDER);
             rightCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
@@ -165,7 +167,7 @@ public class ReportService {
             titleTable.addCell(rightCell);
 
             document.add(titleTable);
-            document.add(new Paragraph("Report time frame: " + collectiveReportDTO.getStartPeriod() + " - " + collectiveReportDTO.getEndPeriod()));
+            document.add(new Paragraph("Report time frame: " + collectiveReportDTO.getStartPeriod().format(formatter) + " - " + collectiveReportDTO.getEndPeriod().format(formatter)));
             document.add(Chunk.NEWLINE);
 
             document.add(new Paragraph("Department: " + collectiveReportDTO.getDepartmentName()));
@@ -213,7 +215,7 @@ public class ReportService {
 
             collectiveReportDTO.getDelegationAllWorkHours().forEach((key, value) -> {
                 workHoursTable.addCell(key.getTitle());
-                workHoursTable.addCell(key.getStartDate().toString());
+                workHoursTable.addCell(key.getStartDate().format(formatter));
                 workHoursTable.addCell(value.toString());
             });
 
@@ -274,12 +276,14 @@ public class ReportService {
             PdfPTable titleTable = new PdfPTable(2);
             titleTable.setWidthPercentage(100);
             titleTable.setWidths(new float[]{50f, 50f});
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+
 
             PdfPCell leftCell = new PdfPCell(new Phrase("Delegation Report", new Font(Font.HELVETICA, 16, Font.BOLD)));
             leftCell.setBorder(Rectangle.NO_BORDER);
             leftCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-            PdfPCell rightCell = new PdfPCell(new Phrase(LocalDateTime.now().toString()));
+            PdfPCell rightCell = new PdfPCell(new Phrase(LocalDateTime.now().format(formatter)));
             rightCell.setBorder(Rectangle.NO_BORDER);
             rightCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
@@ -294,7 +298,7 @@ public class ReportService {
             document.add(Chunk.NEWLINE);
 
             document.add(new Paragraph("Title: " + reportDelegationDTO.getTitle()));
-            document.add(new Paragraph("Duration of the delegation: " + reportDelegationDTO.getStartDate() + " - " + reportDelegationDTO.getEndDate()));
+            document.add(new Paragraph("Duration of the delegation: " + reportDelegationDTO.getStartDate().format(formatter) + " - " + reportDelegationDTO.getEndDate().format(formatter)));
             document.add(new Paragraph("Origin: " + reportDelegationDTO.getOrigin()));
             document.add(new Paragraph("Destination: " + reportDelegationDTO.getDestination()));
 
@@ -305,7 +309,7 @@ public class ReportService {
 
             Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD);
             PdfPCell eh1 = new PdfPCell(new Phrase("Name", headerFont));
-            PdfPCell eh2 = new PdfPCell(new Phrase("TotalExpenses", headerFont));
+            PdfPCell eh2 = new PdfPCell(new Phrase("Total expenses", headerFont));
 
             expensesTable.addCell(eh1);
             expensesTable.addCell(eh2);
@@ -357,7 +361,7 @@ public class ReportService {
             notesTable.setHeaderRows(1);
 
             reportDelegationDTO.getAllNotes().forEach(note -> {
-                notesTable.addCell(note.getCreatedAt().toString());
+                notesTable.addCell(note.getCreatedAt().format(formatter));
                 notesTable.addCell(note.getUser().getFirstName() + note.getUser().getLastName());
                 notesTable.addCell(note.getContent());
             });

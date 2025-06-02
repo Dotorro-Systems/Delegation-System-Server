@@ -81,7 +81,6 @@ public class ReportService {
         YearMonth yearMonth = YearMonth.of(targetYear, targetMonth);
 
         LocalDate startOfMonth = yearMonth.atDay(1);
-
         LocalDate endOfMonth = yearMonth.atEndOfMonth();
 
         return generateCollectiveReport("Monthly Report", monthlyDelegations, startOfMonth, endOfMonth, department);
@@ -167,13 +166,12 @@ public class ReportService {
             titleTable.addCell(rightCell);
 
             document.add(titleTable);
-            document.add(new Paragraph("Report time frame: " + collectiveReportDTO.getStartPeriod().format(formatter) + " - " + collectiveReportDTO.getEndPeriod().format(formatter)));
+            document.add(new Paragraph("Report time frame: " + collectiveReportDTO.getStartPeriod() + " - " + collectiveReportDTO.getEndPeriod()));
             document.add(Chunk.NEWLINE);
 
             document.add(new Paragraph("Department: " + collectiveReportDTO.getDepartmentName()));
-            document.add(new Paragraph(""));
-            document.add(new Paragraph(""));
             document.add(new Paragraph("Total expenses: " + collectiveReportDTO.getTotalExpenses()));
+            document.add(new Paragraph("\n"));
 
             PdfPTable expensesTable = new PdfPTable(3);
             expensesTable.setWidthPercentage(100);
@@ -191,7 +189,7 @@ public class ReportService {
 
             collectiveReportDTO.getDelegationAllExpenses().forEach((key, value) -> {
                 expensesTable.addCell(key.getTitle());
-                expensesTable.addCell(key.getStartDate().toString());
+                expensesTable.addCell(key.getStartDate().format(formatter));
                 expensesTable.addCell(value.toString());
             });
 
@@ -207,6 +205,7 @@ public class ReportService {
             document.add(new Paragraph("All worked hours: " + collectiveReportDTO.getAllWorkHours()));
 
             document.add(new Paragraph("Working hours performed during individual delegations:"));
+            document.add(new Paragraph("\n"));
             PdfPTable workHoursTable = new PdfPTable(3);
             workHoursTable.setWidthPercentage(100);
 
@@ -242,7 +241,7 @@ public class ReportService {
                 List<User> users = entry.getValue();
 
                 Font deptFont = new Font(Font.HELVETICA, 14, Font.BOLD);
-                Paragraph header = new Paragraph("Delegation: " + delegation.getTitle() + " - " + delegation.getStartDate().toString(), deptFont);
+                Paragraph header = new Paragraph("Delegation: " + delegation.getTitle() + " - " + delegation.getStartDate().format(formatter), deptFont);
                 header.setSpacingBefore(15f);
                 header.setSpacingAfter(5f);
                 document.add(header);

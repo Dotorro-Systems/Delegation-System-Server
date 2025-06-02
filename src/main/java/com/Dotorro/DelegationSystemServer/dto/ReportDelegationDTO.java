@@ -1,6 +1,7 @@
 package com.Dotorro.DelegationSystemServer.dto;
 
 import com.Dotorro.DelegationSystemServer.model.Delegation;
+import com.Dotorro.DelegationSystemServer.model.Expense;
 import com.Dotorro.DelegationSystemServer.model.Note;
 import com.Dotorro.DelegationSystemServer.model.User;
 
@@ -14,6 +15,7 @@ public class ReportDelegationDTO {
     private Map<String, Long> userAllWorkHours;
     private Double totalExpenses;
     private Map<String, Double> userTotalExpenses;
+    private Map<User, List<Expense>> userByExpenses;
     private String origin;
     private String destination;
     private List<Note> allNotes;
@@ -24,7 +26,7 @@ public class ReportDelegationDTO {
     private Long delegationId;
 
     public ReportDelegationDTO(Delegation delegation, Map<String, Long> userAllWorkHours, Long allWorkHours,
-                               Map<String, Double> userTotalExpenses,Double totalExpenses, List<Note> allNotes, List<User> allUsers)
+                               Map<String, Double> userTotalExpenses, Map<User, List<Expense>> userByExpenses, Double totalExpenses, List<Note> allNotes, List<User> allUsers)
     {
         this.delegationId = delegation.getId();
         this.title = delegation.getTitle();
@@ -39,6 +41,15 @@ public class ReportDelegationDTO {
         this.allNotes = allNotes;
         this.allUsers = allUsers;
         this.departmentName = delegation.getDepartment().getName();
+        this.userByExpenses = userByExpenses;
+    }
+
+    public Map<User, List<Expense>> getUserByExpenses() {
+        return userByExpenses;
+    }
+
+    public void setUserByExpenses(Map<User, List<Expense>> userByExpenses) {
+        this.userByExpenses = userByExpenses;
     }
 
     public Map<String, Double> getUserTotalExpenses() {

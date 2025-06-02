@@ -63,9 +63,12 @@ public class ReportService {
 
         List<Note> allNotes = delegation.getNotes();
         List<User> users = delegation.getUsers();
+        Map<User, List<Expense>> expenseByUser = delegation.getExpenses()
+                .stream()
+                .collect(Collectors.groupingBy(Expense::getUser));
 
         return new ReportDelegationDTO(delegation, userAllWorkHours, allWorkedHours,
-                userTotalExpenses,totalExpenses, allNotes, users);
+                userTotalExpenses, expenseByUser, totalExpenses, allNotes, users);
     }
 
     public CollectiveReportDTO generateMonthlyReport(Long departmentId, Integer targetMonth, Integer targetYear) {
@@ -314,45 +317,53 @@ public class ReportService {
 
             document.add(Chunk.NEWLINE);
 
-            document.add(new Paragraph("Delegation number: " + reportDelegationDTO.getDelegationId()));
+            document.add(new Paragraph("Delegation ID: " + reportDelegationDTO.getDelegationId()));
             document.add(Chunk.NEWLINE);
 
             document.add(new Paragraph("Title: " + reportDelegationDTO.getTitle()));
             document.add(new Paragraph("Duration of the delegation: " + reportDelegationDTO.getStartDate().format(formatter) + " - " + reportDelegationDTO.getEndDate().format(formatter)));
             document.add(new Paragraph("Origin: " + reportDelegationDTO.getOrigin()));
             document.add(new Paragraph("Destination: " + reportDelegationDTO.getDestination()));
-
             document.add(new Paragraph("Total expenses: " + reportDelegationDTO.getTotalExpenses()));
-            document.add(Chunk.NEWLINE);
-            PdfPTable expensesTable = new PdfPTable(2);
-            expensesTable.setWidthPercentage(100);
+            document.add(new Paragraph("Total worked hours: " + reportDelegationDTO.getAllWorkHours()));
+            document.add(new Paragraph("\n"));
 
             Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD);
-            PdfPCell eh1 = new PdfPCell(new Phrase("Name", headerFont));
-            PdfPCell eh2 = new PdfPCell(new Phrase("Total expenses", headerFont));
 
-            expensesTable.addCell(eh1);
-            expensesTable.addCell(eh2);
+            document.add(new Paragraph("Expenses", headerFont));
+            document.add(new Paragraph("\n"));
+            PdfPTable expensesTables = new PdfPTable(4);
+            expensesTables.setWidthPercentage(100);
 
-            expensesTable.setHeaderRows(1);
+            PdfPCell eh1 = new PdfPCell(new Phrase("Owner", headerFont));
+            PdfPCell eh2 = new PdfPCell(new Phrase("Date", headerFont));
+            PdfPCell eh3 = new PdfPCell(new Phrase("Description", headerFont));
+            PdfPCell eh4 = new PdfPCell(new Phrase("Amount", headerFont));
 
-            reportDelegationDTO.getUserTotalExpenses().forEach((key, value) -> {
-                expensesTable.addCell(key);
-                expensesTable.addCell(value.toString());
+            expensesTables.addCell(eh1);
+            expensesTables.addCell(eh2);
+            expensesTables.addCell(eh3);
+            expensesTables.addCell(eh4);
+
+            expensesTables.setHeaderRows(1);
+
+            reportDelegationDTO.getUserByExpenses().forEach((key, value) -> {
+                value.forEach(expense -> {
+                    expensesTables.addCell(key.getFirstName() + " " + key.getLastName());
+                    expensesTables.addCell(expense.getCreatedAt().format(formatter));
+                    expensesTables.addCell(expense.getDescription());
+                    expensesTables.addCell(expense.getAmount().toString());
+                });
             });
 
-            if(reportDelegationDTO.getUserTotalExpenses().isEmpty())
-            {
-                document.add(new Paragraph("No expenses performed during delegation"));
-            }
+            if (reportDelegationDTO.getUserByExpenses().isEmpty())
+                document.add(new Paragraph("No expenses made during delegation"));
             else
-            {
-                document.add(expensesTable);
-            }
+                document.add(expensesTables);
 
-            document.add(new Paragraph("\n" +
-                    "All worked hours: " + reportDelegationDTO.getAllWorkHours()));
-            document.add(Chunk.NEWLINE);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("Work Hours", headerFont));
+            document.add(new Paragraph("\n"));
             PdfPTable workHoursTable = new PdfPTable(2);
             workHoursTable.setWidthPercentage(100);
 
@@ -370,23 +381,19 @@ public class ReportService {
             });
 
             if(reportDelegationDTO.getUserAllWorkHours().isEmpty())
-            {
                 document.add(new Paragraph("No work hours performed during delegation"));
-            }
             else
-            {
                 document.add(workHoursTable);
-            }
 
-            document.add(new Paragraph("\n" +
-                    "Notes taken during delegation"));
-            document.add(Chunk.NEWLINE);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("Notes", headerFont));
+            document.add(new Paragraph("\n"));
             PdfPTable notesTable = new PdfPTable(3);
             notesTable.setWidthPercentage(100);
 
-            PdfPCell nh1 = new PdfPCell(new Phrase("Date", headerFont));
-            PdfPCell nh2 = new PdfPCell(new Phrase("Creator", headerFont));
-            PdfPCell nh3 = new PdfPCell(new Phrase("Content", headerFont));
+            PdfPCell nh1 = new PdfPCell(new Phrase("Creator", headerFont));
+            PdfPCell nh2 = new PdfPCell(new Phrase("Content", headerFont));
+            PdfPCell nh3 = new PdfPCell(new Phrase("Date", headerFont));
 
             notesTable.addCell(nh1);
             notesTable.addCell(nh2);
@@ -395,10 +402,11 @@ public class ReportService {
             notesTable.setHeaderRows(1);
 
             reportDelegationDTO.getAllNotes().forEach(note -> {
-                notesTable.addCell(note.getCreatedAt().format(formatter));
-                notesTable.addCell(note.getUser().getFirstName() + note.getUser().getLastName());
+                notesTable.addCell(note.getUser().getFirstName() + " " + note.getUser().getLastName());
                 notesTable.addCell(note.getContent());
+                notesTable.addCell(note.getCreatedAt().format(formatter));
             });
+
             if(reportDelegationDTO.getAllNotes().isEmpty())
             {
                 document.add(new Paragraph("No notes performed during delegation"));
@@ -413,8 +421,7 @@ public class ReportService {
         } catch (DocumentException e) {
             throw new RuntimeException("Error during report pdf generating", e);
         }
+
         return out.toByteArray();
-
-
     }
 }

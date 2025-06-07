@@ -31,7 +31,7 @@ public class DelegationService {
             throw new IllegalArgumentException("End date cannot be earlier than the start date");
         }
 
-        if (!delegation.getOrigin().matches("^[\\p{L}- ]+$")) {
+        if (!delegation.getOrigin().matches("^[\\p{L}\\d @!#&'\".,;:-]+$")) {
             throw new IllegalArgumentException("Origin must only contain letters");
         }
 
@@ -39,7 +39,7 @@ public class DelegationService {
             throw new IllegalArgumentException("The origin must start with capital letter.");
         }
       
-        if (!delegation.getDestination().matches("^[\\p{L}- ]+$")) {
+        if (!delegation.getDestination().matches("^[\\p{L}\\d @!#&'\".,;:-]+$")) {
             throw new IllegalArgumentException("Destination must only contain letters");
         }
 
@@ -47,7 +47,7 @@ public class DelegationService {
             throw new IllegalArgumentException("The destination must start with capital letter.");
         }
       
-        if (!delegation.getTitle().matches("^[\\p{L}- ]+$")) {
+        if (!delegation.getTitle().matches("^[\\p{L}\\d @!#&'\".,;:-]+$")) {
             throw new IllegalArgumentException("Title must only contain letters");
         }
 
